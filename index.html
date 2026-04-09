@@ -172,219 +172,170 @@
   }
 
   /* ═════════════════════
-     QUIZ SCREEN
+     QUIZ SCREEN - 深空漫游体验
   ═════════════════════ */
+  
+  .quiz { 
+    padding-top: 16px; 
+    gap: 0; 
+    position: relative;
+    overflow: hidden;
+  }
   
   /* ═════════════════════
-     答题页宇宙氛围元素 - 全面增强
+     答题页宇宙氛围 - 沉浸式星空
   ═════════════════════ */
   
-  /* 深空背景 */
-  .deep-space-bg {
+  /* 深空背景层 */
+  .deep-space {
     position: absolute;
     inset: 0;
-    background: 
-      radial-gradient(ellipse at 20% 30%, rgba(139,92,246,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 70%, rgba(79,163,212,0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 60%);
     pointer-events: none;
     z-index: 0;
   }
   
-  /* 星尘粒子层 - 20颗 */
+  /* 星尘粒子 - 缓慢上升 */
   .stardust-layer {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     overflow: hidden;
-    z-index: 1;
   }
   
   .stardust {
     position: absolute;
     width: 2px;
     height: 2px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
-    animation: float-up 18s linear infinite;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    animation: stardust-rise 20s linear infinite;
     opacity: 0;
   }
   
-  .stardust:nth-child(1) { left: 5%; animation-delay: 0s; animation-duration: 15s; }
-  .stardust:nth-child(2) { left: 12%; animation-delay: 1.5s; animation-duration: 17s; }
-  .stardust:nth-child(3) { left: 20%; animation-delay: 3s; animation-duration: 16s; }
-  .stardust:nth-child(4) { left: 28%; animation-delay: 0.8s; animation-duration: 18s; }
-  .stardust:nth-child(5) { left: 35%; animation-delay: 2.2s; animation-duration: 14s; }
-  .stardust:nth-child(6) { left: 42%; animation-delay: 4s; animation-duration: 19s; }
-  .stardust:nth-child(7) { left: 50%; animation-delay: 1s; animation-duration: 15s; }
-  .stardust:nth-child(8) { left: 58%; animation-delay: 2.5s; animation-duration: 17s; }
-  .stardust:nth-child(9) { left: 65%; animation-delay: 0.5s; animation-duration: 16s; }
-  .stardust:nth-child(10) { left: 72%; animation-delay: 3.5s; animation-duration: 18s; }
-  .stardust:nth-child(11) { left: 8%; animation-delay: 2s; animation-duration: 15s; }
-  .stardust:nth-child(12) { left: 18%; animation-delay: 4.5s; animation-duration: 17s; }
-  .stardust:nth-child(13) { left: 32%; animation-delay: 1.2s; animation-duration: 16s; }
-  .stardust:nth-child(14) { left: 48%; animation-delay: 3.8s; animation-duration: 18s; }
-  .stardust:nth-child(15) { left: 55%; animation-delay: 0.3s; animation-duration: 14s; }
-  .stardust:nth-child(16) { left: 62%; animation-delay: 2.8s; animation-duration: 19s; }
-  .stardust:nth-child(17) { left: 75%; animation-delay: 1.8s; animation-duration: 15s; }
-  .stardust:nth-child(18) { left: 82%; animation-delay: 4.2s; animation-duration: 17s; }
-  .stardust:nth-child(19) { left: 88%; animation-delay: 0.6s; animation-duration: 16s; }
-  .stardust:nth-child(20) { left: 95%; animation-delay: 3.2s; animation-duration: 18s; }
-  
-  @keyframes float-up {
+  @keyframes stardust-rise {
     0% {
-      bottom: -10px;
+      transform: translateY(100vh) translateX(0);
       opacity: 0;
-      transform: translateX(0) scale(0.5);
     }
-    5% { opacity: 0.9; transform: scale(1); }
-    90% { opacity: 0.7; }
+    10% { opacity: 1; }
+    90% { opacity: 0.8; }
     100% {
-      bottom: 105%;
+      transform: translateY(-20px) translateX(30px);
       opacity: 0;
-      transform: translateX(30px) scale(0.8);
     }
   }
   
-  /* 流星 - 5条 */
-  .meteor-layer {
+  /* 流星划过 */
+  .shooting-stars {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     overflow: hidden;
-    z-index: 2;
   }
   
-  .meteor {
+  .shooting-star {
     position: absolute;
-    width: 100px;
+    width: 120px;
     height: 2px;
-    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.9), rgba(167,139,250,0.6));
-    border-radius: 50%;
-    transform: rotate(-45deg);
-    animation: meteor-fall 8s ease-in-out infinite;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), rgba(167,139,250,0.7));
+    border-radius: 2px;
+    transform: rotate(-35deg);
+    animation: shooting 6s ease-in-out infinite;
     opacity: 0;
     filter: blur(0.5px);
   }
   
-  .meteor:nth-child(1) {
-    top: 5%;
-    left: 60%;
-    animation-delay: 0s;
-  }
+  .shooting-star-1 { top: 8%; left: 70%; animation-delay: 0s; }
+  .shooting-star-2 { top: 35%; left: 15%; animation-delay: 2.5s; }
+  .shooting-star-3 { top: 60%; left: 80%; animation-delay: 5s; }
   
-  .meteor:nth-child(2) {
-    top: 25%;
-    left: 10%;
-    animation-delay: 2s;
-  }
-  
-  .meteor:nth-child(3) {
-    top: 50%;
-    left: 75%;
-    animation-delay: 4s;
-  }
-  
-  .meteor:nth-child(4) {
-    top: 70%;
-    left: 30%;
-    animation-delay: 6s;
-  }
-  
-  .meteor:nth-child(5) {
-    top: 15%;
-    left: 85%;
-    animation-delay: 1s;
-  }
-  
-  @keyframes meteor-fall {
-    0% {
-      opacity: 0;
-      transform: rotate(-45deg) translateX(0);
-    }
-    3% { opacity: 1; }
-    10% {
-      opacity: 0;
-      transform: rotate(-45deg) translateX(-300px);
-    }
+  @keyframes shooting {
+    0% { opacity: 0; transform: rotate(-35deg) translateX(0); }
+    5% { opacity: 1; }
+    15% { opacity: 0; transform: rotate(-35deg) translateX(-400px); }
     100% { opacity: 0; }
   }
   
-  /* 星云光晕 - 5团 */
-  .nebula-layer {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    overflow: hidden;
-    z-index: 0;
-  }
-  
-  .nebula {
+  /* 星云光晕 */
+  .nebula-glow {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
-    animation: nebula-drift 25s ease-in-out infinite;
-    opacity: 0.12;
+    filter: blur(100px);
+    animation: nebula-pulse 15s ease-in-out infinite;
   }
   
-  .nebula.purple {
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(139,92,246,0.5), transparent 70%);
-    top: 10%;
-    left: -80px;
-  }
-  
-  .nebula.blue {
+  .nebula-purple {
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(79,163,212,0.4), transparent 70%);
-    bottom: 5%;
-    right: -100px;
-    animation-delay: -12s;
+    background: radial-gradient(circle, rgba(139,92,246,0.2), transparent 70%);
+    top: -100px;
+    left: -100px;
   }
   
-  .nebula.gold {
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, rgba(212,175,55,0.35), transparent 70%);
-    top: 50%;
-    left: 10%;
-    animation-delay: -6s;
+  .nebula-blue {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(79,163,212,0.15), transparent 70%);
+    bottom: -150px;
+    right: -150px;
+    animation-delay: -8s;
   }
   
-  .nebula.pink {
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(236,72,153,0.3), transparent 70%);
-    top: 30%;
-    right: 5%;
-    animation-delay: -18s;
-  }
-  
-  .nebula.teal {
-    width: 180px;
-    height: 180px;
-    background: radial-gradient(circle, rgba(78,205,196,0.25), transparent 70%);
-    bottom: 30%;
+  .nebula-gold {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(212,175,55,0.12), transparent 70%);
+    top: 40%;
     left: 50%;
-    animation-delay: -3s;
+    transform: translateX(-50%);
+    animation-delay: -4s;
+  }
+  
+  @keyframes nebula-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1) translateX(-50%); }
+    50% { opacity: 1; transform: scale(1.2) translateX(-50%); }
+  }
+  
+  .nebula-purple, .nebula-blue {
+    animation-name: nebula-drift;
   }
   
   @keyframes nebula-drift {
-    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.12; }
-    25% { transform: translate(40px, -30px) scale(1.15); opacity: 0.15; }
-    50% { transform: translate(-30px, 20px) scale(0.9); opacity: 0.1; }
-    75% { transform: translate(20px, 40px) scale(1.1); opacity: 0.13; }
+    0%, 100% { opacity: 0.6; transform: translate(0, 0); }
+    50% { opacity: 1; transform: translate(30px, 20px); }
   }
   
-  /* 闪烁星星矩阵 - 30颗 */
-  .twinkling-stars {
+  /* 星座连线背景 */
+  .constellation-bg {
     position: absolute;
     inset: 0;
-    pointer-events: none;
-    z-index: 1;
+    opacity: 0.4;
+  }
+  
+  .constellation-dot {
+    fill: rgba(167, 139, 250, 0.6);
+    animation: dot-pulse 3s ease-in-out infinite;
+  }
+  
+  .constellation-line {
+    stroke: rgba(167, 139, 250, 0.2);
+    stroke-width: 1;
+    stroke-dasharray: 5 5;
+    animation: dash-flow 20s linear infinite;
+  }
+  
+  @keyframes dot-pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+  
+  @keyframes dash-flow {
+    to { stroke-dashoffset: -100; }
+  }
+  
+  /* 闪烁星星矩阵 */
+  .star-matrix {
+    position: absolute;
+    inset: 0;
   }
   
   .twinkle-star {
@@ -393,105 +344,88 @@
     height: 3px;
     background: #fff;
     border-radius: 50%;
-    animation: twinkle 3s ease-in-out infinite;
+    animation: star-twinkle 3s ease-in-out infinite;
   }
   
-  .twinkle-star:nth-child(1) { top: 5%; left: 10%; animation-delay: 0s; animation-duration: 2.5s; }
-  .twinkle-star:nth-child(2) { top: 8%; left: 25%; animation-delay: 0.3s; animation-duration: 3s; }
-  .twinkle-star:nth-child(3) { top: 12%; left: 45%; animation-delay: 0.6s; animation-duration: 2.8s; }
-  .twinkle-star:nth-child(4) { top: 6%; left: 70%; animation-delay: 0.9s; animation-duration: 3.2s; }
-  .twinkle-star:nth-child(5) { top: 15%; left: 85%; animation-delay: 1.2s; animation-duration: 2.6s; }
-  .twinkle-star:nth-child(6) { top: 20%; left: 5%; animation-delay: 0.2s; animation-duration: 3.1s; }
-  .twinkle-star:nth-child(7) { top: 25%; left: 30%; animation-delay: 0.5s; animation-duration: 2.7s; }
-  .twinkle-star:nth-child(8) { top: 22%; left: 55%; animation-delay: 0.8s; animation-duration: 2.9s; }
-  .twinkle-star:nth-child(9) { top: 28%; left: 78%; animation-delay: 1.1s; animation-duration: 3.3s; }
-  .twinkle-star:nth-child(10) { top: 18%; left: 92%; animation-delay: 1.4s; animation-duration: 2.4s; }
-  .twinkle-star:nth-child(11) { top: 35%; left: 12%; animation-delay: 0.1s; animation-duration: 3s; }
-  .twinkle-star:nth-child(12) { top: 40%; left: 38%; animation-delay: 0.4s; animation-duration: 2.8s; }
-  .twinkle-star:nth-child(13) { top: 38%; left: 62%; animation-delay: 0.7s; animation-duration: 3.1s; }
-  .twinkle-star:nth-child(14) { top: 42%; left: 88%; animation-delay: 1s; animation-duration: 2.5s; }
-  .twinkle-star:nth-child(15) { top: 48%; left: 8%; animation-delay: 1.3s; animation-duration: 2.9s; }
-  .twinkle-star:nth-child(16) { top: 52%; left: 22%; animation-delay: 0.15s; animation-duration: 3.2s; }
-  .twinkle-star:nth-child(17) { top: 55%; left: 48%; animation-delay: 0.45s; animation-duration: 2.6s; }
-  .twinkle-star:nth-child(18) { top: 50%; left: 72%; animation-delay: 0.75s; animation-duration: 3s; }
-  .twinkle-star:nth-child(19) { top: 58%; left: 95%; animation-delay: 1.05s; animation-duration: 2.7s; }
-  .twinkle-star:nth-child(20) { top: 62%; left: 3%; animation-delay: 1.35s; animation-duration: 2.8s; }
-  .twinkle-star:nth-child(21) { top: 68%; left: 28%; animation-delay: 0.25s; animation-duration: 3.1s; }
-  .twinkle-star:nth-child(22) { top: 72%; left: 52%; animation-delay: 0.55s; animation-duration: 2.5s; }
-  .twinkle-star:nth-child(23) { top: 70%; left: 75%; animation-delay: 0.85s; animation-duration: 2.9s; }
-  .twinkle-star:nth-child(24) { top: 75%; left: 90%; animation-delay: 1.15s; animation-duration: 3.3s; }
-  .twinkle-star:nth-child(25) { top: 80%; left: 15%; animation-delay: 0.35s; animation-duration: 2.6s; }
-  .twinkle-star:nth-child(26) { top: 85%; left: 40%; animation-delay: 0.65s; animation-duration: 3s; }
-  .twinkle-star:nth-child(27) { top: 82%; left: 65%; animation-delay: 0.95s; animation-duration: 2.8s; }
-  .twinkle-star:nth-child(28) { top: 88%; left: 82%; animation-delay: 1.25s; animation-duration: 3.2s; }
-  .twinkle-star:nth-child(29) { top: 92%; left: 55%; animation-delay: 0.5s; animation-duration: 2.7s; }
-  .twinkle-star:nth-child(30) { top: 95%; left: 35%; animation-delay: 1.45s; animation-duration: 2.9s; }
+  .s1 { top: 10%; left: 15%; animation-delay: 0s; }
+  .s2 { top: 20%; left: 85%; animation-delay: 0.5s; }
+  .s3 { top: 35%; left: 8%; animation-delay: 1s; }
+  .s4 { top: 45%; left: 92%; animation-delay: 1.5s; }
+  .s5 { top: 55%; left: 5%; animation-delay: 2s; }
+  .s6 { top: 65%; left: 88%; animation-delay: 0.3s; }
+  .s7 { top: 75%; left: 12%; animation-delay: 0.8s; }
+  .s8 { top: 85%; left: 78%; animation-delay: 1.3s; }
+  .s9 { top: 15%; left: 50%; animation-delay: 1.8s; }
+  .s10 { top: 70%; left: 45%; animation-delay: 2.3s; }
+  .s11 { top: 30%; left: 70%; animation-delay: 0.6s; }
+  .s12 { top: 80%; left: 30%; animation-delay: 1.1s; }
   
-  @keyframes twinkle {
+  @keyframes star-twinkle {
     0%, 100% { 
-      opacity: 0.2;
+      opacity: 0.3; 
       transform: scale(0.8);
       box-shadow: 0 0 4px rgba(255,255,255,0.3);
     }
     50% { 
-      opacity: 1;
-      transform: scale(1.2);
-      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+      opacity: 1; 
+      transform: scale(1.3);
+      box-shadow: 0 0 12px rgba(255,255,255,0.8), 0 0 20px rgba(167,139,250,0.4);
     }
   }
   
-  /* 星座连线 */
-  .constellation-bg {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.6;
-  }
-  
-  .constellation-bg svg {
-    width: 100%;
-    height: 100%;
-  }
-  
-  /* 漂浮宇宙元素 - 8个 */
+  /* 漂浮宇宙元素 */
   .floating-elements {
     position: absolute;
     inset: 0;
-    pointer-events: none;
     overflow: hidden;
-    z-index: 3;
+    z-index: 1;
   }
   
-  .floating-cosmos {
+  .floating-planet {
     position: absolute;
-    font-size: 1.3rem;
-    opacity: 0.25;
-    animation: float-cosmos 15s ease-in-out infinite;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+    font-size: 1.8rem;
+    opacity: 0.2;
+    animation: float-drift 12s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
   }
   
-  .floating-cosmos:nth-child(1) { top: 8%; left: 6%; animation-delay: 0s; }
-  .floating-cosmos:nth-child(2) { top: 20%; right: 8%; animation-delay: -3s; }
-  .floating-cosmos:nth-child(3) { top: 40%; left: 4%; animation-delay: -6s; }
-  .floating-cosmos:nth-child(4) { top: 55%; right: 6%; animation-delay: -9s; }
-  .floating-cosmos:nth-child(5) { top: 70%; left: 8%; animation-delay: -12s; }
-  .floating-cosmos:nth-child(6) { top: 85%; right: 10%; animation-delay: -2s; }
-  .floating-cosmos:nth-child(7) { top: 30%; left: 90%; animation-delay: -5s; }
-  .floating-cosmos:nth-child(8) { top: 65%; left: 85%; animation-delay: -8s; }
+  .p1 { top: 12%; left: 8%; animation-delay: 0s; }
+  .p2 { top: 25%; right: 10%; animation-delay: -4s; }
+  .p3 { top: 70%; left: 5%; animation-delay: -8s; }
   
-  @keyframes float-cosmos {
+  @keyframes float-drift {
     0%, 100% { 
       transform: translateY(0) rotate(0deg); 
-      opacity: 0.2;
+      opacity: 0.15;
     }
     50% { 
-      transform: translateY(-20px) rotate(15deg); 
-      opacity: 0.35;
+      transform: translateY(-25px) rotate(10deg); 
+      opacity: 0.3;
     }
   }
   
-  /* 问题文字星光环绕效果 */
+  /* 顶部引导语 */
+  .quiz-guide {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: rgba(167, 139, 250, 0.6);
+    letter-spacing: 0.3em;
+    animation: guide-glow 3s ease-in-out infinite;
+  }
+  
+  .guide-icon {
+    display: inline-block;
+    margin: 0 8px;
+    color: rgba(212, 175, 55, 0.7);
+  }
+  
+  @keyframes guide-glow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; text-shadow: 0 0 20px rgba(167, 139, 250, 0.5); }
+  }
+  
+  /* 问题文字星光效果 */
   .question-text {
     position: relative;
   }
@@ -499,31 +433,26 @@
   .question-text::before {
     content: '';
     position: absolute;
-    top: -15px;
+    top: -12px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(167,139,250,0.3), transparent);
-    animation: shimmer 3s ease-in-out infinite;
+    width: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(167,139,250,0.4), transparent);
   }
   
-  @keyframes shimmer {
-    0%, 100% { opacity: 0.3; width: 60%; }
-    50% { opacity: 0.6; width: 70%; }
-  }
-  
-  /* 选项 hover 光晕增强 */
+  /* 选项交互光效 */
   .scale-opt {
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
   }
   
   .scale-opt::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at center, rgba(167,139,250,0.3), transparent 70%);
+    background: radial-gradient(circle, rgba(167,139,250,0.4), transparent 70%);
     opacity: 0;
     transition: opacity 0.3s;
   }
@@ -532,22 +461,12 @@
     opacity: 1;
   }
   
-  .scale-opt.selected::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, rgba(139,92,246,0.4), rgba(212,175,55,0.3));
-    border-radius: 14px;
-    z-index: -1;
-    animation: selected-glow 2s ease-in-out infinite;
+  .scale-opt.selected {
+    background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(212,175,55,0.15));
+    border-color: var(--purple);
+    color: var(--purple);
+    box-shadow: 0 0 20px rgba(139,92,246,0.3), inset 0 0 20px rgba(139,92,246,0.1);
   }
-  
-  @keyframes selected-glow {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
-  .quiz { padding-top:16px; gap:0; }
   
   .quiz-header {
     display:flex; align-items:center; justify-content:space-between;
@@ -807,6 +726,92 @@
     margin-top:30px;
     position:relative;
     opacity:0; animation:fadeInUp .8s ease .8s forwards;
+  }
+  
+  /* ═══════════════════════════════════════════════
+     答题完成过渡动画
+  ═══════════════════════════════════════════════ */
+  
+  .quiz-transition {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #1a1a3e 0%, #050510 100%);
+  }
+  
+  .quiz-transition.active {
+    display: flex;
+    animation: transition-bg 1.5s ease forwards;
+  }
+  
+  @keyframes transition-bg {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  .transition-content {
+    text-align: center;
+    animation: transition-float 1.5s ease forwards;
+  }
+  
+  @keyframes transition-float {
+    0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+    30% { opacity: 1; transform: translateY(0) scale(1); }
+    70% { opacity: 1; transform: translateY(-10px) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(0.9); }
+  }
+  
+  .transition-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: icon-pulse 0.8s ease infinite;
+  }
+  
+  @keyframes icon-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  .transition-text {
+    font-size: 1.2rem;
+    color: rgba(167, 139, 250, 0.9);
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+  }
+  
+  .transition-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  
+  .transition-star {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #fff;
+    border-radius: 50%;
+    animation: star-burst 1.5s ease forwards;
+  }
+  
+  @keyframes star-burst {
+    0% { 
+      opacity: 1; 
+      transform: translate(0, 0) scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: translate(var(--tx), var(--ty)) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2)) scale(0.5);
+    }
   }
   
   .soul-letter {
@@ -1069,33 +1074,64 @@
   <div class="screen quiz" id="quiz">
     <!-- 深空背景层 -->
     <div class="deep-space">
-      <!-- 星尘粒子层 -->
+      <!-- 星尘粒子层 - 15颗缓慢上升 -->
       <div class="stardust-layer">
-        <div class="stardust"></div>
-        <div class="stardust"></div>
-        <div class="stardust"></div>
-        <div class="stardust"></div>
-        <div class="stardust"></div>
-        <div class="stardust"></div>
-        <div class="stardust"></div>
-        <div class="stardust"></div>
+        <div class="stardust" style="left: 5%; animation-delay: 0s; animation-duration: 16s;"></div>
+        <div class="stardust" style="left: 12%; animation-delay: 1.2s; animation-duration: 20s;"></div>
+        <div class="stardust" style="left: 22%; animation-delay: 2.5s; animation-duration: 18s;"></div>
+        <div class="stardust" style="left: 32%; animation-delay: 0.8s; animation-duration: 22s;"></div>
+        <div class="stardust" style="left: 42%; animation-delay: 3.5s; animation-duration: 17s;"></div>
+        <div class="stardust" style="left: 52%; animation-delay: 1.8s; animation-duration: 21s;"></div>
+        <div class="stardust" style="left: 62%; animation-delay: 4s; animation-duration: 15s;"></div>
+        <div class="stardust" style="left: 72%; animation-delay: 2.2s; animation-duration: 19s;"></div>
+        <div class="stardust" style="left: 82%; animation-delay: 3s; animation-duration: 23s;"></div>
+        <div class="stardust" style="left: 92%; animation-delay: 0.5s; animation-duration: 18s;"></div>
+        <div class="stardust" style="left: 18%; animation-delay: 4.5s; animation-duration: 20s;"></div>
+        <div class="stardust" style="left: 48%; animation-delay: 1.5s; animation-duration: 16s;"></div>
+        <div class="stardust" style="left: 68%; animation-delay: 2.8s; animation-duration: 22s;"></div>
+        <div class="stardust" style="left: 28%; animation-delay: 3.8s; animation-duration: 17s;"></div>
+        <div class="stardust" style="left: 78%; animation-delay: 0.3s; animation-duration: 19s;"></div>
       </div>
       
-      <!-- 流星划过 -->
+      <!-- 流星划过 - 3条 -->
       <div class="shooting-stars">
         <div class="shooting-star shooting-star-1"></div>
         <div class="shooting-star shooting-star-2"></div>
+        <div class="shooting-star shooting-star-3"></div>
       </div>
       
-      <!-- 星座连线背景 -->
-      <svg class="constellation-bg" viewBox="0 0 400 600">
-        <circle class="constellation-dot" cx="50" cy="100" r="2"/>
-        <circle class="constellation-dot" cx="120" cy="80" r="1.5"/>
-        <circle class="constellation-dot" cx="350" cy="150" r="2"/>
-        <circle class="constellation-dot" cx="300" cy="400" r="1.5"/>
-        <circle class="constellation-dot" cx="80" cy="500" r="2"/>
-        <line class="constellation-line" x1="50" y1="100" x2="120" y2="80"/>
-        <line class="constellation-line" x1="350" y1="150" x2="300" y2="400"/>
+      <!-- 星座连线背景 - 增强版 -->
+      <svg class="constellation-bg" viewBox="0 0 400 700">
+        <!-- 北方星座 -->
+        <circle class="constellation-dot" cx="50" cy="80" r="2.5"/>
+        <circle class="constellation-dot" cx="120" cy="60" r="2"/>
+        <circle class="constellation-dot" cx="180" cy="100" r="2.2"/>
+        <circle class="constellation-dot" cx="320" cy="80" r="2"/>
+        <circle class="constellation-dot" cx="370" cy="120" r="2.5"/>
+        <!-- 中央星座 -->
+        <circle class="constellation-dot" cx="80" cy="300" r="2.2"/>
+        <circle class="constellation-dot" cx="150" cy="350" r="2"/>
+        <circle class="constellation-dot" cx="220" cy="320" r="2.5"/>
+        <circle class="constellation-dot" cx="300" cy="360" r="2"/>
+        <circle class="constellation-dot" cx="350" cy="310" r="2.2"/>
+        <!-- 南方星座 -->
+        <circle class="constellation-dot" cx="60" cy="550" r="2"/>
+        <circle class="constellation-dot" cx="140" cy="580" r="2.2"/>
+        <circle class="constellation-dot" cx="250" cy="560" r="2.5"/>
+        <circle class="constellation-dot" cx="330" cy="600" r="2"/>
+        <circle class="constellation-dot" cx="380" cy="550" r="2.2"/>
+        <!-- 连线 -->
+        <line class="constellation-line" x1="50" y1="80" x2="120" y2="60"/>
+        <line class="constellation-line" x1="120" y1="60" x2="180" y2="100"/>
+        <line class="constellation-line" x1="320" y1="80" x2="370" y2="120"/>
+        <line class="constellation-line" x1="80" y1="300" x2="150" y2="350"/>
+        <line class="constellation-line" x1="150" y1="350" x2="220" y2="320"/>
+        <line class="constellation-line" x1="220" y1="320" x2="300" y2="360"/>
+        <line class="constellation-line" x1="300" y1="360" x2="350" y2="310"/>
+        <line class="constellation-line" x1="60" y1="550" x2="140" y2="580"/>
+        <line class="constellation-line" x1="140" y1="580" x2="250" y2="560"/>
+        <line class="constellation-line" x1="250" y1="560" x2="330" y2="600"/>
+        <line class="constellation-line" x1="330" y1="600" x2="380" y2="550"/>
       </svg>
       
       <!-- 星云光晕 -->
@@ -1887,9 +1923,41 @@ function selectOpt(el, val){
     if (currentQ < QUESTIONS.length) {
       loadQuestion();
     } else {
-      showResult();
+      // 显示过渡动画
+      showTransition();
     }
   }, 300);
+}
+
+// 答题完成过渡动画
+function showTransition() {
+  const transition = document.getElementById('quizTransition');
+  const starsContainer = document.getElementById('transitionStars');
+  
+  // 生成星星爆发效果
+  starsContainer.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const star = document.createElement('div');
+    star.className = 'transition-star';
+    const angle = (Math.PI * 2 * i) / 20;
+    const distance = 100 + Math.random() * 100;
+    star.style.cssText = `
+      left: 50%;
+      top: 50%;
+      --tx: ${Math.cos(angle) * distance}px;
+      --ty: ${Math.sin(angle) * distance}px;
+      animation-delay: ${i * 0.03}s;
+    `;
+    starsContainer.appendChild(star);
+  }
+  
+  transition.classList.add('active');
+  
+  // 1.5秒后显示结果
+  setTimeout(() => {
+    transition.classList.remove('active');
+    showResult();
+  }, 1500);
 }
 
 function showResult() {
@@ -2178,7 +2246,7 @@ function shareMoment() {
   ctx.fillStyle = '#fff';
   ctx.shadowColor = 'rgba(167,139,250,1)';
   ctx.shadowBlur = 40;
-  ctx.fillText(currentData.name, canvas.width / 2, yOffset + 50);
+  ctx.fillText(currentType, canvas.width / 2, yOffset + 50);
   
   // 类型名称
   yOffset += 130;
@@ -2186,16 +2254,47 @@ function shareMoment() {
   ctx.fillStyle = 'rgba(212,175,55,0.9)';
   ctx.shadowColor = 'rgba(212,175,55,0.5)';
   ctx.shadowBlur = 15;
-  ctx.fillText(currentData.title, canvas.width / 2, yOffset);
+  ctx.fillText(currentData.name + ' · ' + currentData.sub, canvas.width / 2, yOffset);
   
   // ═══════════════════════════════════════════════
-  // 大型 emoji
+  // 特质标签
   // ═══════════════════════════════════════════════
   
-  yOffset += 150;
-  ctx.font = '200px sans-serif';
+  yOffset += 80;
+  const traits = currentData.traits || [];
+  const tagWidth = 180;
+  const tagHeight = 50;
+  const tagGap = 20;
+  const tagsPerRow = 2;
+  const startX = canvas.width / 2 - (tagWidth + tagGap) / 2 - tagWidth / 2;
+  
   ctx.shadowBlur = 0;
-  ctx.fillText(currentData.emoji, canvas.width / 2, yOffset);
+  traits.forEach((trait, i) => {
+    const row = Math.floor(i / tagsPerRow);
+    const col = i % tagsPerRow;
+    const x = startX + col * (tagWidth + tagGap);
+    const y = yOffset + row * (tagHeight + tagGap);
+    
+    // 标签背景
+    const tagGrad = ctx.createLinearGradient(x, y, x + tagWidth, y);
+    tagGrad.addColorStop(0, 'rgba(139,92,246,0.15)');
+    tagGrad.addColorStop(1, 'rgba(212,175,55,0.15)');
+    ctx.fillStyle = tagGrad;
+    ctx.beginPath();
+    ctx.roundRect(x, y, tagWidth, tagHeight, 25);
+    ctx.fill();
+    
+    // 标签边框
+    ctx.strokeStyle = 'rgba(167,139,250,0.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // 标签文字
+    ctx.font = '28px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.textAlign = 'center';
+    ctx.fillText(trait, x + tagWidth / 2, y + 35);
+  });
   
   // ═══════════════════════════════════════════════
   // 宇宙编码
@@ -2307,6 +2406,15 @@ function closePoster() {
 
 <!-- 海报生成用的隐藏 Canvas -->
 <canvas id="posterCanvas" style="display:none;"></canvas>
+
+<!-- 答题完成过渡动画 -->
+<div class="quiz-transition" id="quizTransition">
+  <div class="transition-stars" id="transitionStars"></div>
+  <div class="transition-content">
+    <div class="transition-icon">✨</div>
+    <div class="transition-text">宇宙正在解读你的星辰轨迹</div>
+  </div>
+</div>
 
 </body>
 </html>
