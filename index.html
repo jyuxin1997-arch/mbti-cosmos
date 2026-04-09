@@ -225,33 +225,149 @@
     }
   }
   
-  /* 流星划过 */
+  /* 流星划过 - 增强版 */
   .shooting-stars {
     position: absolute;
     inset: 0;
     overflow: hidden;
+    z-index: 10;
   }
   
   .shooting-star {
     position: absolute;
-    width: 120px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), rgba(167,139,250,0.7));
-    border-radius: 2px;
-    transform: rotate(-35deg);
-    animation: shooting 6s ease-in-out infinite;
+    width: 200px;
+    height: 3px;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(255,255,255,0.3) 20%, 
+      rgba(255,255,255,1) 50%, 
+      rgba(167,139,250,0.8) 80%,
+      rgba(139,92,246,0.4) 100%
+    );
+    border-radius: 50%;
+    transform: rotate(-45deg);
     opacity: 0;
-    filter: blur(0.5px);
+    filter: blur(0.3px);
+    box-shadow: 
+      0 0 10px rgba(255,255,255,0.8),
+      0 0 20px rgba(167,139,250,0.6),
+      0 0 30px rgba(139,92,246,0.4);
   }
   
-  .shooting-star-1 { top: 8%; left: 70%; animation-delay: 0s; }
-  .shooting-star-2 { top: 35%; left: 15%; animation-delay: 2.5s; }
-  .shooting-star-3 { top: 60%; left: 80%; animation-delay: 5s; }
+  /* 流星头部亮点 */
+  .shooting-star::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #fff 0%, rgba(167,139,250,0.8) 50%, transparent 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 15px #fff, 0 0 25px rgba(167,139,250,0.8);
+  }
   
-  @keyframes shooting {
-    0% { opacity: 0; transform: rotate(-35deg) translateX(0); }
-    5% { opacity: 1; }
-    15% { opacity: 0; transform: rotate(-35deg) translateX(-400px); }
+  /* 大流星 - 主流星 */
+  .shooting-star-1 { 
+    top: 5%; 
+    left: 80%; 
+    animation: shooting-big 4s ease-out infinite;
+    animation-delay: 0s;
+  }
+  
+  .shooting-star-2 { 
+    top: 25%; 
+    left: 20%; 
+    animation: shooting-big 5s ease-out infinite;
+    animation-delay: 1.5s;
+  }
+  
+  .shooting-star-3 { 
+    top: 50%; 
+    left: 90%; 
+    animation: shooting-big 4.5s ease-out infinite;
+    animation-delay: 3s;
+  }
+  
+  /* 中等流星 */
+  .shooting-star-4 { 
+    top: 15%; 
+    left: 50%; 
+    animation: shooting-mid 5.5s ease-out infinite;
+    animation-delay: 0.8s;
+    width: 150px;
+    height: 2px;
+  }
+  
+  .shooting-star-5 { 
+    top: 70%; 
+    left: 30%; 
+    animation: shooting-mid 6s ease-out infinite;
+    animation-delay: 2.2s;
+    width: 150px;
+    height: 2px;
+  }
+  
+  /* 小流星 */
+  .shooting-star-6 { 
+    top: 40%; 
+    left: 10%; 
+    animation: shooting-small 7s ease-out infinite;
+    animation-delay: 1s;
+    width: 100px;
+    height: 1.5px;
+    opacity: 0.7;
+  }
+  
+  .shooting-star-7 { 
+    top: 85%; 
+    left: 70%; 
+    animation: shooting-small 6.5s ease-out infinite;
+    animation-delay: 4s;
+    width: 100px;
+    height: 1.5px;
+    opacity: 0.7;
+  }
+  
+  @keyframes shooting-big {
+    0% { 
+      opacity: 0; 
+      transform: rotate(-45deg) translateX(0) translateY(0);
+    }
+    2% { opacity: 1; }
+    8% { 
+      opacity: 0.9; 
+      transform: rotate(-45deg) translateX(-500px) translateY(500px);
+    }
+    12% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  
+  @keyframes shooting-mid {
+    0% { 
+      opacity: 0; 
+      transform: rotate(-45deg) translateX(0) translateY(0);
+    }
+    3% { opacity: 0.9; }
+    10% { 
+      opacity: 0.7; 
+      transform: rotate(-45deg) translateX(-400px) translateY(400px);
+    }
+    15% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  
+  @keyframes shooting-small {
+    0% { 
+      opacity: 0; 
+      transform: rotate(-45deg) translateX(0) translateY(0);
+    }
+    5% { opacity: 0.8; }
+    15% { 
+      opacity: 0.5; 
+      transform: rotate(-45deg) translateX(-300px) translateY(300px);
+    }
+    20% { opacity: 0; }
     100% { opacity: 0; }
   }
   
@@ -441,31 +557,106 @@
     background: linear-gradient(90deg, transparent, rgba(167,139,250,0.4), transparent);
   }
   
-  /* 选项交互光效 */
+  /* 选项交互光效 - 增强版 */
   .scale-opt {
     position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    overflow: visible;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
   }
   
   .scale-opt::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle, rgba(167,139,250,0.4), transparent 70%);
+    background: radial-gradient(circle, rgba(167,139,250,0.5), transparent 70%);
     opacity: 0;
     transition: opacity 0.3s;
+    border-radius: inherit;
+  }
+  
+  .scale-opt:hover {
+    transform: scale(1.08);
+    border-color: rgba(167,139,250,0.5);
   }
   
   .scale-opt:hover::before {
-    opacity: 1;
+    opacity: 0.6;
+  }
+  
+  .scale-opt:active {
+    transform: scale(0.95);
   }
   
   .scale-opt.selected {
-    background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(212,175,55,0.15));
+    background: linear-gradient(135deg, rgba(139,92,246,0.35), rgba(212,175,55,0.25));
     border-color: var(--purple);
-    color: var(--purple);
-    box-shadow: 0 0 20px rgba(139,92,246,0.3), inset 0 0 20px rgba(139,92,246,0.1);
+    color: var(--gold-light);
+    box-shadow: 
+      0 0 30px rgba(139,92,246,0.4), 
+      0 0 60px rgba(139,92,246,0.2),
+      inset 0 0 30px rgba(139,92,246,0.15);
+    transform: scale(1.1);
+    animation: selected-pulse 0.5s ease;
+  }
+  
+  @keyframes selected-pulse {
+    0% { transform: scale(1.1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1.1); }
+  }
+  
+  /* 选项点击粒子效果 */
+  .scale-opt .click-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, #fff, rgba(167,139,250,0.8));
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-burst 0.6s ease-out forwards;
+  }
+  
+  @keyframes particle-burst {
+    0% {
+      opacity: 1;
+      transform: translate(0, 0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(var(--px), var(--py)) scale(0);
+    }
+  }
+  
+  /* 选项数字动画 */
+  .scale-opt span {
+    display: inline-block;
+    transition: transform 0.3s ease;
+  }
+  
+  .scale-opt:hover span {
+    animation: number-float 0.5s ease;
+  }
+  
+  @keyframes number-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+  
+  /* 问题切换动画 */
+  @keyframes question-slide-in {
+    0% {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .question-block {
+    animation: question-slide-in 0.5s ease forwards;
   }
   
   .quiz-header {
@@ -1093,11 +1284,18 @@
         <div class="stardust" style="left: 78%; animation-delay: 0.3s; animation-duration: 19s;"></div>
       </div>
       
-      <!-- 流星划过 - 3条 -->
+      <!-- 流星划过 - 7条流星 -->
       <div class="shooting-stars">
+        <!-- 大流星 -->
         <div class="shooting-star shooting-star-1"></div>
         <div class="shooting-star shooting-star-2"></div>
         <div class="shooting-star shooting-star-3"></div>
+        <!-- 中等流星 -->
+        <div class="shooting-star shooting-star-4"></div>
+        <div class="shooting-star shooting-star-5"></div>
+        <!-- 小流星 -->
+        <div class="shooting-star shooting-star-6"></div>
+        <div class="shooting-star shooting-star-7"></div>
       </div>
       
       <!-- 星座连线背景 - 增强版 -->
@@ -1884,6 +2082,14 @@ function loadQuestion(){
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
   
+  // 问题切换动画
+  const questionBlock = document.querySelector('.question-block');
+  if (questionBlock) {
+    questionBlock.style.animation = 'none';
+    questionBlock.offsetHeight; // 触发重绘
+    questionBlock.style.animation = 'question-slide-in 0.5s ease forwards';
+  }
+  
   document.getElementById('dimLabel').textContent = DIM_NAMES[dimIdx];
   document.getElementById('counter').textContent = `${currentQ+1} / ${QUESTIONS.length}`;
   document.getElementById('progFill').style.width = `${((currentQ)/QUESTIONS.length)*100}%`;
@@ -1912,6 +2118,9 @@ function selectOpt(el, val){
   document.querySelectorAll('.scale-opt').forEach(e=>e.classList.remove('selected'));
   el.classList.add('selected');
   
+  // 点击粒子效果
+  createClickParticles(el);
+  
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
   answers[dimIdx].push(val);
@@ -1926,7 +2135,32 @@ function selectOpt(el, val){
       // 显示过渡动画
       showTransition();
     }
-  }, 300);
+  }, 400);
+}
+
+// 创建点击粒子效果
+function createClickParticles(el) {
+  const rect = el.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  
+  for (let i = 0; i < 8; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'click-particle';
+    const angle = (Math.PI * 2 * i) / 8;
+    const distance = 30 + Math.random() * 20;
+    particle.style.cssText = `
+      position: fixed;
+      left: ${centerX}px;
+      top: ${centerY}px;
+      --px: ${Math.cos(angle) * distance}px;
+      --py: ${Math.sin(angle) * distance}px;
+      z-index: 999;
+    `;
+    document.body.appendChild(particle);
+    
+    setTimeout(() => particle.remove(), 600);
+  }
 }
 
 // 答题完成过渡动画
