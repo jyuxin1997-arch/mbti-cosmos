@@ -285,103 +285,66 @@
     box-shadow: 0 0 15px #fff, 0 0 25px rgba(167,139,250,0.8), 0 0 40px rgba(139,92,246,0.5);
   }
 
-  /* 大流星 - 主流星 */
+  /* 缓慢流星 - 3-6颗随机划过 */
   .shooting-star-1 {
-    top: 5%;
-    left: 80%;
-    animation: shooting-big 4s ease-out infinite;
+    top: 8%;
+    left: 75%;
+    animation: shooting-slow 8s ease-out infinite;
     animation-delay: 0s;
   }
 
   .shooting-star-2 {
-    top: 25%;
-    left: 20%;
-    animation: shooting-big 5s ease-out infinite;
-    animation-delay: 1.5s;
-  }
-
-  .shooting-star-3 {
-    top: 50%;
-    left: 90%;
-    animation: shooting-big 4.5s ease-out infinite;
+    top: 20%;
+    left: 30%;
+    animation: shooting-slow 10s ease-out infinite;
     animation-delay: 3s;
   }
 
-  /* 中等流星 */
+  .shooting-star-3 {
+    top: 45%;
+    left: 85%;
+    animation: shooting-slow 9s ease-out infinite;
+    animation-delay: 6s;
+  }
+
   .shooting-star-4 {
-    top: 15%;
-    left: 50%;
-    animation: shooting-mid 5.5s ease-out infinite;
-    animation-delay: 0.8s;
-    width: 150px;
+    top: 65%;
+    left: 15%;
+    animation: shooting-slow 11s ease-out infinite;
+    animation-delay: 2s;
+    width: 120px;
     height: 2px;
+    opacity: 0.7;
   }
 
   .shooting-star-5 {
-    top: 70%;
-    left: 30%;
-    animation: shooting-mid 6s ease-out infinite;
-    animation-delay: 2.2s;
-    width: 150px;
-    height: 2px;
-  }
-
-  /* 小流星 */
-  .shooting-star-6 {
-    top: 40%;
-    left: 10%;
-    animation: shooting-small 7s ease-out infinite;
-    animation-delay: 1s;
+    top: 80%;
+    left: 60%;
+    animation: shooting-slow 9.5s ease-out infinite;
+    animation-delay: 5s;
     width: 100px;
     height: 1.5px;
-    opacity: 0.7;
+    opacity: 0.6;
   }
 
+  .shooting-star-6,
   .shooting-star-7 {
-    top: 85%;
-    left: 70%;
-    animation: shooting-small 6.5s ease-out infinite;
-    animation-delay: 4s;
-    width: 100px;
-    height: 1.5px;
-    opacity: 0.7;
+    display: none;
   }
 
-  @keyframes shooting-big {
+  @keyframes shooting-slow {
     0% {
       opacity: 0;
       transform: rotate(-45deg) translateX(0) translateY(0);
     }
-    2% { opacity: 1; }
-    8% {
-      opacity: 0.9;
-      transform: rotate(-45deg) translateX(-500px) translateY(500px);
+    5% { opacity: 1; }
+    20% {
+      opacity: 0.8;
+      transform: rotate(-45deg) translateX(-600px) translateY(600px);
     }
-    12% { opacity: 0; }
+    25% { opacity: 0; }
     100% { opacity: 0; }
   }
-
-  @keyframes shooting-mid {
-    0% {
-      opacity: 0;
-      transform: rotate(-45deg) translateX(0) translateY(0);
-    }
-    3% { opacity: 0.9; }
-    10% {
-      opacity: 0.7;
-      transform: rotate(-45deg) translateX(-400px) translateY(400px);
-    }
-    15% { opacity: 0; }
-    100% { opacity: 0; }
-  }
-
-  @keyframes shooting-small {
-    0% {
-      opacity: 0;
-      transform: rotate(-45deg) translateX(0) translateY(0);
-    }
-    5% { opacity: 0.8; }
-    15% {
       opacity: 0.5;
       transform: rotate(-45deg) translateX(-300px) translateY(300px);
     }
@@ -1515,18 +1478,13 @@
         <div class="stardust" style="left: 78%; animation-delay: 0.3s; animation-duration: 19s;"></div>
       </div>
 
-      <!-- 流星划过 - 7条流星 -->
+      <!-- 流星划过 - 3-6颗缓慢流星 -->
       <div class="shooting-stars">
-        <!-- 大流星 -->
         <div class="shooting-star shooting-star-1"></div>
         <div class="shooting-star shooting-star-2"></div>
         <div class="shooting-star shooting-star-3"></div>
-        <!-- 中等流星 -->
         <div class="shooting-star shooting-star-4"></div>
         <div class="shooting-star shooting-star-5"></div>
-        <!-- 小流星 -->
-        <div class="shooting-star shooting-star-6"></div>
-        <div class="shooting-star shooting-star-7"></div>
       </div>
 
       <!-- 星座连线背景 - 增强版 -->
@@ -2613,8 +2571,8 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   // 深邃星空背景
   // ═══════════════════════════════════════════════
   const bgGrad = ctx.createRadialGradient(
-    canvas.width/2, canvas.height*0.4, 0,
-    canvas.width/2, canvas.height*0.4, canvas.height
+    canvas.width/2, canvas.height*0.35, 0,
+    canvas.width/2, canvas.height*0.35, canvas.height
   );
   bgGrad.addColorStop(0, '#1a1a3e');
   bgGrad.addColorStop(0.4, '#12122a');
@@ -2626,19 +2584,17 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   // ═══════════════════════════════════════════════
   // 星座连线背景图案
   // ═══════════════════════════════════════════════
-  ctx.strokeStyle = 'rgba(139,92,246,0.15)';
+  ctx.strokeStyle = 'rgba(139,92,246,0.12)';
   ctx.lineWidth = 1;
 
-  // 生成星座点
   const constellationPoints = [];
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 10; i++) {
     constellationPoints.push({
-      x: 100 + Math.random() * (canvas.width - 200),
-      y: 100 + Math.random() * (canvas.height - 200)
+      x: 80 + Math.random() * (canvas.width - 160),
+      y: 80 + Math.random() * (canvas.height - 160)
     });
   }
 
-  // 绘制连线
   for (let i = 0; i < constellationPoints.length - 1; i++) {
     ctx.beginPath();
     ctx.moveTo(constellationPoints[i].x, constellationPoints[i].y);
@@ -2646,181 +2602,139 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.stroke();
   }
 
-  // 绘制星座节点
   constellationPoints.forEach(p => {
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(167,139,250,0.4)';
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(167,139,250,0.35)';
     ctx.fill();
   });
 
   // ═══════════════════════════════════════════════
-  // 多层星星 - 近中远三层
+  // 星星层
   // ═══════════════════════════════════════════════
 
-  // 远景星星（小而暗）
-  for (let i = 0; i < 150; i++) {
+  // 远景星星
+  for (let i = 0; i < 120; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
-    const r = Math.random() * 1.2;
-    const alpha = Math.random() * 0.3 + 0.1;
+    const r = Math.random() * 1;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.25 + 0.1})`;
     ctx.fill();
   }
 
-  // 中景星星（带微光）
-  for (let i = 0; i < 80; i++) {
+  // 中景星星
+  for (let i = 0; i < 50; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
-    const r = Math.random() * 2 + 1;
-    const alpha = Math.random() * 0.5 + 0.3;
+    const r = Math.random() * 1.5 + 0.5;
 
-    // 光晕
-    const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
-    glowGrad.addColorStop(0, `rgba(255,255,255,${alpha})`);
+    const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, r * 2.5);
+    glowGrad.addColorStop(0, `rgba(255,255,255,${Math.random() * 0.4 + 0.2})`);
     glowGrad.addColorStop(1, 'rgba(255,255,255,0)');
     ctx.fillStyle = glowGrad;
     ctx.beginPath();
-    ctx.arc(x, y, r * 3, 0, Math.PI * 2);
+    ctx.arc(x, y, r * 2.5, 0, Math.PI * 2);
     ctx.fill();
 
-    // 核心
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fillStyle = '#fff';
     ctx.fill();
   }
 
-  // 近景亮星（少数亮点）
-  for (let i = 0; i < 15; i++) {
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-
-    // 十字星芒效果
-    ctx.strokeStyle = `rgba(255,255,255,${Math.random() * 0.4 + 0.2})`;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(x - 8, y);
-    ctx.lineTo(x + 8, y);
-    ctx.moveTo(x, y - 8);
-    ctx.lineTo(x, y + 8);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(x, y, 2, 0, Math.PI * 2);
-    ctx.fillStyle = '#fff';
-    ctx.fill();
-  }
-
-  // ═══════════════════════════════════════════════
-  // 星云光晕装饰
-  // ═══════════════════════════════════════════════
-
-  // 紫色星云
-  const nebula1 = ctx.createRadialGradient(200, 400, 0, 200, 400, 300);
-  nebula1.addColorStop(0, 'rgba(139,92,246,0.15)');
+  // 星云光晕
+  const nebula1 = ctx.createRadialGradient(150, 350, 0, 150, 350, 250);
+  nebula1.addColorStop(0, 'rgba(139,92,246,0.12)');
   nebula1.addColorStop(1, 'rgba(139,92,246,0)');
   ctx.fillStyle = nebula1;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // 金色星云
-  const nebula2 = ctx.createRadialGradient(800, 1200, 0, 800, 1200, 350);
-  nebula2.addColorStop(0, 'rgba(212,175,55,0.12)');
+  const nebula2 = ctx.createRadialGradient(750, 1100, 0, 750, 1100, 280);
+  nebula2.addColorStop(0, 'rgba(212,175,55,0.1)');
   nebula2.addColorStop(1, 'rgba(212,175,55,0)');
   ctx.fillStyle = nebula2;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // ═══════════════════════════════════════════════
-  // 顶部装饰区域
+  // 顶部装饰
   // ═══════════════════════════════════════════════
-
-  // 顶部星光线条
-  ctx.strokeStyle = 'rgba(167,139,250,0.3)';
+  ctx.strokeStyle = 'rgba(167,139,250,0.25)';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(canvas.width * 0.2, 120);
-  ctx.lineTo(canvas.width * 0.8, 120);
+  ctx.moveTo(canvas.width * 0.2, 100);
+  ctx.lineTo(canvas.width * 0.8, 100);
   ctx.stroke();
 
-  // 顶部小星星装饰
+  ctx.font = '20px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✦', canvas.width * 0.12, 105);
+  ctx.fillText('✦', canvas.width * 0.88, 105);
+
+  // ═══════════════════════════════════════════════
+  // 名字问候区 - 紧凑顶部
+  // ═══════════════════════════════════════════════
+  let yOffset = 160;
+
   ctx.font = '24px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.75)';
   ctx.textAlign = 'center';
-  ctx.fillText('✦', canvas.width * 0.15, 125);
-  ctx.fillText('✦', canvas.width * 0.85, 125);
-
-  // ═══════════════════════════════════════════════
-  // 名字问候区
-  // ═══════════════════════════════════════════════
-
-  let yOffset = 200;
-
-  // 副标题
-  ctx.font = '28px sans-serif';
-  ctx.fillStyle = 'rgba(167,139,250,0.8)';
-  ctx.textAlign = 'center';
-  ctx.shadowColor = 'rgba(167,139,250,0.4)';
-  ctx.shadowBlur = 15;
+  ctx.shadowColor = 'rgba(167,139,250,0.3)';
+  ctx.shadowBlur = 12;
   ctx.fillText('✦ 宇宙漫游日志 ✦', canvas.width / 2, yOffset);
 
-  // 名字
-  yOffset += 100;
-  ctx.font = 'bold 52px sans-serif';
+  yOffset += 70;
+  ctx.font = 'bold 44px sans-serif';
   const nameGrad = ctx.createLinearGradient(
-    canvas.width/2 - 200, yOffset,
-    canvas.width/2 + 200, yOffset
+    canvas.width/2 - 180, yOffset,
+    canvas.width/2 + 180, yOffset
   );
   nameGrad.addColorStop(0, '#f0d78c');
   nameGrad.addColorStop(0.5, '#FFD700');
   nameGrad.addColorStop(1, '#f0d78c');
   ctx.fillStyle = nameGrad;
-  ctx.shadowColor = 'rgba(255,215,0,0.6)';
-  ctx.shadowBlur = 25;
+  ctx.shadowColor = 'rgba(255,215,0,0.5)';
+  ctx.shadowBlur = 20;
   ctx.fillText(`亲爱的 ${posterName}`, canvas.width / 2, yOffset);
 
   // ═══════════════════════════════════════════════
-  // 人格类型区 - 核心视觉
+  // 人格类型区
   // ═══════════════════════════════════════════════
+  yOffset += 140;
 
-  yOffset += 180;
-
-  // 类型代码背景光晕
   const typeGlow = ctx.createRadialGradient(
     canvas.width/2, yOffset, 0,
-    canvas.width/2, yOffset, 200
+    canvas.width/2, yOffset, 160
   );
-  typeGlow.addColorStop(0, 'rgba(139,92,246,0.2)');
+  typeGlow.addColorStop(0, 'rgba(139,92,246,0.18)');
   typeGlow.addColorStop(1, 'rgba(139,92,246,0)');
   ctx.fillStyle = typeGlow;
   ctx.beginPath();
-  ctx.arc(canvas.width/2, yOffset, 200, 0, Math.PI * 2);
+  ctx.arc(canvas.width/2, yOffset, 160, 0, Math.PI * 2);
   ctx.fill();
 
-  // 类型代码
-  ctx.font = 'bold 140px sans-serif';
+  ctx.font = 'bold 120px sans-serif';
   ctx.fillStyle = '#fff';
-  ctx.shadowColor = 'rgba(167,139,250,1)';
-  ctx.shadowBlur = 40;
-  ctx.fillText(currentType, canvas.width / 2, yOffset + 50);
+  ctx.shadowColor = 'rgba(167,139,250,0.9)';
+  ctx.shadowBlur = 35;
+  ctx.fillText(currentType, canvas.width / 2, yOffset + 42);
 
-  // 类型名称
-  yOffset += 130;
-  ctx.font = '42px sans-serif';
-  ctx.fillStyle = 'rgba(212,175,55,0.9)';
-  ctx.shadowColor = 'rgba(212,175,55,0.5)';
-  ctx.shadowBlur = 15;
+  yOffset += 110;
+  ctx.font = '36px sans-serif';
+  ctx.fillStyle = 'rgba(212,175,55,0.85)';
+  ctx.shadowColor = 'rgba(212,175,55,0.4)';
+  ctx.shadowBlur = 12;
   ctx.fillText(currentData.name + ' · ' + currentData.sub, canvas.width / 2, yOffset);
 
   // ═══════════════════════════════════════════════
-  // 特质标签
+  // 特质标签 - 紧凑排列
   // ═══════════════════════════════════════════════
-
-  yOffset += 80;
+  yOffset += 65;
   const traits = currentData.traits || [];
-  const tagWidth = 180;
-  const tagHeight = 50;
-  const tagGap = 20;
+  const tagWidth = 160;
+  const tagHeight = 44;
+  const tagGap = 15;
   const tagsPerRow = 2;
   const startX = canvas.width / 2 - (tagWidth + tagGap) / 2 - tagWidth / 2;
 
@@ -2831,66 +2745,59 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     const x = startX + col * (tagWidth + tagGap);
     const y = yOffset + row * (tagHeight + tagGap);
 
-    // 标签背景
     const tagGrad = ctx.createLinearGradient(x, y, x + tagWidth, y);
-    tagGrad.addColorStop(0, 'rgba(139,92,246,0.15)');
-    tagGrad.addColorStop(1, 'rgba(212,175,55,0.15)');
+    tagGrad.addColorStop(0, 'rgba(139,92,246,0.12)');
+    tagGrad.addColorStop(1, 'rgba(212,175,55,0.12)');
     ctx.fillStyle = tagGrad;
     ctx.beginPath();
-    ctx.roundRect(x, y, tagWidth, tagHeight, 25);
+    ctx.roundRect(x, y, tagWidth, tagHeight, 22);
     ctx.fill();
 
-    // 标签边框
-    ctx.strokeStyle = 'rgba(167,139,250,0.3)';
+    ctx.strokeStyle = 'rgba(167,139,250,0.25)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // 标签文字
-    ctx.font = '28px sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.font = '24px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.textAlign = 'center';
-    ctx.fillText(trait, x + tagWidth / 2, y + 35);
+    ctx.fillText(trait, x + tagWidth / 2, y + 30);
   });
 
   // ═══════════════════════════════════════════════
-  // 宇宙编码
+  // 宇宙编码 - 移到特质下方
   // ═══════════════════════════════════════════════
-
-  yOffset += 120;
+  yOffset += 100;
   const cosmicCode = window.currentCosmicCode || 'STAR-XXXX-XXXX';
 
-  // 编码背景
   const codeBg = ctx.createLinearGradient(
-    canvas.width/2 - 250, yOffset - 30,
-    canvas.width/2 + 250, yOffset + 30
+    canvas.width/2 - 220, yOffset - 25,
+    canvas.width/2 + 220, yOffset + 25
   );
-  codeBg.addColorStop(0, 'rgba(212,175,55,0.05)');
-  codeBg.addColorStop(0.5, 'rgba(212,175,55,0.1)');
-  codeBg.addColorStop(1, 'rgba(212,175,55,0.05)');
+  codeBg.addColorStop(0, 'rgba(212,175,55,0.04)');
+  codeBg.addColorStop(0.5, 'rgba(212,175,55,0.08)');
+  codeBg.addColorStop(1, 'rgba(212,175,55,0.04)');
   ctx.fillStyle = codeBg;
   ctx.shadowBlur = 0;
-  ctx.fillRect(canvas.width/2 - 250, yOffset - 30, 500, 60);
+  ctx.fillRect(canvas.width/2 - 220, yOffset - 25, 440, 50);
 
-  // 编码文字
-  ctx.font = 'bold 38px "Courier New", monospace';
+  ctx.font = 'bold 32px "Courier New", monospace';
   ctx.fillStyle = '#FFD700';
-  ctx.shadowColor = 'rgba(255,215,0,0.5)';
-  ctx.shadowBlur = 20;
-  ctx.fillText(cosmicCode, canvas.width / 2, yOffset + 10);
+  ctx.shadowColor = 'rgba(255,215,0,0.4)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(cosmicCode, canvas.width / 2, yOffset + 8);
 
   // ═══════════════════════════════════════════════
-  // 专属寄语
+  // 专属寄语 - 宽松排版
   // ═══════════════════════════════════════════════
-
-  yOffset += 100;
+  yOffset += 80;
   const personalizedQuote = getPersonalizedQuote(currentType, posterName);
 
-  ctx.font = '30px sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,0.85)';
-  ctx.shadowColor = 'rgba(255,255,255,0.2)';
-  ctx.shadowBlur = 8;
+  ctx.font = '26px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.shadowColor = 'rgba(255,255,255,0.15)';
+  ctx.shadowBlur = 6;
 
-  const maxWidth = 850;
+  const maxWidth = 780;
   const lines = [];
   let line = '';
 
@@ -2907,38 +2814,35 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   if (line) lines.push(line);
 
   const quoteStartY = yOffset;
-  const lineHeight = 50;
+  const lineHeight = 42;
   lines.forEach((l, i) => {
     ctx.fillText(l, canvas.width / 2, quoteStartY + i * lineHeight);
   });
 
   // 署名
-  yOffset = quoteStartY + lines.length * lineHeight + 70;
-  ctx.font = 'italic 26px sans-serif';
-  ctx.fillStyle = 'rgba(167,139,250,0.7)';
-  ctx.shadowBlur = 10;
-  ctx.fillText(`-- 宇宙给 ${posterName} 的私语`, canvas.width / 2, yOffset);
+  yOffset = quoteStartY + lines.length * lineHeight + 55;
+  ctx.font = 'italic 22px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.65)';
+  ctx.shadowBlur = 8;
+  ctx.fillText(`—— 宇宙给 ${posterName} 的私语`, canvas.width / 2, yOffset);
 
   // ═══════════════════════════════════════════════
   // 底部装饰
   // ═══════════════════════════════════════════════
-
-  // 底部星光线
-  ctx.strokeStyle = 'rgba(167,139,250,0.2)';
+  ctx.strokeStyle = 'rgba(167,139,250,0.18)';
   ctx.lineWidth = 1;
   ctx.shadowBlur = 0;
   ctx.beginPath();
-  ctx.moveTo(canvas.width * 0.15, canvas.height - 140);
-  ctx.lineTo(canvas.width * 0.85, canvas.height - 140);
+  ctx.moveTo(canvas.width * 0.15, canvas.height - 120);
+  ctx.lineTo(canvas.width * 0.85, canvas.height - 120);
   ctx.stroke();
 
-  // 底部文字
-  ctx.font = '24px sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,0.5)';
-  ctx.fillText('星辰人格 MBTI 测试', canvas.width / 2, canvas.height - 100);
   ctx.font = '20px sans-serif';
-  ctx.fillStyle = 'rgba(255,255,255,0.3)';
-  ctx.fillText('探索你的星辰人格', canvas.width / 2, canvas.height - 60);
+  ctx.fillStyle = 'rgba(255,255,255,0.45)';
+  ctx.fillText('星辰人格 MBTI 测试', canvas.width / 2, canvas.height - 85);
+  ctx.font = '17px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.28)';
+  ctx.fillText('探索你的星辰人格', canvas.width / 2, canvas.height - 55);
 }
 
 // ═══════════════════════════════════════════════════════════
