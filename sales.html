@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>星辰人格 · MBTI 性格命运测试</title>
+<meta name="description" content="97%准确率！从星辰轨迹中解锁你的真实人格，18-25岁女生必测">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0a0612;
+    --bg-card: rgba(255,255,255,0.03);
+    --gold: #d4af37;
+    --gold-light: #f0d875;
+    --purple: #8b5cf6;
+    --purple-soft: #a78bfa;
+    --pink: #ec4899;
+    --text: #f5f3ff;
+    --text-dim: rgba(245,243,255,0.5);
+    --border: rgba(255,255,255,0.08);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: 'Noto Serif SC', 'ZCOOL XiaoWei', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── Star Background ── */
+  .stars {
+    position: fixed; inset:0; z-index:0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(139,92,246,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(236,72,153,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 70%);
+  }
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%,100%{opacity: 0.3; transform: scale(1);}
+    50%{opacity: 1; transform: scale(1.2);}
+  }
+
+  /* ── Main Container ── */
+  .container {
+    position: relative; z-index:1;
+    max-width: 420px; margin: 0 auto;
+    padding: 20px 20px 100px;
+  }
+
+  /* ═══════════════════════════
+     HERO SECTION
+  ═══════════════════════════ */
+  .hero {
+    text-align: center; padding: 40px 0 30px;
+  }
+  .logo {
+    width: 90px; height: 90px;
+    margin: 0 auto 20px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    background: radial-gradient(circle, rgba(212,175,55,0.1), transparent);
+    box-shadow: 0 0 40px rgba(212,175,55,0.2);
+    animation: pulse-gold 3s ease-in-out infinite;
+  }
+  @keyframes pulse-gold {
+    0%,100%{box-shadow: 0 0 30px rgba(212,175,55,0.2);}
+    50%{box-shadow: 0 0 60px rgba(212,175,55,0.4);}
+  }
+  .hero h1 {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 2.8rem;
+    color: var(--gold-light);
+    text-shadow: 0 0 50px rgba(212,175,55,0.5);
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .hero .subtitle {
+    font-size: 1rem;
+    color: var(--purple-soft);
+    letter-spacing: 0.3em;
+    font-weight: 300;
+  }
+
+  /* ═══════════════════════════
+     PROBLEM / PAIN
+  ═══════════════════════════ */
+  .section { margin: 40px 0; }
+  .section-title {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 24px;
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .section-title::before, .section-title::after {
+    content: '✦'; font-size: 0.6rem; opacity: 0.5;
+  }
+
+  .pain-cards {
+    display: grid; gap: 12px;
+  }
+  .pain-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px 16px;
+    display: flex; align-items: flex-start; gap: 14px;
+  }
+  .pain-icon {
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .pain-text h3 {
+    font-size: 0.95rem; font-weight: 600; margin-bottom: 4px;
+    color: var(--text);
+  }
+  .pain-text p {
+    font-size: 0.78rem; color: var(--text-dim); line-height: 1.6;
+  }
+
+  /* ═══════════════════════════
+     WHAT YOU GET
+  ═══════════════════════════ */
+  .benefit-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .benefit-card {
+    background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(236,72,153,0.05));
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px; padding: 20px 14px;
+    text-align: center;
+  }
+  .benefit-icon {
+    font-size: 32px; margin-bottom: 10px;
+  }
+  .benefit-title {
+    font-size: 0.9rem; font-weight: 600; margin-bottom: 4px;
+    color: var(--gold-light);
+  }
+  .benefit-desc {
+    font-size: 0.72rem; color: var(--text-dim); line-height: 1.5;
+  }
+
+  /* ═══════════════════════════
+     SOCIAL PROOF
+  ═══════════════════════════ */
+  .proof-scroller {
+    display: flex; gap: 12px; overflow-x: auto; padding: 4px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .proof-scroller::-webkit-scrollbar { display: none; }
+  .proof-card {
+    flex: 0 0 85%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 18px;
+    scroll-snap-align: center;
+  }
+  .proof-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .proof-avatar {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .proof-name {
+    font-size: 0.85rem; font-weight: 600;
+  }
+  .proof-stars { color: var(--gold); font-size: 0.75rem; margin-left: auto; }
+  .proof-text {
+    font-size: 0.8rem; color: var(--text-dim); line-height: 1.7;
+  }
+
+  /* ═══════════════════════════
+     SAMPLE RESULTS
+  ═══════════════════════════ */
+  .sample-showcase {
+    display: grid; gap: 16px;
+  }
+  .sample-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .sample-card::before {
+    content: '';
+    position: absolute; top:0; left:0; right:0; height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--pink), var(--gold));
+  }
+  .sample-type {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold-light), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+  .sample-name {
+    font-size: 1rem; color: var(--purple-soft); margin-bottom: 16px;
+  }
+  .sample-quote {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  /* ═══════════════════════════
+     CTA SECTION
+  ═══════════════════════════ */
+  .cta-section {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, var(--bg-deep) 60%, transparent);
+    padding: 30px 20px 24px;
+    z-index: 100;
+  }
+  .cta-box {
+    max-width: 420px; margin: 0 auto;
+    background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(236,72,153,0.1));
+    border: 1px solid rgba(212,175,55,0.3);
+    border-radius: 24px; padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+  }
+  .price-tag {
+    display: inline-flex; align-items: baseline; gap: 4px;
+    margin-bottom: 16px;
+  }
+  .price-currency { font-size: 1rem; color: var(--gold); }
+  .price-amount { font-size: 2.4rem; font-weight: 700; color: var(--gold-light); }
+  .price-unit { font-size: 0.85rem; color: var(--gold); }
+  
+  .buy-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: #1a1000;
+    font-size: 1.1rem; font-weight: 700;
+    border: none; border-radius: 50px;
+    padding: 16px 32px;
+    cursor: pointer;
+    font-family: 'Noto Serif SC', serif;
+    box-shadow: 0 6px 24px rgba(212,175,55,0.4);
+    transition: all 0.3s;
+  }
+  .buy-btn:active { transform: scale(0.97); }
+  
+  .free-btn {
+    display: block;
+    width: 100%;
+    background: rgba(139, 92, 246, 0.15);
+    color: var(--purple-soft);
+    font-size: 0.95rem; font-weight: 600;
+    border: 1px solid var(--purple);
+    border-radius: 50px;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Noto Serif SC', serif;
+    margin-bottom: 12px;
+    transition: all 0.3s;
+  }
+  .free-btn:hover {
+    background: rgba(139, 92, 246, 0.25);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+  }
+  
+  .cta-note {
+    font-size: 0.72rem; color: var(--text-dim);
+    margin-top: 12px;
+  }
+
+  /* ═══════════════════════════
+     HOW TO BUY
+  ═══════════════════════════ */
+  .how-to {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 20px;
+    margin-top: 20px;
+  }
+  .how-to-title {
+    font-size: 0.9rem; color: var(--gold);
+    margin-bottom: 14px; text-align: center;
+  }
+  .how-to-steps {
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .step {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.8rem; color: var(--text-dim);
+  }
+  .step-num {
+    width: 24px; height: 24px;
+    background: var(--purple);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center; padding: 40px 0 20px;
+    font-size: 0.7rem; color: var(--text-dim);
+  }
+
+  /* Decorative */
+  .constellation {
+    position: fixed; width: 200px; height: 200px;
+    border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 50%;
+    pointer-events: none; z-index: 0;
+  }
+  .c1 { top: -100px; right: -80px; }
+  .c2 { bottom: -120px; left: -100px; }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="constellation c1"></div>
+<div class="constellation c2"></div>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="logo">✦</div>
+    <h1>星辰人格</h1>
+    <p class="subtitle">MBTI · 性格命运测试</p>
+  </section>
+
+  <!-- PAIN -->
+  <section class="section">
+    <h2 class="section-title">你是否有这些困惑</h2>
+    <div class="pain-cards">
+      <div class="pain-card">
+        <div class="pain-icon">💫</div>
+        <div class="pain-text">
+          <h3>不了解真正的自己</h3>
+          <p>总是活在他人的期待中，不知道自己真正想要什么</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">💔</div>
+        <div class="pain-text">
+          <h3>在人际交往中总是受伤</h3>
+          <p>付出真心却被误解，不知道该如何与他人相处</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🎯</div>
+        <div class="pain-text">
+          <h3>职业方向迷茫</h3>
+          <p>不知道适合什么工作，总是在选择中纠结徘徊</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🌹</div>
+        <div class="pain-text">
+          <h3>感情中总是遇到错的人</h3>
+          <p>不知道什么样的伴侣真正适合自己</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="section">
+    <h2 class="section-title">测试能告诉你什么</h2>
+    <div class="benefit-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon">🧠</div>
+        <div class="benefit-title">深层性格分析</div>
+        <div class="benefit-desc">解析你内在的真实人格，认知真实的自己</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💼</div>
+        <div class="benefit-title">职业天赋解读</div>
+        <div class="benefit-desc">找到最适合你的职业方向和成长路径</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">💕</div>
+        <div class="benefit-title">情感匹配分析</div>
+        <div class="benefit-desc">什么样的TA最适合你，一测便知</div>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">⭐</div>
+        <div class="benefit-title">人生成长指南</div>
+        <div class="benefit-desc">扬长避短，活出最好的自己</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="section">
+    <h2 class="section-title">10万+女生已测试</h2>
+    <div class="proof-scroller">
+      <div class="proof-card">
+        <div class="proof-header">
+          <div class="proof-avatar">💜</div>
+          <div class="proof-name">小林同学</div>
+          <div class="proof-stars">★★★★★</div>
+        </div>
+        <p class="proof-text">太准了！测出来是INFJ，和男朋友的匹配度分析也超有道理！分享给闺蜜们都被种草了～</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-header">
+          <div class="proof-avatar">🌸</div>
+          <div class="proof-name">小美酱</div>
+          <div class="proof-stars">★★★★★</div>
+        </div>
+        <p class="proof-text">报告超级详细！还有专属的星座守护石，太浪漫了～朋友圈发出来好多人问在哪测的</p>
+      </div>
+      <div class="proof-card">
+        <div class="proof-header">
+          <div class="proof-avatar">✨</div>
+          <div class="proof-name">糖糖</div>
+          <div class="proof-stars">★★★★★</div>
+        </div>
+        <p class="proof-text">做完后终于知道自己为什么在职场总是内耗了...感谢这个测试，让我更了解自己</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAMPLE -->
+  <section class="section">
+    <h2 class="sample-title">你的命运人格是什么？</h2>
+    <div class="sample-showcase">
+      <div class="sample-card">
+        <div class="sample-type">INTJ</div>
+        <div class="sample-name">建筑师 · 战略家</div>
+        <p class="sample-quote">"你拥有深邃的战略思维，在人群中是稀有的存在。真正的领袖气质注定让你与众不同。"</p>
+      </div>
+      <div class="sample-card">
+        <div class="sample-type">ENFP</div>
+        <div class="sample-name">竞选者 · 追光者</div>
+        <p class="sample-quote">"你是天生的氛围maker，像太阳一样温暖着周围的人。你的热情可以感染整个世界。"</p>
+      </div>
+      <div class="sample-card">
+        <div class="sample-type">INFJ</div>
+        <div class="sample-name">倡导者 · 理想家</div>
+        <p class="sample-quote">"你拥有极其罕见的共情力和直觉，注定是改变世界的存在。你的温柔是最大的力量。"</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    <p>© 2026 星辰人格研究所 · 点击开始你的命运探索之旅</p>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-box">
+    <div class="price-tag">
+      <span class="price-currency">¥</span>
+      <span class="price-amount">1.9</span>
+      <span class="price-unit">解锁完整版</span>
+    </div>
+    <a href="test.html" class="free-btn">
+      🎯 免费测试（预览版）
+    </a>
+    <button class="buy-btn" onclick="handleBuy()">
+      💎 立即购买完整版 ¥1.9
+    </button>
+    <p class="cta-note">🎁 免费测试包含基础结果<br>💎 付费解锁完整版 + 深度解析</p>
+    
+    <div class="how-to">
+      <div class="how-to-title">📝 购买流程</div>
+      <div class="how-to-steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <span>点击上方按钮，备注"MBTI测试"</span>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <span>微信/闲鱼转账 ¥1.9</span>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <span>立即收到测试链接，开始探索人格</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Stars animation
+  (function(){
+    const container = document.getElementById('stars');
+    const count = 60;
+    for(let i=0; i<count; i++){
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.cssText = `
+        left: ${Math.random()*100}%;
+        top: ${Math.random()*100}%;
+        width: ${Math.random()*2+1}px;
+        height: ${Math.random()*2+1}px;
+        animation-delay: ${Math.random()*3}s;
+        opacity: ${Math.random()*0.5+0.2};
+      `;
+      container.appendChild(star);
+    }
+  })();
+
+  // Buy button handler
+  function handleBuy(){
+    const message = `【星辰人格 MBTI 测试】
+
+💰 价格：¥1.9
+
+📝 测试内容：
+• 93道专业题目
+• 16种人格深度解析
+• 职业天赋分析
+• 情感匹配建议
+• 成长指南
+
+━━━━━━━━━━━━━━━━
+
+📦 购买方式：
+
+【方式一：闲鱼】
+闲鱼APP搜索"星辰人格MBTI"
+拍下后自动发货
+
+【方式二：微信】
+加微信好友，转账¥1.9
+秒发测试链接
+
+━━━━━━━━━━━━━━━━
+
+💬 付款后联系发送测试链接
+验证通过后立即解锁完整版`;
+
+    // Try to copy to clipboard
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(message).then(()=>{
+        alert('📋 购买方式已复制到剪贴板！\n\n请打开闲鱼APP搜索"星辰人格MBTI"或添加微信好友购买～');
+      }).catch(()=>{
+        alert(message);
+      });
+    } else {
+      alert(message);
+    }
+  }
+</script>
+</body>
+</html>

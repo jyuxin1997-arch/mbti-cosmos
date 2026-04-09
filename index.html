@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>星辰人格 · MBTI 性格命运测试</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050510;
+    --surface: rgba(255,255,255,0.04);
+    --surface2: rgba(255,255,255,0.08);
+    --gold: #d4af37;
+    --gold-light: #f0d875;
+    --gold-glow: rgba(212,175,55,0.6);
+    --purple: #8b5cf6;
+    --purple-soft: #a78bfa;
+    --pink: #ec4899;
+    --blue: #4fa3d4;
+    --teal: #4ecdc4;
+    --text: #f5f3ff;
+    --text-dim: rgba(245,243,255,0.5);
+    --border: rgba(255,255,255,0.08);
+    --card: rgba(15,12,35,0.9);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif SC', serif;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Stars Canvas */
+  #stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  
+  .app { position:relative; z-index:1; min-height:100dvh; }
+
+  .screen { display:none; min-height:100dvh; padding: 20px 20px 40px; }
+  .screen.active { display:flex; flex-direction:column; animation:fadeIn .5s ease; }
+  
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+
+  /* ═════════════════════
+     INTRO SCREEN
+  ═════════════════════ */
+  .intro { align-items:center; justify-content:center; text-align:center; gap:32px; padding-top:40px; }
+  
+  .logo-mark {
+    width:80px; height:80px; border:2px solid var(--gold);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:28px; color:var(--gold);
+    background: radial-gradient(circle, rgba(212,175,55,0.1), transparent);
+    box-shadow: 0 0 30px rgba(212,175,55,.2);
+    animation: pulse-gold 3s ease-in-out infinite;
+  }
+  @keyframes pulse-gold {
+    0%,100%{box-shadow:0 0 20px rgba(212,175,55,.2)}
+    50%{box-shadow:0 0 50px rgba(212,175,55,.4)}
+  }
+  
+  .title-block h1 {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+    color: var(--gold-light);
+    text-shadow: 0 0 40px rgba(212,175,55,.4);
+    letter-spacing: .1em;
+    line-height:1.2;
+  }
+  .title-block .subtitle {
+    margin-top:8px; font-size:.85rem; color:var(--purple-soft);
+    letter-spacing:.3em; font-weight:300;
+  }
+
+  .intro-card {
+    width:100%; max-width:340px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius:24px; padding: 28px 24px;
+    backdrop-filter: blur(20px);
+  }
+  .intro-icon { font-size:42px; margin-bottom:14px; }
+  .intro-title { font-size:1.15rem; font-weight:600; margin-bottom:8px; color:var(--gold-light); }
+  .intro-desc { font-size:.82rem; color:var(--text-dim); line-height:1.7; }
+
+  /* 名字输入区 */
+  .name-input-section {
+    width:100%; max-width:340px;
+    margin-top:-8px;
+  }
+  .name-input-label {
+    font-size:.85rem; color:var(--purple-soft); margin-bottom:10px;
+  }
+  .name-input-row {
+    display:flex; gap:10px;
+  }
+  .name-input {
+    flex:1; padding:12px 16px; border-radius:12px;
+    border:1px solid var(--border); background:var(--surface);
+    color:var(--text); font-size:1rem; font-family:'Noto Serif SC', serif;
+    outline:none; transition:border-color .2s;
+  }
+  .name-input:focus { border-color:var(--purple); }
+  .name-input::placeholder { color:var(--text-dim); }
+
+  .test-info {
+    display:flex; justify-content:center; gap:20px; flex-wrap:wrap;
+  }
+  .info-item { text-align:center; }
+  .info-num { font-size:1.6rem; font-weight:700; color:var(--gold-light); }
+  .info-label { font-size:.7rem; color:var(--text-dim); }
+
+  .start-btn {
+    width:100%; max-width:300px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color:#1a1000; font-weight:700; font-size:1rem;
+    border:none; border-radius:50px; padding:16px 40px;
+    cursor:pointer; transition: all .3s;
+    font-family: 'Noto Serif SC', serif;
+    box-shadow: 0 4px 24px rgba(212,175,55,.3);
+  }
+  .start-btn:active { transform:scale(.97); }
+
+  /* ═════════════════════
+     LOADING SCREEN - 命运感加载
+  ═════════════════════ */
+  .loading {
+    align-items:center; justify-content:center; text-align:center;
+    gap:20px;
+  }
+  .loading-orbit {
+    width:120px; height:120px;
+    position:relative;
+    animation: orbit-spin 20s linear infinite;
+  }
+  @keyframes orbit-spin {
+    from{transform:rotate(0deg)}
+    to{transform:rotate(360deg)}
+  }
+  .loading-core {
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%, -50%);
+    width:40px; height:40px;
+    background: radial-gradient(circle, var(--gold-light), var(--gold));
+    border-radius:50%;
+    box-shadow: 0 0 30px var(--gold-glow);
+  }
+  .loading-ring {
+    position:absolute; inset:0;
+    border:1px solid rgba(212,175,55,0.3);
+    border-radius:50%;
+  }
+  .loading-dot {
+    position:absolute; top:-4px; left:50%;
+    width:8px; height:8px;
+    background:var(--gold);
+    border-radius:50%;
+    box-shadow: 0 0 12px var(--gold-glow);
+  }
+  .loading-text {
+    font-size:1.1rem; color:var(--gold-light);
+    text-shadow: 0 0 20px rgba(212,175,55,0.5);
+    min-height:1.5em;
+  }
+  .loading-sub {
+    font-size:.8rem; color:var(--text-dim); margin-top:8px;
+  }
+
+  /* ═════════════════════
+     QUIZ SCREEN
+  ═════════════════════ */
+  
+  /* ═════════════════════
+     答题页宇宙氛围元素 - 全面增强
+  ═════════════════════ */
+  
+  /* 深空背景 */
+  .deep-space-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 30%, rgba(139,92,246,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(79,163,212,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* 星尘粒子层 - 20颗 */
+  .stardust-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .stardust {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    animation: float-up 18s linear infinite;
+    opacity: 0;
+  }
+  
+  .stardust:nth-child(1) { left: 5%; animation-delay: 0s; animation-duration: 15s; }
+  .stardust:nth-child(2) { left: 12%; animation-delay: 1.5s; animation-duration: 17s; }
+  .stardust:nth-child(3) { left: 20%; animation-delay: 3s; animation-duration: 16s; }
+  .stardust:nth-child(4) { left: 28%; animation-delay: 0.8s; animation-duration: 18s; }
+  .stardust:nth-child(5) { left: 35%; animation-delay: 2.2s; animation-duration: 14s; }
+  .stardust:nth-child(6) { left: 42%; animation-delay: 4s; animation-duration: 19s; }
+  .stardust:nth-child(7) { left: 50%; animation-delay: 1s; animation-duration: 15s; }
+  .stardust:nth-child(8) { left: 58%; animation-delay: 2.5s; animation-duration: 17s; }
+  .stardust:nth-child(9) { left: 65%; animation-delay: 0.5s; animation-duration: 16s; }
+  .stardust:nth-child(10) { left: 72%; animation-delay: 3.5s; animation-duration: 18s; }
+  .stardust:nth-child(11) { left: 8%; animation-delay: 2s; animation-duration: 15s; }
+  .stardust:nth-child(12) { left: 18%; animation-delay: 4.5s; animation-duration: 17s; }
+  .stardust:nth-child(13) { left: 32%; animation-delay: 1.2s; animation-duration: 16s; }
+  .stardust:nth-child(14) { left: 48%; animation-delay: 3.8s; animation-duration: 18s; }
+  .stardust:nth-child(15) { left: 55%; animation-delay: 0.3s; animation-duration: 14s; }
+  .stardust:nth-child(16) { left: 62%; animation-delay: 2.8s; animation-duration: 19s; }
+  .stardust:nth-child(17) { left: 75%; animation-delay: 1.8s; animation-duration: 15s; }
+  .stardust:nth-child(18) { left: 82%; animation-delay: 4.2s; animation-duration: 17s; }
+  .stardust:nth-child(19) { left: 88%; animation-delay: 0.6s; animation-duration: 16s; }
+  .stardust:nth-child(20) { left: 95%; animation-delay: 3.2s; animation-duration: 18s; }
+  
+  @keyframes float-up {
+    0% {
+      bottom: -10px;
+      opacity: 0;
+      transform: translateX(0) scale(0.5);
+    }
+    5% { opacity: 0.9; transform: scale(1); }
+    90% { opacity: 0.7; }
+    100% {
+      bottom: 105%;
+      opacity: 0;
+      transform: translateX(30px) scale(0.8);
+    }
+  }
+  
+  /* 流星 - 5条 */
+  .meteor-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2;
+  }
+  
+  .meteor {
+    position: absolute;
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.9), rgba(167,139,250,0.6));
+    border-radius: 50%;
+    transform: rotate(-45deg);
+    animation: meteor-fall 8s ease-in-out infinite;
+    opacity: 0;
+    filter: blur(0.5px);
+  }
+  
+  .meteor:nth-child(1) {
+    top: 5%;
+    left: 60%;
+    animation-delay: 0s;
+  }
+  
+  .meteor:nth-child(2) {
+    top: 25%;
+    left: 10%;
+    animation-delay: 2s;
+  }
+  
+  .meteor:nth-child(3) {
+    top: 50%;
+    left: 75%;
+    animation-delay: 4s;
+  }
+  
+  .meteor:nth-child(4) {
+    top: 70%;
+    left: 30%;
+    animation-delay: 6s;
+  }
+  
+  .meteor:nth-child(5) {
+    top: 15%;
+    left: 85%;
+    animation-delay: 1s;
+  }
+  
+  @keyframes meteor-fall {
+    0% {
+      opacity: 0;
+      transform: rotate(-45deg) translateX(0);
+    }
+    3% { opacity: 1; }
+    10% {
+      opacity: 0;
+      transform: rotate(-45deg) translateX(-300px);
+    }
+    100% { opacity: 0; }
+  }
+  
+  /* 星云光晕 - 5团 */
+  .nebula-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+  }
+  
+  .nebula {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: nebula-drift 25s ease-in-out infinite;
+    opacity: 0.12;
+  }
+  
+  .nebula.purple {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(139,92,246,0.5), transparent 70%);
+    top: 10%;
+    left: -80px;
+  }
+  
+  .nebula.blue {
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(79,163,212,0.4), transparent 70%);
+    bottom: 5%;
+    right: -100px;
+    animation-delay: -12s;
+  }
+  
+  .nebula.gold {
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(212,175,55,0.35), transparent 70%);
+    top: 50%;
+    left: 10%;
+    animation-delay: -6s;
+  }
+  
+  .nebula.pink {
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(236,72,153,0.3), transparent 70%);
+    top: 30%;
+    right: 5%;
+    animation-delay: -18s;
+  }
+  
+  .nebula.teal {
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(78,205,196,0.25), transparent 70%);
+    bottom: 30%;
+    left: 50%;
+    animation-delay: -3s;
+  }
+  
+  @keyframes nebula-drift {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.12; }
+    25% { transform: translate(40px, -30px) scale(1.15); opacity: 0.15; }
+    50% { transform: translate(-30px, 20px) scale(0.9); opacity: 0.1; }
+    75% { transform: translate(20px, 40px) scale(1.1); opacity: 0.13; }
+  }
+  
+  /* 闪烁星星矩阵 - 30颗 */
+  .twinkling-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .twinkle-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  
+  .twinkle-star:nth-child(1) { top: 5%; left: 10%; animation-delay: 0s; animation-duration: 2.5s; }
+  .twinkle-star:nth-child(2) { top: 8%; left: 25%; animation-delay: 0.3s; animation-duration: 3s; }
+  .twinkle-star:nth-child(3) { top: 12%; left: 45%; animation-delay: 0.6s; animation-duration: 2.8s; }
+  .twinkle-star:nth-child(4) { top: 6%; left: 70%; animation-delay: 0.9s; animation-duration: 3.2s; }
+  .twinkle-star:nth-child(5) { top: 15%; left: 85%; animation-delay: 1.2s; animation-duration: 2.6s; }
+  .twinkle-star:nth-child(6) { top: 20%; left: 5%; animation-delay: 0.2s; animation-duration: 3.1s; }
+  .twinkle-star:nth-child(7) { top: 25%; left: 30%; animation-delay: 0.5s; animation-duration: 2.7s; }
+  .twinkle-star:nth-child(8) { top: 22%; left: 55%; animation-delay: 0.8s; animation-duration: 2.9s; }
+  .twinkle-star:nth-child(9) { top: 28%; left: 78%; animation-delay: 1.1s; animation-duration: 3.3s; }
+  .twinkle-star:nth-child(10) { top: 18%; left: 92%; animation-delay: 1.4s; animation-duration: 2.4s; }
+  .twinkle-star:nth-child(11) { top: 35%; left: 12%; animation-delay: 0.1s; animation-duration: 3s; }
+  .twinkle-star:nth-child(12) { top: 40%; left: 38%; animation-delay: 0.4s; animation-duration: 2.8s; }
+  .twinkle-star:nth-child(13) { top: 38%; left: 62%; animation-delay: 0.7s; animation-duration: 3.1s; }
+  .twinkle-star:nth-child(14) { top: 42%; left: 88%; animation-delay: 1s; animation-duration: 2.5s; }
+  .twinkle-star:nth-child(15) { top: 48%; left: 8%; animation-delay: 1.3s; animation-duration: 2.9s; }
+  .twinkle-star:nth-child(16) { top: 52%; left: 22%; animation-delay: 0.15s; animation-duration: 3.2s; }
+  .twinkle-star:nth-child(17) { top: 55%; left: 48%; animation-delay: 0.45s; animation-duration: 2.6s; }
+  .twinkle-star:nth-child(18) { top: 50%; left: 72%; animation-delay: 0.75s; animation-duration: 3s; }
+  .twinkle-star:nth-child(19) { top: 58%; left: 95%; animation-delay: 1.05s; animation-duration: 2.7s; }
+  .twinkle-star:nth-child(20) { top: 62%; left: 3%; animation-delay: 1.35s; animation-duration: 2.8s; }
+  .twinkle-star:nth-child(21) { top: 68%; left: 28%; animation-delay: 0.25s; animation-duration: 3.1s; }
+  .twinkle-star:nth-child(22) { top: 72%; left: 52%; animation-delay: 0.55s; animation-duration: 2.5s; }
+  .twinkle-star:nth-child(23) { top: 70%; left: 75%; animation-delay: 0.85s; animation-duration: 2.9s; }
+  .twinkle-star:nth-child(24) { top: 75%; left: 90%; animation-delay: 1.15s; animation-duration: 3.3s; }
+  .twinkle-star:nth-child(25) { top: 80%; left: 15%; animation-delay: 0.35s; animation-duration: 2.6s; }
+  .twinkle-star:nth-child(26) { top: 85%; left: 40%; animation-delay: 0.65s; animation-duration: 3s; }
+  .twinkle-star:nth-child(27) { top: 82%; left: 65%; animation-delay: 0.95s; animation-duration: 2.8s; }
+  .twinkle-star:nth-child(28) { top: 88%; left: 82%; animation-delay: 1.25s; animation-duration: 3.2s; }
+  .twinkle-star:nth-child(29) { top: 92%; left: 55%; animation-delay: 0.5s; animation-duration: 2.7s; }
+  .twinkle-star:nth-child(30) { top: 95%; left: 35%; animation-delay: 1.45s; animation-duration: 2.9s; }
+  
+  @keyframes twinkle {
+    0%, 100% { 
+      opacity: 0.2;
+      transform: scale(0.8);
+      box-shadow: 0 0 4px rgba(255,255,255,0.3);
+    }
+    50% { 
+      opacity: 1;
+      transform: scale(1.2);
+      box-shadow: 0 0 8px rgba(255,255,255,0.8);
+    }
+  }
+  
+  /* 星座连线 */
+  .constellation-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.6;
+  }
+  
+  .constellation-bg svg {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* 漂浮宇宙元素 - 8个 */
+  .floating-elements {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 3;
+  }
+  
+  .floating-cosmos {
+    position: absolute;
+    font-size: 1.3rem;
+    opacity: 0.25;
+    animation: float-cosmos 15s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+  }
+  
+  .floating-cosmos:nth-child(1) { top: 8%; left: 6%; animation-delay: 0s; }
+  .floating-cosmos:nth-child(2) { top: 20%; right: 8%; animation-delay: -3s; }
+  .floating-cosmos:nth-child(3) { top: 40%; left: 4%; animation-delay: -6s; }
+  .floating-cosmos:nth-child(4) { top: 55%; right: 6%; animation-delay: -9s; }
+  .floating-cosmos:nth-child(5) { top: 70%; left: 8%; animation-delay: -12s; }
+  .floating-cosmos:nth-child(6) { top: 85%; right: 10%; animation-delay: -2s; }
+  .floating-cosmos:nth-child(7) { top: 30%; left: 90%; animation-delay: -5s; }
+  .floating-cosmos:nth-child(8) { top: 65%; left: 85%; animation-delay: -8s; }
+  
+  @keyframes float-cosmos {
+    0%, 100% { 
+      transform: translateY(0) rotate(0deg); 
+      opacity: 0.2;
+    }
+    50% { 
+      transform: translateY(-20px) rotate(15deg); 
+      opacity: 0.35;
+    }
+  }
+  
+  /* 问题文字星光环绕效果 */
+  .question-text {
+    position: relative;
+  }
+  
+  .question-text::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(167,139,250,0.3), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.3; width: 60%; }
+    50% { opacity: 0.6; width: 70%; }
+  }
+  
+  /* 选项 hover 光晕增强 */
+  .scale-opt {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .scale-opt::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(167,139,250,0.3), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .scale-opt:hover::before {
+    opacity: 1;
+  }
+  
+  .scale-opt.selected::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.4), rgba(212,175,55,0.3));
+    border-radius: 14px;
+    z-index: -1;
+    animation: selected-glow 2s ease-in-out infinite;
+  }
+  
+  @keyframes selected-glow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  .quiz { padding-top:16px; gap:0; }
+  
+  .quiz-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:6px;
+  }
+  .quiz-dim { font-size:.72rem; color:var(--purple-soft); letter-spacing:.2em; text-transform:uppercase; }
+  .quiz-counter { font-size:.72rem; color:var(--text-dim); }
+  
+  .progress-bar { height:3px; background:var(--border); border-radius:2px; margin-bottom:28px; overflow:hidden; }
+  .progress-fill { height:100%; background: linear-gradient(90deg, var(--purple), var(--gold)); border-radius:2px; transition: width .5s ease; }
+
+  .question-block { flex:1; }
+  .question-text {
+    font-size: clamp(1.05rem, 4.5vw, 1.35rem);
+    font-weight:600; line-height:1.6; margin-bottom:20px;
+    min-height:60px;
+    text-shadow: 0 0 20px rgba(245,243,255,0.15);
+  }
+  .question-text .q-icon { margin-right:8px; }
+  
+  .question-options {
+    display:flex; justify-content:space-between; margin-bottom:24px; 
+    font-size:clamp(0.85rem,3.2vw,1rem); padding:12px 16px;
+    background:rgba(255,255,255,0.05); border-radius:12px;
+  }
+  .opt-left { color:var(--gold); text-align:left; flex:1; padding-right:10px; }
+  .opt-right { color:var(--blue); text-align:right; flex:1; padding-left:10px; }
+
+  .scale-row { display:flex; align-items:center; gap:6px; width:100%; }
+  .scale-label { font-size:.65rem; color:var(--text-dim); white-space:nowrap; min-width:38px; text-align:center; }
+  .scale-label.right { text-align:right; }
+  .scale-opts { flex:1; display:flex; justify-content:space-between; }
+  .scale-opt {
+    flex:1; margin:0 2px;
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; padding:14px 4px;
+    text-align:center; font-size:.75rem; color:var(--text-dim);
+    cursor:pointer; transition: all .2s;
+    user-select:none;
+  }
+  .scale-opt:hover, .scale-opt:active { border-color:var(--purple); color:var(--purple); }
+  .scale-opt.selected {
+    background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(139,92,246,.08));
+    border-color:var(--purple); color:var(--purple);
+    box-shadow: 0 0 16px rgba(139,92,246,.2);
+  }
+
+  .dim-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .dim-tag {
+    font-size:.65rem; padding:3px 10px; border-radius:20px;
+    border:1px solid; letter-spacing:.1em;
+  }
+  .dim-tag.ei { border-color:rgba(212,175,55,.4); color:var(--gold); }
+  .dim-tag.sn { border-color:rgba(79,163,212,.4); color:var(--blue); }
+  .dim-tag.tf { border-color:rgba(236,72,153,.4); color:var(--pink); }
+  .dim-tag.jp { border-color:rgba(78,205,196,.4); color:var(--teal); }
+
+  /* ═════════════════════
+     RESULT SCREEN - 星空感
+  ═════════════════════ */
+  .result {
+    align-items:center; text-align:center;
+    padding-top:30px; gap:0;
+    position:relative;
+  }
+
+  /* 名字问候 - 金黄渐变高亮 */
+  .cosmic-greeting {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 24px 20px;
+    position: relative;
+    opacity: 0;
+    animation: fadeInUp .8s ease .2s forwards;
+  }
+  
+  .cosmic-subtitle {
+    font-size: 0.7rem;
+    color: rgba(167, 139, 250, 0.7);
+    letter-spacing: 0.4em;
+    margin-bottom: 16px;
+    font-weight: 300;
+    text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
+  }
+  
+  .cosmic-name {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    background: linear-gradient(135deg, #f0d78c, #d4af37, #f5e6c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+    margin-bottom: 20px;
+    animation: name-glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes name-glow {
+    0%, 100% { filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); }
+    50% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.7)); }
+  }
+  
+  .cosmic-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .star-dot {
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.9), transparent);
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    animation: twinkle-dot 2s ease-in-out infinite;
+  }
+  
+  .star-line {
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+  }
+  
+  @keyframes twinkle-dot {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+  
+  .cosmic-message {
+    font-size: 0.85rem;
+    color: rgba(200, 200, 220, 0.8);
+    letter-spacing: 0.2em;
+    font-weight: 300;
+    text-shadow: 0 0 20px rgba(200, 200, 220, 0.2);
+  }
+  
+  @keyframes fadeInUp {
+    from{opacity:0;transform:translateY(15px)}
+    to{opacity:1;transform:none}
+  }
+
+  /* 核心人格星球 - 发光效果 */
+  .planet-core {
+    position:relative;
+    margin-bottom:60px;
+  }
+  .planet-main {
+    width:140px; height:140px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:3.2rem; font-weight:700; color:var(--gold);
+    position:relative; z-index:2;
+    animation: planet-float 4s ease-in-out infinite;
+    text-shadow: 0 0 30px var(--gold-glow), 0 0 60px rgba(212,175,55,0.3);
+  }
+  @keyframes planet-float {
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+  }
+  .planet-glow {
+    position:absolute; inset:-30px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(212,175,55,.25), rgba(212,175,55,.05) 50%, transparent 70%);
+    animation: glow-pulse 3s ease-in-out infinite;
+    z-index:1;
+  }
+  @keyframes glow-pulse {
+    0%,100%{opacity:.6;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.08)}
+  }
+  .planet-name {
+    font-size:1.4rem; color:var(--gold-light);
+    margin-top:16px; letter-spacing:.15em;
+    font-weight:300;
+    text-shadow: 0 0 20px rgba(212,175,55,0.4);
+  }
+  .planet-sub {
+    font-size:.9rem; color:var(--text-dim); margin-top:6px;
+    text-shadow: 0 0 15px rgba(245,243,255,0.1);
+  }
+
+  /* 特质星点散落 */
+  .trait-stars {
+    position:absolute;
+    width:280px; height:280px;
+    top:50%; left:50%;
+    transform:translate(-50%, -50%);
+    pointer-events:none; z-index:3;
+  }
+  .trait-star {
+    position:absolute;
+    font-size:.8rem; color:var(--gold-light);
+    opacity:.8;
+    white-space:nowrap;
+    animation: twinkle 2s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(212,175,55,0.6);
+  }
+  .trait-star:nth-child(1) { top:5%; left:15%; animation-delay:0s; }
+  .trait-star:nth-child(2) { top:15%; right:10%; animation-delay:.4s; }
+  .trait-star:nth-child(3) { bottom:20%; left:8%; animation-delay:.8s; }
+  .trait-star:nth-child(4) { bottom:8%; right:15%; animation-delay:1.2s; }
+  @keyframes twinkle {
+    0%,100%{opacity:.5;transform:scale(1)}
+    50%{opacity:1;transform:scale(1.05)}
+  }
+
+  /* 伴星 - 最旺我人格 */
+  .companion-star {
+    margin-top:-30px; margin-bottom:40px;
+    position:relative;
+    opacity:0; animation:fadeInUp .8s ease .6s forwards;
+  }
+  .companion-orbit {
+    width:200px; height:60px;
+    margin:0 auto; position:relative;
+  }
+  .companion-planet {
+    width:70px; height:70px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, rgba(212,175,55,.3), rgba(212,175,55,.1));
+    border:1px solid rgba(212,175,55,.4);
+    display:flex; align-items:center; justify-content:center;
+    position:absolute; right:0; top:-5px;
+    animation: orbit-float 5s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(212,175,55,0.3);
+  }
+  @keyframes orbit-float {
+    0%,100%{transform:translateY(0) rotate(0deg)}
+    50%{transform:translateY(-5px) rotate(3deg)}
+  }
+  .companion-type {
+    font-size:1.3rem; color:var(--gold);
+    text-shadow: 0 0 15px rgba(212,175,55,0.5);
+  }
+  .companion-info {
+    margin-top:12px;
+  }
+  .companion-title {
+    font-size:.75rem; color:var(--text-dim); letter-spacing:.2em;
+    margin-bottom:6px;
+    text-shadow: 0 0 10px rgba(245,243,255,0.1);
+  }
+  .companion-name {
+    font-size:1rem; color:var(--gold-light);
+    text-shadow: 0 0 15px rgba(212,175,55,0.3);
+  }
+  .companion-desc {
+    font-size:.78rem; color:var(--text-dim); margin-top:8px;
+    max-width:260px; line-height:1.6;
+    text-shadow: 0 0 10px rgba(245,243,255,0.1);
+  }
+
+  /* 专属寄语 - 星光阴影 */
+  .soul-message {
+    width:100%; max-width:360px;
+    margin-top:30px;
+    position:relative;
+    opacity:0; animation:fadeInUp .8s ease .8s forwards;
+  }
+  
+  .soul-letter {
+    background: linear-gradient(145deg, rgba(25,25,45,0.7) 0%, rgba(18,18,35,0.8) 50%, rgba(25,25,45,0.7) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 20px;
+    padding: 32px 28px;
+    backdrop-filter: blur(15px);
+    box-shadow: 
+      0 8px 32px rgba(0,0,0,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  
+  .letter-header {
+    font-size: 1.15rem;
+    color: #e8c87a;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+    font-weight: 500;
+    text-shadow: 0 0 25px rgba(232,200,122,0.4);
+  }
+  
+  .letter-body {
+    font-size: 0.92rem;
+    line-height: 2.2;
+    color: rgba(230, 230, 240, 0.95);
+    letter-spacing: 0.08em;
+    font-weight: 300;
+    text-align: justify;
+    padding: 0 8px;
+    text-shadow: 0 0 25px rgba(245,243,255,0.2);
+    word-break: break-word;
+  }
+  
+  .letter-footer {
+    margin-top: 24px;
+    text-align: right;
+  }
+  
+  .cosmic-code {
+    font-size: 11px;
+    color: rgba(255, 215, 100, 0.6);
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    font-family: 'Courier New', monospace;
+  }
+  
+  .letter-signature {
+    font-size: 0.8rem;
+    color: rgba(167,139,250,0.6);
+    letter-spacing: 0.1em;
+    font-weight: 300;
+    font-style: italic;
+    text-shadow: 0 0 15px rgba(167,139,250,0.2);
+  }
+
+  /* 分享按钮区 */
+  .share-actions {
+    margin-top:40px; width:100%; max-width:320px;
+    opacity:0; animation:fadeInUp .8s ease 1s forwards;
+  }
+  .share-row { display:flex; gap:12px; justify-content:center; margin-bottom:16px; }
+  
+/* ═══════════════════════════════════════════════════════════
+   海报预览弹窗 - 微信友好
+   ═══════════════════════════════════════════════════════════ */
+
+.poster-preview {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.poster-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+}
+
+.poster-container {
+  position: relative;
+  z-index: 10;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.poster-img {
+  max-width: 100%;
+  max-height: 75vh;
+  border-radius: 12px;
+  box-shadow: 0 0 60px rgba(167, 139, 250, 0.3);
+  animation: poster-appear 0.3s ease;
+}
+
+@keyframes poster-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.poster-tip {
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: rgba(212, 175, 55, 0.8);
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.poster-close {
+  margin-top: 20px;
+  padding: 12px 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.poster-close:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+.share-btn {
+    display:flex; align-items:center; gap:6px;
+    padding:12px 20px; border-radius:50px;
+    border:1px solid var(--border); font-size:.85rem;
+    cursor:pointer; transition:all .2s; color:var(--text);
+    background:var(--surface); font-family:'Noto Serif SC', serif;
+  }
+  .share-btn:hover { border-color:var(--gold); color:var(--gold); }
+  .share-btn.gold { border-color:rgba(212,175,55,.5); color:var(--gold); }
+  .share-btn.gold:hover { background:rgba(212,175,55,.1); }
+
+  .result-actions { display:flex; gap:10px; width:100%; }
+  .result-actions .start-btn { flex:1; font-size:.85rem; padding:13px 16px; }
+  .result-actions .free-btn { 
+    flex:1; text-align:center; font-size:.85rem; padding:13px 16px;
+    background:none; border:1px solid var(--border);
+    color:var(--text-dim); border-radius:50px;
+    cursor:pointer; font-family: 'Noto Serif SC', serif;
+  }
+  .result-actions .free-btn:hover { border-color:var(--purple); color:var(--purple); }
+
+  /* 结果页名字输入弹窗 */
+  .name-modal {
+    position:fixed; inset:0; background:rgba(0,0,0,.9);
+    z-index:9999; display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .name-modal-content {
+    background:var(--card); border:1px solid var(--border);
+    border-radius:24px; padding:30px 24px;
+    text-align:center; max-width:320px; width:100%;
+  }
+  .name-modal-title {
+    font-size:1.1rem; color:var(--gold-light); margin-bottom:8px;
+  }
+  .name-modal-desc {
+    font-size:.85rem; color:var(--text-dim); margin-bottom:20px;
+  }
+  .name-modal-input {
+    width:100%; padding:14px 18px; border-radius:12px;
+    border:1px solid var(--border); background:var(--surface);
+    color:var(--text); font-size:1rem; font-family:'Noto Serif SC', serif;
+    outline:none; margin-bottom:16px;
+  }
+  .name-modal-input:focus { border-color:var(--gold); }
+  .name-modal-btns { display:flex; gap:10px; }
+  .name-modal-btn {
+    flex:1; padding:12px; border-radius:50px; cursor:pointer;
+    font-family:'Noto Serif SC', serif; font-size:.9rem;
+  }
+  .name-modal-btn.primary {
+    background:linear-gradient(135deg, var(--gold), var(--gold-light));
+    color:#1a1000; border:none; font-weight:600;
+  }
+  .name-modal-btn.secondary {
+    background:none; border:1px solid var(--border);
+    color:var(--text-dim);
+  }
+
+  /* 海报弹窗 */
+  #posterModal { font-family: 'Noto Serif SC', serif !important; }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="app">
+
+  <!-- INTRO -->
+  <div class="screen intro active" id="intro">
+    <div class="logo-mark">✦</div>
+    <div class="title-block">
+      <h1>星辰人格</h1>
+      <p class="subtitle">MBTI · 性格命运测试</p>
+    </div>
+    <div class="intro-card">
+      <div class="intro-icon">🔮</div>
+      <div class="intro-title">解锁你的星辰人格</div>
+      <div class="intro-desc">从星辰轨迹中读懂真实的自己<br>随机题目 · 每次体验不同 · 16种人格</div>
+    </div>
+    <div class="name-input-section">
+      <div class="name-input-label">你希望我怎么称呼你？</div>
+      <div class="name-input-row">
+        <input type="text" class="name-input" id="nameInput" placeholder="输入你的昵称（可选）" maxlength="10">
+      </div>
+    </div>
+    <div class="test-info">
+      <div class="info-item">
+        <div class="info-num">~45</div>
+        <div class="info-label">随机题目</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">16</div>
+        <div class="info-label">人格类型</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">∞</div>
+        <div class="info-label">命运组合</div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">开始探索人格</button>
+  </div>
+
+  <!-- LOADING - 命运感加载 -->
+  <div class="screen loading" id="loading">
+    <div class="loading-orbit">
+      <div class="loading-core"></div>
+      <div class="loading-ring"><div class="loading-dot"></div></div>
+    </div>
+    <div class="loading-text" id="loadingText">正在为你链接星轨…</div>
+    <div class="loading-sub" id="loadingSub">宇宙正在挑选今日与你共鸣的问题</div>
+  </div>
+
+  <!-- QUIZ - 深空漫游 -->
+  <div class="screen quiz" id="quiz">
+    <!-- 深空背景层 -->
+    <div class="deep-space">
+      <!-- 星尘粒子层 -->
+      <div class="stardust-layer">
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+        <div class="stardust"></div>
+      </div>
+      
+      <!-- 流星划过 -->
+      <div class="shooting-stars">
+        <div class="shooting-star shooting-star-1"></div>
+        <div class="shooting-star shooting-star-2"></div>
+      </div>
+      
+      <!-- 星座连线背景 -->
+      <svg class="constellation-bg" viewBox="0 0 400 600">
+        <circle class="constellation-dot" cx="50" cy="100" r="2"/>
+        <circle class="constellation-dot" cx="120" cy="80" r="1.5"/>
+        <circle class="constellation-dot" cx="350" cy="150" r="2"/>
+        <circle class="constellation-dot" cx="300" cy="400" r="1.5"/>
+        <circle class="constellation-dot" cx="80" cy="500" r="2"/>
+        <line class="constellation-line" x1="50" y1="100" x2="120" y2="80"/>
+        <line class="constellation-line" x1="350" y1="150" x2="300" y2="400"/>
+      </svg>
+      
+      <!-- 星云光晕 -->
+      <div class="nebula-glow nebula-purple"></div>
+      <div class="nebula-glow nebula-blue"></div>
+      <div class="nebula-glow nebula-gold"></div>
+      
+      <!-- 闪烁星星矩阵 -->
+      <div class="star-matrix">
+        <div class="twinkle-star s1"></div>
+        <div class="twinkle-star s2"></div>
+        <div class="twinkle-star s3"></div>
+        <div class="twinkle-star s4"></div>
+        <div class="twinkle-star s5"></div>
+        <div class="twinkle-star s6"></div>
+        <div class="twinkle-star s7"></div>
+        <div class="twinkle-star s8"></div>
+        <div class="twinkle-star s9"></div>
+        <div class="twinkle-star s10"></div>
+        <div class="twinkle-star s11"></div>
+        <div class="twinkle-star s12"></div>
+      </div>
+    </div>
+    
+    <!-- 漂浮的宇宙元素 -->
+    <div class="floating-elements">
+      <div class="floating-planet p1">🪐</div>
+      <div class="floating-planet p2">🌙</div>
+      <div class="floating-planet p3">✨</div>
+    </div>
+    
+    <!-- 顶部引导语 -->
+    <div class="quiz-guide">
+      <span class="guide-icon">✧</span>
+      <span class="guide-text">倾听内心的声音</span>
+      <span class="guide-icon">✧</span>
+    </div>
+    
+    <div class="quiz-header">
+      <span class="quiz-dim" id="dimLabel">E / I 维度</span>
+      <span class="quiz-counter" id="counter">1 / 40</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:1%"></div></div>
+    <div class="dim-tags" id="dimTags"></div>
+    <div class="question-block">
+      <div class="question-text" id="qText">加载中…</div>
+      <div class="scale-row">
+        <span class="scale-label">完全不符</span>
+        <div class="scale-opts" id="scaleOpts">
+          <div class="scale-opt" data-v="1" onclick="selectOpt(this,1)">1</div>
+          <div class="scale-opt" data-v="2" onclick="selectOpt(this,2)">2</div>
+          <div class="scale-opt" data-v="3" onclick="selectOpt(this,3)">3</div>
+          <div class="scale-opt" data-v="4" onclick="selectOpt(this,4)">4</div>
+          <div class="scale-opt" data-v="5" onclick="selectOpt(this,5)">5</div>
+        </div>
+        <span class="scale-label right">完全符合</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT - 星空感 -->
+  <div class="screen result" id="result">
+    <!-- 宇宙漫游问候 -->
+    <div class="cosmic-greeting">
+      <div class="cosmic-subtitle">✦ 宇宙漫游日志 ✦</div>
+      <div class="cosmic-name" id="cosmicName">亲爱的 路飞</div>
+      <div class="cosmic-divider">
+        <span class="star-dot"></span>
+        <span class="star-line"></span>
+        <span class="star-dot"></span>
+      </div>
+      <div class="cosmic-message" id="cosmicMessage">宇宙找到了你的星辰轨迹</div>
+    </div>
+    
+    <!-- 核心人格星球 -->
+    <div class="planet-core">
+      <div class="planet-glow"></div>
+      <div class="planet-main" id="planetType">INFP</div>
+      <div class="planet-name" id="planetName">调停者</div>
+      <div class="planet-sub" id="planetSub">温柔的理想主义者</div>
+      
+      <!-- 特质星点散落 -->
+      <div class="trait-stars" id="traitStars">
+        <span class="trait-star">浪漫理想</span>
+        <span class="trait-star">文字敏感</span>
+        <span class="trait-star">温和善良</span>
+        <span class="trait-star">忠于自我</span>
+      </div>
+    </div>
+    
+    <!-- 伴星 - 最旺我人格 -->
+    <div class="companion-star" id="companionStar">
+      <div class="companion-orbit">
+        <div class="companion-planet">
+          <span class="companion-type" id="companionType">ENTJ</span>
+        </div>
+      </div>
+      <div class="companion-info">
+        <div class="companion-title">✦ 你的光芒，总有TA在悉心守护 ✦</div>
+        <div class="companion-name" id="companionName">ENTJ · 指挥官</div>
+        <div class="companion-desc" id="companionDesc">TA能帮你把理想变为现实，行动力满分</div>
+      </div>
+    </div>
+    
+    <!-- 专属寄语 -->
+    <div class="soul-message">
+      <div class="soul-letter">
+        <div class="letter-header" id="letterHeader">致 远方的星辰：</div>
+        <div class="letter-body" id="soulQuote">你心中有一片柔软的星空...</div>
+        <div class="letter-footer">
+          <div class="cosmic-code" id="cosmicCode">宇宙编码: STAR-XXXX-XXXX</div>
+          <div class="letter-signature" id="soulSignature">—— 宇宙漫游指南</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 分享按钮 -->
+    <div class="share-actions">
+      <div class="share-row">
+        <button class="share-btn gold" onclick="shareMoment()">✨ 生成星辰海报</button>
+      </div>
+      <div class="result-actions">
+        <button class="free-btn" onclick="restart()">重新测试</button>
+        <button class="start-btn" onclick="editName()">修改昵称</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 海报预览区域（微信可长按保存） -->
+  <div class="poster-preview" id="posterPreview" style="display:none;">
+    <div class="poster-mask" onclick="closePoster()"></div>
+    <div class="poster-container">
+      <img id="posterImage" class="poster-img" />
+      <p class="poster-tip">✦ 长按图片保存到相册 ✦</p>
+      <button class="poster-close" onclick="closePoster()">关闭</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// ═══════════════════════════════════════════════════════════
+// 动态语录池 - 每个类型多段寄语，根据名字/日期随机选择
+// ═══════════════════════════════════════════════════════════
+const QUOTE_POOLS = {
+  INTJ: [
+    "{name}，姐姐想告诉你：你那双总能看透一切的眼睛，其实挺让人羡慕的。你习惯一个人扛着，但偶尔也可以不用那么坚强——你值得被温柔拥抱，而不是总做那个清醒的旁观者。",
+    "{name}，你总是在规划未来，思考每一个可能的变量。这份缜密是你的天赋，但姐姐想提醒你：当下的美好同样值得被看见。你已经足够好了，不需要一直证明。",
+    "{name}，你习惯用理性丈量世界，把情绪藏在很深的地方。姐姐懂你的孤独，也懂你不想被看穿的保护壳。但偶尔，也可以允许自己被一个人完全看懂——那个人值得。"
+  ],
+  INTP: [
+    "{name}，你知道吗？你脑子里那些天马行空的想法，真的很珍贵。姐姐知道你不太擅长表达感情，但这不代表你不温柔。试着把那些藏在心里的柔软说出来，会有人愿意好好听的。",
+    "{name}，你总是在追问「为什么」，对世界充满好奇。这份探索欲是你的光芒。姐姐想告诉你：你的思考方式很独特，不用急着让别人理解——懂你的人会出现的。",
+    "{name}，你更喜欢和概念对话，而不是和人。姐姐理解你的世界，那里面有很多迷人的逻辑和可能。但偶尔也可以走出来，看看这个不那么讲道理的世界——它也很美。"
+  ],
+  INFJ: [
+    "{name}，你总是比别人想得多一点，感知得深一点。姐姐懂你的累——看透太多，心会很疼。但你不用把整个世界都扛在肩上，偶尔允许自己只做一个普通的人，也很好。",
+    "{name}，你总在寻找意义，想要理解每个人的故事。这份深度让你与众不同。姐姐想提醒你：你的敏感是礼物，不是负担。请好好照顾那颗总是为别人跳动的心。",
+    "{name}，你眼里有别人看不见的世界，心里装着很大的理想。姐姐知道你常常感到孤独——但请相信，在这个宇宙里，总有人能读懂你的沉默，听懂你的弦外之音。"
+  ],
+  INFP: [
+    "{name}，你心里的那片星空，真的好美。姐姐知道这个世界有时候不够温柔，但请你一直保持这份柔软——你的浪漫不是天真，而是清醒地选择相信美好。",
+    "{name}，你总是用温柔的目光看待世界，即使被伤害也选择原谅。姐姐心疼你的善良，也想告诉你：你的柔软值得被珍惜，而不是被辜负。",
+    "{name}，你的内心像一本诗集，写满了对美好的向往。姐姐想对你说：这份理想主义很珍贵，即使现实有时残酷，也请继续相信——因为你值得被世界温柔以待。"
+  ],
+  ISTJ: [
+    "{name}，你总是默默把每件事都做好，从不邀功。姐姐想提醒你：靠谱是你的超能力，但你也可以偶尔任性一下——你不需要一直做那个「让人放心」的人，偶尔也可以让人担心担心你。",
+    "{name}，你用行动表达关心，而不是语言。姐姐懂你的方式——那些默默记住的细节，那些在背后做的事，都是你深沉的爱。但也记得，有时候说出来，会让爱更透明。",
+    "{name}，你相信规则，相信责任，相信把事情做对。这份稳重让身边的人安心。姐姐想告诉你：你已经足够可靠了，偶尔也可以允许自己放松——不完美的你也值得被爱。"
+  ],
+  ISFJ: [
+    "{name}，你总是记得所有人，唯独常常忘了自己。姐姐心疼你——付出是你的本能，但接受别人的好也是一种能力。你值得被照顾，而不只是一直照顾别人。",
+    "{name}，你把爱藏在每一个细节里，不求回报。姐姐想告诉你：你的付出都被看见了，即使没人说出口。但也请你学会接受——你值得被同样温柔地对待。",
+    "{name}，你是最安静的那个守护者，总是在别人需要时出现。姐姐心疼你总是把自己放在最后。请记住：照顾自己不是自私，而是让你能更好地爱这个世界。"
+  ],
+  ESTJ: [
+    "{name}，你总是冲在最前面，扛下所有责任。姐姐知道你习惯了坚强，但其实你不需要证明自己——你本身就已经足够好了。偶尔停下来，让别人也为你做点什么吧。",
+    "{name}，你用效率和时间管理一切，让世界井井有条。姐姐欣赏你的能力，但也想提醒你：生活不只是任务清单，偶尔也可以无所事事——那样的你，也值得被喜欢。",
+    "{name}，你是天生的组织者，能把混乱变成秩序。这份能力让人敬佩。姐姐想告诉你：偶尔脆弱也不是坏事，不需要一直做那个「什么都能搞定」的人。"
+  ],
+  ESFJ: [
+    "{name}，你是那个总是温暖所有人的人，但姐姐想问问你：你的心有没有被好好照顾过？你不用一直做那个「小太阳」，偶尔也可以躲进云层里，休息一下。",
+    "{name}，你记得每个人的生日，关心每个人的感受。姐姐心疼你把太多能量给了别人。请记得：你也需要被记住、被关心——你的情绪也很重要。",
+    "{name}，你让每个场合都变得温暖，让每个人都感到被欢迎。姐姐想告诉你：你的付出是珍贵的，但也别忘了给自己留一点温柔——你值得被自己善待。"
+  ],
+  ISTP: [
+    "{name}，你喜欢一个人待着，不太爱说心事。姐姐理解你的独立，但也想告诉你——这个世界上真的有人愿意听你说话，愿意成为你的依靠，不用一个人扛所有事。",
+    "{name}，你更喜欢用手解决问题，而不是用嘴解释。姐姐懂你的沉默——你不需要很多话，也能表达很多。但偶尔说出来，会让那些爱你的人更安心。",
+    "{name}，你的世界很安静，喜欢用观察代替参与。姐姐想对你说：这份冷静是你的力量，但也别忘了，有时候投入其中，会遇见意想不到的惊喜。"
+  ],
+  ISFP: [
+    "{name}，你总是安安静静地感受着这个世界，用你独特的方式。姐姐想对你说：你的敏感是你的天赋，不要觉得它是一种负担。好好保护你的柔软，它会带你走向美好。",
+    "{name}，你用灵魂感受美，用直觉做选择。姐姐欣赏你的这份随性——你不需要计划每一步，跟着心走，也很好。你的生活方式，就是你的艺术。",
+    "{name}，你不喜欢表达，但内心却很丰富。姐姐想告诉你：你的安静里有很多故事，不必急着让所有人听懂。但那些愿意等你开口的人，值得你认真对待。"
+  ],
+  ESTP: [
+    "{name}，你像一阵风，自由又勇敢。姐姐知道你习惯了往前冲，但偶尔也停下来看看身后的风景——有些人一直在默默支持你，你值得被安稳地爱着。",
+    "{name}，你总能找到最刺激的那条路，让生活不无聊。姐姐欣赏你的勇气，但也想提醒你：偶尔的停顿不是浪费时间，而是让你更清楚地看见谁值得你的冒险。",
+    "{name}，你活在当下，很少回头看。姐姐想告诉你：往前冲很酷，但也有人愿意陪你慢下来——找到那个人，会让你的旅途更有温度。"
+  ],
+  ESFP: [
+    "{name}，你走到哪里都是光。姐姐知道你习惯了做那个让大家开心的人，但你也值得难过、疲惫、被安慰。你不需要永远灿烂，偶尔阴天也很好。",
+    "{name}，你的笑容能感染很多人，让气氛变得明亮。姐姐心疼你总是把最好的给别人。请记得：你也可以有低落的时候——那样的你，同样值得被爱。",
+    "{name}，你喜欢站在舞台中央，享受被注视的感觉。姐姐想对你说：你的光芒是真实的，不需要为了别人一直闪耀。偶尔退到幕后，也是另一种美。"
+  ],
+  ENTJ: [
+    "{name}，你总是知道自己要什么，这很酷。姐姐想提醒你——在成为更好的人的路上，别忘了停下来抱抱现在的自己。你已经足够优秀了，不用一直证明。",
+    "{name}，你的目标感很强，总能把事情推进到想要的结果。姐姐欣赏你的魄力，但也想告诉你：偶尔示弱不是失败，而是让你更完整。",
+    "{name}，你习惯了领导，习惯了承担责任。姐姐心疼你把太多扛在自己身上。请记住：你不需要一直强大，也有人愿意在你疲惫的时候接住你。"
+  ],
+  ENTP: [
+    "{name}，你脑子里总有无数个有趣的想法，这真的很迷人。姐姐想对你说：你不必用调侃来保护自己，真诚的你，也很好。有人会懂你那些藏在玩笑后的真心。",
+    "{name}，你喜欢挑战观点，享受思维的碰撞。姐姐欣赏你的聪明，但也想提醒你：不是每个人都能跟上你的节奏——慢下来解释，会让人更想了解你的世界。",
+    "{name}，你总是能发现别人看不到的可能性。姐姐想告诉你：这份好奇心是你的财富，但偶尔也记得把想法落地——那些愿意陪你执行的人，值得被珍惜。"
+  ],
+  ENFJ: [
+    "{name}，你总是照顾所有人的感受，点燃所有人的热情。姐姐心疼你——你为别人做了那么多，什么时候也允许自己被好好爱护一下？你的心也需要休息。",
+    "{name}，你天生能读懂别人，知道怎么让每个人都发光。姐姐想提醒你：在照亮别人的同时，也别忘了照亮自己——你的需求同样重要。",
+    "{name}，你总是把别人的成长放在心上，用温柔推动每一个人。姐姐心疼你总是把自己放在最后。请记住：你也需要被支持、被鼓励——你值得被同样温柔地对待。"
+  ],
+  ENFP: [
+    "{name}，你像一朵永远向阳的花，热情又自由。姐姐想提醒你——追风的时候也要照顾好自己，你的能量珍贵，要用在值得的人和事上。偶尔停下，也很好。",
+    "{name}，你的世界里有很多可能，你总是能看到最好的那条路。姐姐欣赏你的乐观，但也想告诉你：偶尔的低落和迷茫也是可以的——它们也是旅程的一部分。",
+    "{name}，你喜欢连接不同的世界，让每个相遇都有意义。姐姐想对你说：你的热情是礼物，但也记得给自己留一点——你不必点亮所有人，偶尔也让自己休息。"
+  ]
+};
+
+// 根据 name + 日期 选择语录
+function getPersonalizedQuote(mbtiType, name) {
+  // 直接从 MBTI_DATA 获取寄语
+  const data = MBTI_DATA[mbtiType];
+  if (!data || !data.quote) return '你的星辰轨迹独一无二';
+  
+  // 替换名字占位符
+  return data.quote.replace(/{name}/g, name || '亲爱的');
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// MBTI Data
+// ═══════════════════════════════════════════════════════════
+const MBTI_DATA = {
+  INTJ: { name:"建筑师", sub:"深邃的战略家", bestMatch:"ENFP", bestMatchName:"竞选者", bestMatchDesc:"ENFP能激发你的热情，让你走出思维舒适区",
+    traits:["战略思维","独立自主","追求完美","内敛深沉"],
+    quote:`{name}，你总是站在人群之外，用沉默丈量世界的逻辑。人们说你的冷静像一座冰山，但我知道，水面下藏着怎样炽热的执念。你习惯了独自扛下所有，把「不需要」挂在嘴边，却忘了自己也曾渴望被理解。没关系，这里没有评判，只有一片安静的星空，允许你放下图纸，允许你什么都不是，只是你自己。`},
+  INTP: { name:"逻辑学家", sub:"思想的探索者", bestMatch:"ENFJ", bestMatchName:"主人公", bestMatchDesc:"ENFJ能欣赏你的思想，给你温暖的情感支持",
+    traits:["逻辑至上","知识渴求","安静内省","创意无限"],
+    quote:`{name}，你的脑子里住着一万个宇宙，却总在现实里找不到入口。你习惯了用思考逃避喧嚣，用沉默对抗误解。别人眼里的「想太多」，其实是你对真相的执念。你不需要向谁证明你的价值，在这片星空下，你的存在本身就是答案。你可以不必那么用力，允许自己偶尔迷失在思想的银河里。`},
+  INFJ: { name:"倡导者", sub:"理想主义的守护者", bestMatch:"ENFP", bestMatchName:"竞选者", bestMatchDesc:"ENFP与你志同道合，共同追寻理想与意义",
+    traits:["理想主义","共情力强","内心丰富","创造表达"],
+    quote:`{name}，你总在人海里寻找灵魂的共振，像个固执的守夜人，提着灯等一个同路人。你习惯了把别人的情绪当自己的使命，却忘了自己也需要被照亮。我知道你有多累，那种「不被理解的孤独」像潮水一样。没关系，这片星空下没有误解，你可以放下所有防备，允许自己什么都不做。`},
+  INFP: { name:"调停者", sub:"温柔的理想主义者", bestMatch:"ENTJ", bestMatchName:"指挥官", bestMatchDesc:"ENTJ能帮你把理想变为现实，行动力满分",
+    traits:["浪漫理想","文字敏感","温和善良","忠于自我"],
+    quote:`{name}，你总是小心翼翼地捧着内心的萤火，试图照亮这个粗糙的世界。这种善良让你在现实中反复碰壁，我想告诉你：你的敏感不是错，是珍贵的礼物。不必总在深夜拷问自己「是不是不够好」，在这个宇宙里，你的存在就是一束温柔的光。允许自己不必那么勇敢，安心做一场不被打扰的梦。`},
+  ISTJ: { name:"物流师", sub:"可靠的守护者", bestMatch:"ESFP", bestMatchName:"表演者", bestMatchDesc:"ESFP能带你体验生活的美好，打破你的刻板",
+    traits:["尽职尽责","务实可靠","尊重传统","稳重沉着"],
+    quote:`{name}，你像座沉默的灯塔，日复一日守着航线。人们只看见你的稳定，却看不见你扛了多少重量。你习惯了把「应该」当信仰，把责任刻进骨血。但亲爱的，偶尔偏离航道没关系，偶尔偷个懒没关系。这里没有必须完成的任务，只有允许你喘息的温柔。你不必总是那样可靠，也可以是被照顾的那一个。`},
+  ISFJ: { name:"守护者", sub:"温柔的付出者", bestMatch:"ESTP", bestMatchName:"企业家", bestMatchDesc:"ESTP能保护你的柔软，给你空间做自己",
+    traits:["体贴周到","忠诚可靠","细致入微","守护温暖"],
+    quote:`{name}，你总在角落里默默托举着所有人的日常，像个透明的守护者。你太习惯把别人放在第一位，以至于忘了自己也有被爱的资格。那些你咽下去的话、你藏起来的委屈，我都想告诉你：你不必那么努力做个「好人」，在这片星空下，你值得被看见、被心疼、被温柔地放在心上。`},
+  ESTJ: { name:"总经理", sub:"果断的领导者", bestMatch:"ISFP", bestMatchName:"探险家", bestMatchDesc:"ISFP能让你慢下来，感受生活的诗意",
+    traits:["执行果断","讲求原则","领导力强","诚实正直"],
+    quote:`{name}，你习惯了站在最前面，把混乱整顿成秩序。所有人都依赖你的果断，但我知道，那些深夜里的自我怀疑，你从不让任何人看见。你不必永远做那个「扛事的人」，偶尔示弱不是软弱，是信任。在这片星空下，没有人期待你强大，只愿你卸下铠甲，做回那个柔软的自己。`},
+  ESFJ: { name:"执政官", sub:"温暖的社交家", bestMatch:"ISFP", bestMatchName:"探险家", bestMatchDesc:"ISFP能用柔软平衡你的刚强，守护你的付出",
+    traits:["热情洋溢","社交达人","乐于助人","有品位"],
+    quote:`{name}，你总把每个人的情绪都记在心里，像个疲惫的晴雨表。你习惯了付出，习惯了等待一句「谢谢你」，却常常落空。亲爱的，你的好不需要被谁认可，你的存在本身就很珍贵。在这片星空下，你可以不必那么用心，允许自己偶尔「自私」，允许自己被温柔地照顾。`},
+  ISTP: { name:"鉴赏家", sub:"冷静的问题解决者", bestMatch:"ESFJ", bestMatchName:"执政官", bestMatchDesc:"ESFJ能照顾你的日常，给你温暖的港湾",
+    traits:["动手能力","随性自由","冷静观察","解决问题"],
+    quote:`{name}，你像个沉默的匠人，把情绪藏在工具箱的最底层。人们说你冷漠，其实你只是不知道怎么开口。你习惯了用行动代替语言，用沉默保护自己。但我想告诉你，这里不需要你「有用」，不需要你证明什么。你可以只是坐着，看星星，什么都不用解释。在这片安静的宇宙里，你不需要理由。`},
+  ISFP: { name:"探险家", sub:"自由的艺术家", bestMatch:"ESTJ", bestMatchName:"总经理", bestMatchDesc:"ESTJ能帮你落地梦想，让你的艺术被看见",
+    traits:["审美敏锐","活在当下","温暖柔软","独特个性"],
+    quote:`{name}，你把所有感受都藏进眼睛里，像本安静的诗集。你太习惯用沉默回应世界，用逃避保护自己柔软的心。那些你不敢说的渴望、你咽回去的眼泪，都不是软弱。在这片星空下，你可以大声说出想要什么，可以脆弱，可以不那么「懂事」。你值得被温柔地倾听，被认真地对待。`},
+  ESTP: { name:"企业家", sub:"勇敢的行动派", bestMatch:"ISFJ", bestMatchName:"守护者", bestMatchDesc:"ISFJ能给你稳稳的陪伴，照顾你的节奏",
+    traits:["行动果敢","活在当下","社交高手","务实精明"],
+    quote:`{name}，你像个不停奔跑的猎手，把「下一站」当逃避当下的借口。你习惯了用热闹淹没思考，用行动麻痹自己。但我知道，那些深夜的孤独像影子一样跟着你。亲爱的，不必总在追逐什么，停下来看看此刻的自己。在这片星空下，你可以什么都不做，只需要允许自己呼吸。`},
+  ESFP: { name:"表演者", sub:"闪耀的明星", bestMatch:"ISTJ", bestMatchName:"物流师", bestMatchDesc:"ISTJ能帮你规划未来，让梦想落地",
+    traits:["魅力四射","乐观开朗","创意无限","热情温暖"],
+    quote:`{name}，你像一颗旋转的星星，用欢笑照亮每个人。但我知道，最耀眼的光背后是最深的空洞。你太习惯做那个「开心果」，以至于忘了自己也会难过。你不必永远在舞台中央，可以走下来，坐一坐，哭一哭。在这片星空下，没有人要求你发光，只愿你真实地存在。`},
+  ENTJ: { name:"指挥官", sub:"果断的战略家", bestMatch:"INFP", bestMatchName:"调停者", bestMatchDesc:"INFP能理解你的抱负，支持你的每个决定",
+    traits:["果断决策","高效执行","战略思维","自信坚定"],
+    quote:`{name}，你习惯了缝合破碎的秩序，把混乱裁剪成蓝图。所有人都仰仗你的清醒，但我只想抱抱你的疲惫。你太擅长做那个「搞定一切」的人，以至于忘了自己也会累。不需要永远扛着整座山，在这片星空下，你可以卸下盔甲，允许自己偶尔迷路，允许自己不坚强。`},
+  ENTP: { name:"辩论家", sub:"创新的思考者", bestMatch:"INFJ", bestMatchName:"倡导者", bestMatchDesc:"INFJ能读懂你的创意，给你有深度的共鸣",
+    traits:["思维敏捷","创新探索","多才多艺","善于调侃"],
+    quote:`{name}，你像个永动机，不停拆解、质疑、推翻。世界在你眼里是个巨大的游乐场，也是座没有出口的迷宫。你习惯了用笑声掩盖疲惫，用辩解逃避被真正看见。其实不必总是那样锋利，你的脆弱、你的犹疑、你的每一面，都值得被温柔接纳。这里没有人期待你「聪明」，只愿你安稳着陆。`},
+  ENFJ: { name:"主人公", sub:"有感染力的领袖", bestMatch:"INTP", bestMatchName:"逻辑学家", bestMatchDesc:"INTP能给你独立思考的空间，欣赏你的独特",
+    traits:["魅力领袖","培养他人","理想驱动","表达流畅"],
+    quote:`{name}，你像个不知疲倦的园丁，操心着每一朵花有没有晒到太阳。你太擅长照顾别人，以至于常常忘了自己也需要被灌溉。那些你默默扛下的情绪、你咽回去的委屈，我都懂。在这里，你不必做那个「永远不会倒下」的人，你可以是疲惫的、脆弱的、也需要被抱一抱的。`},
+  ENFP: { name:"竞选者", sub:"自由的灵魂", bestMatch:"INTJ", bestMatchName:"建筑师", bestMatchDesc:"INTJ能帮你把天马行空变成切实可行的计划",
+    traits:["热情活泼","创意无限","自由灵魂","情感丰富"],
+    quote:`{name}，你像个追着风跑的孩子，眼睛里永远亮着光。但我知道，那些转身之后的落寞，只有你自己懂。你习惯了用热闹填满空隙，用「我很好」哄骗所有人。其实不必一直这样燃烧自己，你的疲惫、你的低谷、你偶尔想躲起来的念头，都值得被温柔以待。在这片星空下，你可以安静下来。`}
+};
+
+// 别名，兼容旧代码
+const TYPES = MBTI_DATA;
+
+
+
+// ═══════════════════════════════════════════════════════════
+// 宇宙编码生成 - 基于名字+MBTI+时间戳
+// ═══════════════════════════════════════════════════════════
+function generateCosmicCode(name, mbti) {
+  // 使用名字、MBTI类型和时间生成唯一编码
+  const base = (name || "旅人") + mbti + Date.now();
+  let hash = 0;
+  for (let i = 0; i < base.length; i++) {
+    const char = base.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  // 生成格式: STAR-XXXX-XXXX
+  const code = Math.abs(hash).toString(36).toUpperCase().padStart(8, '0').slice(0, 8);
+  return `STAR-${code.slice(0,4)}-${code.slice(4,8)}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// 丰富题库 - 每维度 30-45 题
+// ═══════════════════════════════════════════════════════════
+const QUESTION_POOL = {
+  // E/I 维度 - 45题
+  EI: [
+    // 社交能量
+    {text:"社交聚会后，你的状态是：",left:"精力充沛",right:"需要独处充电"},
+    {text:"参加完一场热闹的派对，你最想：",left:"继续下一场",right:"回家休息"},
+    {text:"在人群中待了一整天，你会觉得：",left:"很开心",right:"有点累"},
+    {text:"连续几天社交活动后，你更想：",left:"继续约朋友",right:"宅家休息"},
+    {text:"和一群人聊天，你通常会：",left:"很享受",right:"有点耗能"},
+    // 表达方式
+    {text:"遇到问题时，你更倾向于：",left:"找人讨论",right:"自己思考"},
+    {text:"有想法时，你更喜欢：",left:"马上说出来",right:"先在心里想"},
+    {text:"做决定之前，你更想：",left:"和他人商量",right:"自己想明白"},
+    {text:"遇到困扰，你通常会：",left:"找人倾诉",right:"自己消化"},
+    {text:"有了新想法，你会：",left:"迫不及待分享",right:"先自己琢磨"},
+    // 闲暇偏好
+    {text:"周末闲暇，你更喜欢：",left:"约朋友出门",right:"在家安静待着"},
+    {text:"难得的假期，你更想：",left:"和朋友旅行",right:"一个人放松"},
+    {text:"空闲时间，你倾向于：",left:"联系朋友",right:"做自己的事"},
+    {text:"周末晚上，你更常：",left:"约人聚会",right:"宅家追剧"},
+    {text:"闲暇时光，你觉得：",left:"一个人太无聊",right:"一个人很舒服"},
+    // 独处感受
+    {text:"独处对你来说：",left:"有点无聊孤单",right:"享受的时光"},
+    {text:"一个人待着时，你通常：",left:"想找人聊天",right:"很自在"},
+    {text:"长时间独处后，你会：",left:"想见人",right:"还想继续"},
+    {text:"一个人的周末，你会觉得：",left:"有点空虚",right:"很自在"},
+    {text:"独处时，你的状态是：",left:"容易胡思乱想",right:"内心平静充实"},
+    // 陌生人互动
+    {text:"面对陌生人，你通常：",left:"主动搭话",right:"保持距离"},
+    {text:"在陌生环境中，你会：",left:"主动认识人",right:"观察为主"},
+    {text:"参加陌生人很多的聚会，你会：",left:"积极社交",right:"待在角落"},
+    {text:"和不熟的人相处，你觉得：",left:"挺有趣的",right:"有点尴尬"},
+    {text:"认识新朋友，你会：",left:"很主动",right:"比较被动"},
+    // 团队角色
+    {text:"在团队中，你更像是：",left:"气氛担当",right:"安静观察者"},
+    {text:"会议讨论时，你更常：",left:"积极发言",right:"先听再说"},
+    {text:"小组作业中，你倾向于：",left:"主导讨论",right:"默默贡献"},
+    {text:"在群体中，你更习惯：",left:"成为焦点",right:"默默支持"},
+    {text:"团队合作时，你觉得：",left:"很高效",right:"不如自己干"},
+    // 沟通方式
+    {text:"表达想法时，你更喜欢：",left:"当面说清楚",right:"文字慢慢想"},
+    {text:"你更擅长：",left:"口头表达",right:"文字书写"},
+    {text:"重要的事情，你会选择：",left:"当面沟通",right:"发消息说"},
+    {text:"与人沟通，你更偏好：",left:"电话语音",right:"文字聊天"},
+    {text:"向别人解释想法时：",left:"边说边想",right:"先想好再说"},
+    // 社交分享
+    {text:"你的朋友圈更新频率：",left:"经常分享",right:"很少发"},
+    {text:"看到有趣的视频，你会：",left:"转发给朋友",right:"自己收藏"},
+    {text:"有好消息时，你会：",left:"发朋友圈",right:"告诉几个好友"},
+    {text:"旅行时拍的照片，你会：",left:"马上发出来",right:"很少分享"},
+    {text:"社交媒体对你来说是：",left:"分享生活的窗口",right:"偶尔看看的地方"},
+    // 电话接听
+    {text:"接到电话时，你通常：",left:"很开心接听",right:"有点紧张"},
+    {text:"别人突然打电话来，你会：",left:"自然接听",right:"希望先发消息"},
+    {text:"电话响起，你的第一反应是：",left:"接起来",right:"犹豫一下"},
+    {text:"你更倾向于：",left:"打电话沟通",right:"发消息慢慢聊"},
+    {text:"和朋友的联系方式：",left:"经常语音",right:"主要是文字"},
+    // 聚会行为
+    {text:"聚会中，你更常：",left:"主动认识新朋友",right:"和熟人聊天"},
+    {text:"在社交场合，你更像是：",left:"社交蝴蝶",right:"安静观察者"},
+    {text:"朋友聚会，你通常：",left:"组织者",right:"参与者"},
+    {text:"大型聚会中，你感到：",left:"如鱼得水",right:"有点不自在"},
+    {text:"社交活动结束，你觉得：",left:"意犹未尽",right:"终于可以休息了"},
+  ],
+  
+  // S/N 维度 - 42题
+  SN: [
+    // 问题解决
+    {text:"解决问题时，你更看重：",left:"实际可行",right:"创新突破"},
+    {text:"面对难题，你更倾向于：",left:"用已有方法",right:"想新方案"},
+    {text:"做事时，你更在意：",left:"步骤清晰",right:"有创意空间"},
+    {text:"遇到问题，你首先想的是：",left:"怎么解决过",right:"有没有新思路"},
+    {text:"处理事情，你更喜欢：",left:"按规矩来",right:"自己发挥"},
+    // 记忆方式
+    {text:"你更擅长记住：",left:"具体细节",right:"整体印象"},
+    {text:"看完一部电影，你更记得：",left:"具体情节",right:"整体感受"},
+    {text:"回忆一件事，你更记得：",left:"具体说了什么",right:"当时的感觉"},
+    {text:"描述过去的经历时：",left:"细节很清楚",right:"大概的感觉"},
+    {text:"别人说的具体数字，你：",left:"容易记住",right:"不太在意"},
+    // 决策依据
+    {text:"做决定时，你更依赖：",left:"已有经验",right:"直觉判断"},
+    {text:"做选择时，你更看重：",left:"实际利弊",right:"内心感觉"},
+    {text:"买东西时，你更在意：",left:"具体参数",right:"整体感觉"},
+    {text:"选择工作，你更看重：",left:"现实条件",right:"发展潜力"},
+    {text:"做重要决定前：",left:"收集充分信息",right:"相信直觉"},
+    // 兴趣偏好
+    {text:"什么东西更吸引你：",left:"实用价值",right:"创意独特"},
+    {text:"你更感兴趣的是：",left:"现实可行的想法",right:"天马行空的创意"},
+    {text:"选择兴趣爱好时：",left:"选实用的技能",right:"选有趣的体验"},
+    {text:"你觉得更有价值的是：",left:"解决实际问题",right:"探索新的可能"},
+    {text:"看到新事物，你会想：",left:"有什么用",right:"有意思在哪"},
+    // 理解方式
+    {text:"你更容易理解：",left:"具体的例子",right:"抽象的概念"},
+    {text:"学习新知识，你偏好：",left:"具体案例",right:"理论框架"},
+    {text:"别人解释事情时，你更喜欢：",left:"举例子",right:"讲原理"},
+    {text:"阅读时，你更关注：",left:"具体内容",right:"深层含义"},
+    {text:"理解一个概念，你需要：",left:"具体的例子",right:"整体的理解"},
+    // 表达方式
+    {text:"描述一件事，你更常说：",left:"发生了什么",right:"意味着什么"},
+    {text:"告诉别人一件事时：",left:"说具体细节",right:"讲整体感受"},
+    {text:"你的表达方式更偏向：",left:"直白具体",right:"隐喻抽象"},
+    {text:"写东西时，你更喜欢：",left:"写实",right:"写意"},
+    {text:"讲故事时，你会：",left:"详细描述",right:"突出重点"},
+    // 关注重点
+    {text:"你对未来更关注：",left:"当下的可能",right:"长远的愿景"},
+    {text:"做计划时，你更看重：",left:"近期的安排",right:"未来的方向"},
+    {text:"你更在意：",left:"眼前的事",right:"未来的梦"},
+    {text:"思考问题时，你更关注：",left:"现实层面",right:"可能性"},
+    {text:"你更擅长：",left:"处理当下",right:"展望未来"},
+    // 阅读偏好
+    {text:"读一本书，你更喜欢：",left:"按顺序读",right:"跳着看有趣的"},
+    {text:"阅读长文时，你会：",left:"从头读到尾",right:"先看重点"},
+    {text:"看说明书，你会：",left:"仔细阅读",right:"大概浏览"},
+    {text:"学习新东西时：",left:"跟着教程来",right:"自己摸索"},
+    {text:"使用新软件，你会：",left:"看教程",right:"直接上手试"},
+    // 直觉 vs 事实
+    {text:"你更相信：",left:"眼见为实",right:"第六感"},
+    {text:"别人说你更像是：",left:"脚踏实地",right:"天马行空"},
+    {text:"面对未知，你更依赖：",left:"已知的事实",right:"内在的直觉"},
+    {text:"判断一个人，你更看重：",left:"实际表现",right:"整体感觉"},
+    {text:"你认为成功更多来自：",left:"踏实努力",right:"敏锐洞察"},
+    // 关注层面
+    {text:"你更在意：",left:"事实本身",right:"背后的意义"},
+    {text:"看新闻时，你更关注：",left:"发生了什么",right:"为什么发生"},
+    {text:"了解一件事，你更想知：",left:"具体情况",right:"深层原因"},
+    {text:"听故事时，你更在意：",left:"情节发展",right:"人物内心"},
+    {text:"你更喜欢讨论：",left:"具体的话题",right:"抽象的观念"},
+  ],
+  
+  // T/F 维度 - 42题
+  TF: [
+    // 决策偏好
+    {text:"做决定时，你更在意：",left:"逻辑合理",right:"他人感受"},
+    {text:"选择时，你更看重：",left:"客观事实",right:"人情关系"},
+    {text:"做重要决定时：",left:"理性分析",right:"考虑感情"},
+    {text:"面对两难选择：",left:"选合理的",right:"选感情上的"},
+    {text:"你的决策风格是：",left:"冷静客观",right:"顾及他人"},
+    // 助人方式
+    {text:"朋友倾诉烦恼，你会：",left:"帮TA分析解决",right:"先陪TA难过"},
+    {text:"别人求助时，你更想：",left:"提供解决方案",right:"给予情感支持"},
+    {text:"朋友遇到困难，你的反应是：",left:"帮忙分析",right:"先安慰"},
+    {text:"别人难过时，你会：",left:"想办法解决",right:"陪在身边"},
+    {text:"帮助别人，你更擅长：",left:"出主意",right:"给温暖"},
+    // 评价取向
+    {text:"你更希望被评价为：",left:"理性客观",right:"温暖体贴"},
+    {text:"别人对你的印象，你更在意：",left:"聪明能干",right:"善良温暖"},
+    {text:"你希望别人说你：",left:"有头脑",right:"有心"},
+    {text:"你觉得更重要的是：",left:"被尊重",right:"被喜欢"},
+    {text:"你更看重哪种评价：",left:"逻辑清晰",right:"情感细腻"},
+    // 情绪处理
+    {text:"别人情绪激动时，你：",left:"保持冷静分析",right:"想安抚对方"},
+    {text:"面对情绪化的人：",left:"理性应对",right:"被情绪感染"},
+    {text:"处理冲突时：",left:"讲道理",right:"顾感受"},
+    {text:"团队有矛盾时，你会：",left:"分析对错",right:"调解感情"},
+    {text:"别人生气时，你觉得：",left:"需要冷静",right:"需要理解"},
+    // 批评方式
+    {text:"批评别人时，你更在意：",left:"指出问题",right:"不伤害对方"},
+    {text:"给别人提意见，你会：",left:"直说问题",right:"委婉表达"},
+    {text:"别人做得不好时：",left:"直接指出",right:"先肯定再说"},
+    {text:"你认为好的批评应该是：",left:"一针见血",right:"温和中肯"},
+    {text:"别人批评你时，你更在意：",left:"说得对不对",right:"态度好不好"},
+    // 价值观
+    {text:"你更看重：",left:"公平公正",right:"人情世故"},
+    {text:"面对规则和人情：",left:"遵守规则",right:"照顾人情"},
+    {text:"你觉得更应该：",left:"公正无私",right:"情理兼顾"},
+    {text:"评判一件事：",left:"看对错",right:"看立场"},
+    {text:"你认为好的领导应该：",left:"公正严明",right:"体恤下属"},
+    // 冲突处理
+    {text:"面对冲突，你更倾向：",left:"讲道理",right:"顾感情"},
+    {text:"和朋友有分歧时：",left:"据理力争",right:"退一步海阔天空"},
+    {text:"争吵后，你会：",left:"分析谁对谁错",right:"想怎么和解"},
+    {text:"处理分歧，你更看重：",left:"解决问题",right:"维护关系"},
+    {text:"别人和你观点不同时：",left:"讨论清楚",right:"求同存异"},
+    // 成功因素
+    {text:"你认为成功更多来自：",left:"能力实力",right:"人际关系"},
+    {text:"你觉得更重要：",left:"专业能力",right:"人际情商"},
+    {text:"工作中，你更看重：",left:"业绩成果",right:"团队氛围"},
+    {text:"评价一个人成功：",left:"看成就",right:"看幸福感"},
+    {text:"你认为成功需要：",left:"硬实力",right:"软实力"},
+    // 难以接受
+    {text:"你更难接受：",left:"逻辑混乱",right:"冷漠无情"},
+    {text:"什么更让你不舒服：",left:"不公平",right:"不友善"},
+    {text:"你更讨厌：",left:"不讲道理",right:"没有同理心"},
+    {text:"你觉得更糟的是：",left:"不聪明",right:"不善良"},
+    {text:"你更不能忍受：",left:"愚蠢",right:"冷漠"},
+    // 团队价值
+    {text:"团队中，你更看重：",left:"效率结果",right:"氛围和谐"},
+    {text:"工作环境对你来说：",left:"效率第一",right:"氛围重要"},
+    {text:"团队协作时：",left:"目标导向",right:"关系导向"},
+    {text:"你认为团队最重要的是：",left:"把事做好",right:"相处融洽"},
+    {text:"领导风格上，你偏好：",left:"雷厉风行",right:"温和包容"},
+    // 他人评价
+    {text:"你更常被说：",left:"太直",right:"太感性"},
+    {text:"别人觉得你：",left:"有点冷",right:"有点软"},
+    {text:"朋友对你的评价是：",left:"理智",right:"感性"},
+    {text:"你给人的印象是：",left:"头脑清醒",right:"心地善良"},
+    {text:"你觉得哪种说法更像你：",left:"铁面无私",right:"心软"},
+  ],
+  
+  // J/P 维度 - 42题
+  JP: [
+    // 生活节奏
+    {text:"你更喜欢的生活节奏：",left:"有计划有条理",right:"灵活随性"},
+    {text:"日常生活，你更倾向于：",left:"按计划进行",right:"看心情来"},
+    {text:"你觉得生活应该：",left:"有规律",right:"自由自在"},
+    {text:"对于日程安排：",left:"喜欢提前规划",right:"顺其自然"},
+    {text:"你的生活态度是：",left:"规划未来",right:"活在当下"},
+    // 旅行准备
+    {text:"旅行前，你会：",left:"详细规划",right:"说走就走"},
+    {text:"安排旅行时：",left:"提前订好一切",right:"边走边看"},
+    {text:"出去旅游，你更倾向：",left:"做好攻略",right:"随心所欲"},
+    {text:"旅行计划对你来说：",left:"必须的",right:"可有可无"},
+    {text:"假期安排，你会：",left:"提前想好",right:"到时候再说"},
+    // 计划执行
+    {text:"你更享受：",left:"按计划完成",right:"即兴发挥"},
+    {text:"有计划的时候，你会：",left:"严格执行",right:"灵活调整"},
+    {text:"对待任务：",left:"尽早完成",right:"临期再做"},
+    {text:"有事情要做时：",left:"马上开始",right:"看心情"},
+    {text:"你觉得计划的作用是：",left:"指导行动",right:"参考一下"},
+    // 应变能力
+    {text:"面对突发情况，你：",left:"有备选方案",right:"随机应变"},
+    {text:"计划被打乱时：",left:"有点焦虑",right:"无所谓"},
+    {text:"临时改变安排：",left:"不太喜欢",right:"觉得有趣"},
+    {text:"意外发生时，你的状态是：",left:"想找回秩序",right:"顺其自然"},
+    {text:"你对变化的态度是：",left:"不太喜欢",right:"欣然接受"},
+    // 整理习惯
+    {text:"你的房间通常是：",left:"整齐有序",right:"随性自然"},
+    {text:"对于物品整理：",left:"定期整理",right:"想起来再说"},
+    {text:"你的书桌/工作台：",left:"很整洁",right:"有点乱"},
+    {text:"整理东西对你来说：",left:"很必要",right:"不着急"},
+    {text:"你的收纳习惯是：",left:"物归原处",right:"随手放"},
+    // 时间观念
+    {text:"截止日期对你：",left:"必须提前完成",right:"临近才有动力"},
+    {text:"对于deadline：",left:"提前赶完",right:"最后一刻冲刺"},
+    {text:"有任务要完成：",left:"尽早搞定",right:"拖一拖再说"},
+    {text:"你完成任务的方式：",left:"稳步推进",right:"突击完成"},
+    {text:"你更像是：",left:"早起的鸟儿",right:"夜猫子"},
+    // 决策方式
+    {text:"你更倾向于：",left:"先决定再行动",right:"边做边调整"},
+    {text:"做选择时：",left:"想清楚再动",right:"试试再说"},
+    {text:"面对不确定性：",left:"想消除它",right:"享受它"},
+    {text:"你觉得决定：",left:"要慎重",right:"可以改变"},
+    {text:"重要决定：",left:"深思熟虑",right:"相信直觉"},
+    // 工作偏好
+    {text:"工作中，你更喜欢：",left:"明确的任务",right:"开放的空间"},
+    {text:"对于工作安排：",left:"喜欢确定性",right:"喜欢灵活性"},
+    {text:"你更喜欢的工作方式：",left:"有章可循",right:"自由发挥"},
+    {text:"工作中你的风格：",left:"按部就班",right:"见招拆招"},
+    {text:"对于工作流程：",left:"遵守它",right:"改进它"},
+    // 周末安排
+    {text:"周末计划，你通常：",left:"提前安排好",right:"看心情决定"},
+    {text:"周末之前：",left:"已经想好做什么",right:"到时候再说"},
+    {text:"空闲时间：",left:"会规划好",right:"随性度过"},
+    {text:"对于休息日：",left:"有安排",right:"随缘"},
+    {text:"你的周末通常是：",left:"充实的",right:"放松的"},
+    // 规则偏好
+    {text:"你更难以忍受：",left:"计划被打乱",right:"太多条条框框"},
+    {text:"对于规则：",left:"遵守它",right:"质疑它"},
+    {text:"你更喜欢：",left:"有章可循",right:"自由自在"},
+    {text:"面对束缚：",left:"可以接受",right:"感到不适"},
+    {text:"你觉得规矩是：",left:"必要的",right:"可以打破的"},
+    // 待办习惯
+    {text:"待办事项，你：",left:"列清单逐一完成",right:"记在脑子里"},
+    {text:"你的记事方式：",left:"写下来",right:"靠记忆"},
+    {text:"对于日程：",left:"用日历记录",right:"大概记得"},
+    {text:"你需要提醒自己：",left:"设置提醒",right:"自然记得"},
+    {text:"你管理任务的方式：",left:"工具辅助",right:"凭感觉"},
+    // 他人评价
+    {text:"别人对你的评价：",left:"靠谱有规划",right:"灵活有创意"},
+    {text:"朋友觉得你是：",left:"靠谱的",right:"有趣的"},
+    {text:"你给人的印象：",left:"稳重",right:"随性"},
+    {text:"在别人眼里，你是：",left:"有计划的人",right:"随遇而安的人"},
+    {text:"你觉得别人怎么看你：",left:"可靠",right:"有趣"},
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+// 加载动画文字
+// ═══════════════════════════════════════════════════════════
+const LOADING_TEXTS = [
+  {main:"正在为你链接星轨…",sub:"宇宙正在挑选今日与你共鸣的问题"},
+  {main:"星辰正在排列…",sub:"从亿万轨迹中寻找属于你的那一条"},
+  {main:"命运之轮转动中…",sub:"让宇宙为你定制今日的人格密码"},
+  {main:"星河正在汇聚…",sub:"每个问题都带着命运的回响"},
+  {main:"星座正在解析…",sub:"你的星辰人格即将揭晓"},
+];
+
+const LOADING_DOTS = ["…","⋯","⋯⋯","⋯⋯⋯"];
+
+// ═══════════════════════════════════════════════════════════
+// State
+// ═══════════════════════════════════════════════════════════
+let userName = '';
+// 页面加载时从 localStorage 恢复名字
+const savedName = localStorage.getItem('mbti_username');
+if (savedName) {
+  userName = savedName;
+}
+let currentQ = 0;
+let answers = [[],[],[],[]];
+let dimScores = [0,0,0,0];
+let dimCounts = [0,0,0,0];
+let selectedVal = null;
+let currentType = '';
+let currentData = null;
+let QUESTIONS = [];
+let QUESTIONS_PER_DIM = 10; // 每维度抽10题，共40题
+
+// ═══════════════════════════════════════════════════════════
+// Stars Animation
+// ═══════════════════════════════════════════════════════════
+(function initStars(){
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let W, H, stars = [];
+  
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    stars = Array.from({length:150}, ()=>({
+      x:Math.random()*W, y:Math.random()*H,
+      r: Math.random()*1.5+0.3,
+      speed: Math.random()*0.4+0.1,
+      opacity: Math.random()*0.6+0.2,
+      phase: Math.random()*Math.PI*2,
+      twinkleSpeed: Math.random()*0.015+0.005
+    }));
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  
+  function draw(ts){
+    ctx.clearRect(0,0,W,H);
+    stars.forEach(s=>{
+      s.phase += s.twinkleSpeed;
+      const op = s.opacity * (0.4 + 0.6*Math.abs(Math.sin(s.phase)));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(245,243,255,${op})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ═══════════════════════════════════════════════════════════
+// Utils
+// ═══════════════════════════════════════════════════════════
+function show(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+// Fisher-Yates 洗牌算法
+function shuffleArray(arr) {
+  const result = [...arr];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
+}
+
+// 随机抽取题目
+function generateRandomQuestions() {
+  const selected = [
+    ...shuffleArray(QUESTION_POOL.EI).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:0})),
+    ...shuffleArray(QUESTION_POOL.SN).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:1})),
+    ...shuffleArray(QUESTION_POOL.TF).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:2})),
+    ...shuffleArray(QUESTION_POOL.JP).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:3})),
+  ];
+  // 最后打乱整体顺序
+  return shuffleArray(selected);
+}
+
+// ═══════════════════════════════════════════════════════════
+// Loading Animation
+// ═══════════════════════════════════════════════════════════
+function showLoading() {
+  show('loading');
+  const textData = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
+  const textEl = document.getElementById('loadingText');
+  const subEl = document.getElementById('loadingSub');
+  
+  textEl.textContent = textData.main;
+  subEl.textContent = textData.sub;
+  
+  // 打字机效果
+  let dotIndex = 0;
+  const baseText = textData.main.replace(/[…⋯]+/g, '');
+  const dotInterval = setInterval(() => {
+    dotIndex = (dotIndex + 1) % LOADING_DOTS.length;
+    textEl.textContent = baseText + LOADING_DOTS[dotIndex];
+  }, 400);
+  
+  return dotInterval;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Quiz Flow
+// ═══════════════════════════════════════════════════════════
+function startQuiz(){
+  userName = document.getElementById('nameInput').value.trim();
+  // 存入 localStorage 确保持久化
+  if (userName) {
+    localStorage.setItem('mbti_username', userName);
+  }
+  
+  // 显示加载动画
+  const dotInterval = showLoading();
+  
+  // 模拟加载时间，让用户感受"命运感"
+  setTimeout(() => {
+    clearInterval(dotInterval);
+    QUESTIONS = generateRandomQuestions();
+    show('quiz');
+    loadQuestion();
+  }, 1500 + Math.random() * 1000); // 1.5-2.5秒
+}
+
+function restart(){
+  currentQ = 0;
+  answers = [[],[],[],[]];
+  dimScores = [0,0,0,0];
+  dimCounts = [0,0,0,0];
+  userName = '';
+  QUESTIONS = [];
+  document.getElementById('nameInput').value = '';
+  show('intro');
+}
+
+function loadQuestion(){
+  if(currentQ >= QUESTIONS.length){ showResult(); return; }
+  const q = QUESTIONS[currentQ];
+  const dimIdx = q.dim;
+  
+  document.getElementById('dimLabel').textContent = DIM_NAMES[dimIdx];
+  document.getElementById('counter').textContent = `${currentQ+1} / ${QUESTIONS.length}`;
+  document.getElementById('progFill').style.width = `${((currentQ)/QUESTIONS.length)*100}%`;
+  
+  document.getElementById('qText').innerHTML = 
+    `<span class="q-icon">${['💬','🔍','💡','📋'][dimIdx]}</span>` + q.text +
+    `<div class="question-options">
+      <div class="opt-left">← ${q.left}</div>
+      <div class="opt-right">${q.right} →</div>
+    </div>`;
+  
+  document.getElementById('dimTags').innerHTML = DIM_CLASS.map((c,i)=>
+    `<span class="dim-tag ${c}">${['E/I','S/N','T/F','J/P'][i]}</span>`
+  ).join('');
+  
+  selectedVal = null;
+  document.querySelectorAll('.scale-opt').forEach(el=>el.classList.remove('selected'));
+}
+
+const DIM_NAMES = ["外向/内向 E/I", "感觉/直觉 S/N", "思考/情感 T/F", "判断/知觉 J/P"];
+const DIM_CLASS = ["ei","sn","tf","jp"];
+
+function selectOpt(el, val){
+  if(selectedVal !== null) return;
+  selectedVal = val;
+  document.querySelectorAll('.scale-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  
+  const q = QUESTIONS[currentQ];
+  const dimIdx = q.dim;
+  answers[dimIdx].push(val);
+  dimScores[dimIdx] += val;
+  dimCounts[dimIdx]++;  dimCounts[dimIdx]++;
+  
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < QUESTIONS.length) {
+      loadQuestion();
+    } else {
+      showResult();
+    }
+  }, 300);
+}
+
+function showResult() {
+  // ★★★ 强制从 localStorage 恢复用户名 ★★★
+  const storedName = localStorage.getItem('mbti_username');
+  if (storedName && storedName.trim()) {
+    userName = storedName.trim();
+    console.log('✅ 从 localStorage 恢复用户名:', userName);
+  } else {
+    userName = '旅人';
+    console.log('⚠️ localStorage 为空，使用默认名');
+  }
+  
+  show('result');
+  
+  // 计算 MBTI 类型
+  let type = '';
+  type += dimScores[0] > 0 ? 'E' : 'I';
+  type += dimScores[1] > 0 ? 'S' : 'N';
+  type += dimScores[2] > 0 ? 'T' : 'F';
+  type += dimScores[3] > 0 ? 'J' : 'P';
+  
+  currentType = type;
+  currentData = TYPES[type];
+  
+  // 更新问候语（顶部）
+  const displayName = userName || '旅人';
+  document.getElementById('cosmicName').textContent = `亲爱的 ${displayName}`;
+  document.getElementById('cosmicMessage').textContent = '宇宙找到了你的星辰轨迹';
+  
+  // 更新核心人格星球
+  document.getElementById('planetType').textContent = type;
+  document.getElementById('planetName').textContent = currentData.name;
+  document.getElementById('planetSub').textContent = currentData.desc;
+  
+  // 更新特质星点
+  const traitsEl = document.getElementById('traitStars');
+  traitsEl.innerHTML = currentData.traits.map(t => `<span class="trait-star">${t}</span>`).join('');
+  
+  // 更新伴星（最旺我人格）
+  const matchType = currentData.bestMatch;
+  const matchData = TYPES[matchType];
+  document.getElementById('companionType').textContent = matchType;
+  document.getElementById('companionName').textContent = `${matchType} · ${matchData.name}`;
+  document.getElementById('companionDesc').textContent = currentData.matchDesc;
+  
+  // 更新专属书信
+  document.getElementById('letterHeader').textContent = `致 ${displayName}：`;
+  
+  // 从动态语录池获取专属寄语
+  const personalizedQuote = getPersonalizedQuote(type, userName);
+  document.getElementById('soulQuote').textContent = personalizedQuote;
+  
+  // 生成宇宙编码
+  const cosmicCode = generateCosmicCode(userName, type);
+  document.getElementById('cosmicCode').textContent = `宇宙编码: ${cosmicCode}`;
+  
+  // 落款
+  document.getElementById('soulSignature').textContent = `—— 宇宙漫游指南 赠予 ${displayName}`;
+  
+  // 保存供海报使用
+  window.currentCosmicCode = cosmicCode;
+  window.currentDisplayName = displayName;
+}
+
+function restart() {
+  currentQ = 0;
+  answers = [[], [], [], []];
+  dimScores = [0, 0, 0, 0];
+  dimCounts = [0, 0, 0, 0];
+  userName = '';
+  QUESTIONS = [];
+  document.getElementById('nameInput').value = '';
+  show('intro');
+}
+
+function shareMoment() {
+  if (!currentData || !currentType) {
+    alert('请先完成测试再生成海报');
+    return;
+  }
+  
+  let canvas = document.getElementById('posterCanvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.id = 'posterCanvas';
+    document.body.appendChild(canvas);
+  }
+  
+  const ctx = canvas.getContext('2d');
+  canvas.width = 1080;
+  canvas.height = 1920;
+  
+  const posterName = userName || localStorage.getItem('mbti_username') || '旅人';
+  
+  // ═══════════════════════════════════════════════
+  // 深邃星空背景
+  // ═══════════════════════════════════════════════
+  const bgGrad = ctx.createRadialGradient(
+    canvas.width/2, canvas.height*0.4, 0,
+    canvas.width/2, canvas.height*0.4, canvas.height
+  );
+  bgGrad.addColorStop(0, '#1a1a3e');
+  bgGrad.addColorStop(0.4, '#12122a');
+  bgGrad.addColorStop(0.7, '#0a0a1a');
+  bgGrad.addColorStop(1, '#050510');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // ═══════════════════════════════════════════════
+  // 星座连线背景图案
+  // ═══════════════════════════════════════════════
+  ctx.strokeStyle = 'rgba(139,92,246,0.15)';
+  ctx.lineWidth = 1;
+  
+  // 生成星座点
+  const constellationPoints = [];
+  for (let i = 0; i < 12; i++) {
+    constellationPoints.push({
+      x: 100 + Math.random() * (canvas.width - 200),
+      y: 100 + Math.random() * (canvas.height - 200)
+    });
+  }
+  
+  // 绘制连线
+  for (let i = 0; i < constellationPoints.length - 1; i++) {
+    ctx.beginPath();
+    ctx.moveTo(constellationPoints[i].x, constellationPoints[i].y);
+    ctx.lineTo(constellationPoints[i+1].x, constellationPoints[i+1].y);
+    ctx.stroke();
+  }
+  
+  // 绘制星座节点
+  constellationPoints.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(167,139,250,0.4)';
+    ctx.fill();
+  });
+  
+  // ═══════════════════════════════════════════════
+  // 多层星星 - 近中远三层
+  // ═══════════════════════════════════════════════
+  
+  // 远景星星（小而暗）
+  for (let i = 0; i < 150; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const r = Math.random() * 1.2;
+    const alpha = Math.random() * 0.3 + 0.1;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.fill();
+  }
+  
+  // 中景星星（带微光）
+  for (let i = 0; i < 80; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const r = Math.random() * 2 + 1;
+    const alpha = Math.random() * 0.5 + 0.3;
+    
+    // 光晕
+    const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
+    glowGrad.addColorStop(0, `rgba(255,255,255,${alpha})`);
+    glowGrad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 3, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 核心
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  }
+  
+  // 近景亮星（少数亮点）
+  for (let i = 0; i < 15; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    
+    // 十字星芒效果
+    ctx.strokeStyle = `rgba(255,255,255,${Math.random() * 0.4 + 0.2})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x - 8, y);
+    ctx.lineTo(x + 8, y);
+    ctx.moveTo(x, y - 8);
+    ctx.lineTo(x, y + 8);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.arc(x, y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  }
+  
+  // ═══════════════════════════════════════════════
+  // 星云光晕装饰
+  // ═══════════════════════════════════════════════
+  
+  // 紫色星云
+  const nebula1 = ctx.createRadialGradient(200, 400, 0, 200, 400, 300);
+  nebula1.addColorStop(0, 'rgba(139,92,246,0.15)');
+  nebula1.addColorStop(1, 'rgba(139,92,246,0)');
+  ctx.fillStyle = nebula1;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // 金色星云
+  const nebula2 = ctx.createRadialGradient(800, 1200, 0, 800, 1200, 350);
+  nebula2.addColorStop(0, 'rgba(212,175,55,0.12)');
+  nebula2.addColorStop(1, 'rgba(212,175,55,0)');
+  ctx.fillStyle = nebula2;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // ═══════════════════════════════════════════════
+  // 顶部装饰区域
+  // ═══════════════════════════════════════════════
+  
+  // 顶部星光线条
+  ctx.strokeStyle = 'rgba(167,139,250,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(canvas.width * 0.2, 120);
+  ctx.lineTo(canvas.width * 0.8, 120);
+  ctx.stroke();
+  
+  // 顶部小星星装饰
+  ctx.font = '24px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✦', canvas.width * 0.15, 125);
+  ctx.fillText('✦', canvas.width * 0.85, 125);
+  
+  // ═══════════════════════════════════════════════
+  // 名字问候区
+  // ═══════════════════════════════════════════════
+  
+  let yOffset = 200;
+  
+  // 副标题
+  ctx.font = '28px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.8)';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(167,139,250,0.4)';
+  ctx.shadowBlur = 15;
+  ctx.fillText('✦ 宇宙漫游日志 ✦', canvas.width / 2, yOffset);
+  
+  // 名字
+  yOffset += 100;
+  ctx.font = 'bold 52px sans-serif';
+  const nameGrad = ctx.createLinearGradient(
+    canvas.width/2 - 200, yOffset,
+    canvas.width/2 + 200, yOffset
+  );
+  nameGrad.addColorStop(0, '#f0d78c');
+  nameGrad.addColorStop(0.5, '#FFD700');
+  nameGrad.addColorStop(1, '#f0d78c');
+  ctx.fillStyle = nameGrad;
+  ctx.shadowColor = 'rgba(255,215,0,0.6)';
+  ctx.shadowBlur = 25;
+  ctx.fillText(`亲爱的 ${posterName}`, canvas.width / 2, yOffset);
+  
+  // ═══════════════════════════════════════════════
+  // 人格类型区 - 核心视觉
+  // ═══════════════════════════════════════════════
+  
+  yOffset += 180;
+  
+  // 类型代码背景光晕
+  const typeGlow = ctx.createRadialGradient(
+    canvas.width/2, yOffset, 0,
+    canvas.width/2, yOffset, 200
+  );
+  typeGlow.addColorStop(0, 'rgba(139,92,246,0.2)');
+  typeGlow.addColorStop(1, 'rgba(139,92,246,0)');
+  ctx.fillStyle = typeGlow;
+  ctx.beginPath();
+  ctx.arc(canvas.width/2, yOffset, 200, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // 类型代码
+  ctx.font = 'bold 140px sans-serif';
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(167,139,250,1)';
+  ctx.shadowBlur = 40;
+  ctx.fillText(currentData.name, canvas.width / 2, yOffset + 50);
+  
+  // 类型名称
+  yOffset += 130;
+  ctx.font = '42px sans-serif';
+  ctx.fillStyle = 'rgba(212,175,55,0.9)';
+  ctx.shadowColor = 'rgba(212,175,55,0.5)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(currentData.title, canvas.width / 2, yOffset);
+  
+  // ═══════════════════════════════════════════════
+  // 大型 emoji
+  // ═══════════════════════════════════════════════
+  
+  yOffset += 150;
+  ctx.font = '200px sans-serif';
+  ctx.shadowBlur = 0;
+  ctx.fillText(currentData.emoji, canvas.width / 2, yOffset);
+  
+  // ═══════════════════════════════════════════════
+  // 宇宙编码
+  // ═══════════════════════════════════════════════
+  
+  yOffset += 120;
+  const cosmicCode = window.currentCosmicCode || 'STAR-XXXX-XXXX';
+  
+  // 编码背景
+  const codeBg = ctx.createLinearGradient(
+    canvas.width/2 - 250, yOffset - 30,
+    canvas.width/2 + 250, yOffset + 30
+  );
+  codeBg.addColorStop(0, 'rgba(212,175,55,0.05)');
+  codeBg.addColorStop(0.5, 'rgba(212,175,55,0.1)');
+  codeBg.addColorStop(1, 'rgba(212,175,55,0.05)');
+  ctx.fillStyle = codeBg;
+  ctx.shadowBlur = 0;
+  ctx.fillRect(canvas.width/2 - 250, yOffset - 30, 500, 60);
+  
+  // 编码文字
+  ctx.font = 'bold 38px "Courier New", monospace';
+  ctx.fillStyle = '#FFD700';
+  ctx.shadowColor = 'rgba(255,215,0,0.5)';
+  ctx.shadowBlur = 20;
+  ctx.fillText(cosmicCode, canvas.width / 2, yOffset + 10);
+  
+  // ═══════════════════════════════════════════════
+  // 专属寄语
+  // ═══════════════════════════════════════════════
+  
+  yOffset += 100;
+  const personalizedQuote = getPersonalizedQuote(currentType, posterName);
+  
+  ctx.font = '30px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.shadowColor = 'rgba(255,255,255,0.2)';
+  ctx.shadowBlur = 8;
+  
+  const maxWidth = 850;
+  const lines = [];
+  let line = '';
+  
+  for (let char of personalizedQuote) {
+    const testLine = line + char;
+    const metrics = ctx.measureText(testLine);
+    if (metrics.width > maxWidth && line) {
+      lines.push(line);
+      line = char;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) lines.push(line);
+  
+  const quoteStartY = yOffset;
+  const lineHeight = 50;
+  lines.forEach((l, i) => {
+    ctx.fillText(l, canvas.width / 2, quoteStartY + i * lineHeight);
+  });
+  
+  // 署名
+  yOffset = quoteStartY + lines.length * lineHeight + 70;
+  ctx.font = 'italic 26px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.7)';
+  ctx.shadowBlur = 10;
+  ctx.fillText(`—— 宇宙给 ${posterName} 的私语`, canvas.width / 2, yOffset);
+  
+  // ═══════════════════════════════════════════════
+  // 底部装饰
+  // ═══════════════════════════════════════════════
+  
+  // 底部星光线
+  ctx.strokeStyle = 'rgba(167,139,250,0.2)';
+  ctx.lineWidth = 1;
+  ctx.shadowBlur = 0;
+  ctx.beginPath();
+  ctx.moveTo(canvas.width * 0.15, canvas.height - 140);
+  ctx.lineTo(canvas.width * 0.85, canvas.height - 140);
+  ctx.stroke();
+  
+  // 底部文字
+  ctx.font = '24px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillText('星辰人格 MBTI 测试', canvas.width / 2, canvas.height - 100);
+  ctx.font = '20px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fillText('扫码探索你的星辰人格', canvas.width / 2, canvas.height - 60);
+  
+  // ═══════════════════════════════════════════════
+  // 显示海报
+  // ═══════════════════════════════════════════════
+  
+  const dataUrl = canvas.toDataURL('image/png');
+  const posterImg = document.getElementById('posterImage');
+  posterImg.src = dataUrl;
+  
+  const preview = document.getElementById('posterPreview');
+  preview.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closePoster() {
+  const preview = document.getElementById('posterPreview');
+  preview.style.display = 'none';
+  document.body.style.overflow = '';
+}
+</script>
+
+<!-- 海报生成用的隐藏 Canvas -->
+<canvas id="posterCanvas" style="display:none;"></canvas>
+
+</body>
+</html>
