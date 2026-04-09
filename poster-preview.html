@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>海报风格预览</title>
+<style>
+  body {
+    background: #0a0a0a;
+    color: #fff;
+    font-family: sans-serif;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  h1 { color: #d4af37; margin-bottom: 40px; }
+  .poster-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .poster-item {
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    padding: 20px;
+  }
+  .poster-item h3 { color: #a78bfa; margin-bottom: 10px; }
+  .poster-item p { color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 15px; }
+  .poster-item canvas { 
+    width: 100%; 
+    height: auto; 
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  }
+  .download-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #8b5cf6, #d4af37);
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .download-btn:hover { opacity: 0.9; }
+</style>
+</head>
+<body>
+<h1>✨ 星辰人格海报风格预览 ✨</h1>
+<div class="poster-grid">
+  <div class="poster-item">
+    <h3>🌌 深邃星空</h3>
+    <p>经典宇宙风，星云星座连线</p>
+    <canvas id="cosmicCanvas" width="540" height="960"></canvas>
+    <button class="download-btn" onclick="download('cosmicCanvas', '深邃星空风')">下载海报</button>
+  </div>
+  <div class="poster-item">
+    <h3>⬜ 极简白金</h3>
+    <p>简约高级感，干净利落</p>
+    <canvas id="minimalCanvas" width="540" height="960"></canvas>
+    <button class="download-btn" onclick="download('minimalCanvas', '极简白金风')">下载海报</button>
+  </div>
+  <div class="poster-item">
+    <h3>💜 霓虹赛博</h3>
+    <p>炫酷科技风，霓虹光效</p>
+    <canvas id="neonCanvas" width="540" height="960"></canvas>
+    <button class="download-btn" onclick="download('neonCanvas', '霓虹赛博风')">下载海报</button>
+  </div>
+  <div class="poster-item">
+    <h3>✨ 梦幻渐变</h3>
+    <p>温柔浪漫风，柔和光晕</p>
+    <canvas id="dreamyCanvas" width="540" height="960"></canvas>
+    <button class="download-btn" onclick="download('dreamyCanvas', '梦幻渐变风')">下载海报</button>
+  </div>
+</div>
+
+<script>
+const posterName = '路飞';
+const currentType = 'ENTJ';
+const currentData = {
+  name: '指挥官',
+  sub: '天生的领袖',
+  traits: ['战略家', '果断', '自信', '效率']
+};
+const cosmicCode = 'STAR-7A3B-9X2K';
+
+// ═══════════════════════════════════════════════════════════
+// 海报风格1：深邃星空风
+// ═══════════════════════════════════════════════════════════
+function drawCosmicPoster(ctx, canvas, posterName) {
+  const w = canvas.width;
+  const h = canvas.height;
+  
+  // 深邃星空背景
+  const bgGrad = ctx.createRadialGradient(w/2, h*0.4, 0, w/2, h*0.4, h);
+  bgGrad.addColorStop(0, '#1a1a3e');
+  bgGrad.addColorStop(0.4, '#12122a');
+  bgGrad.addColorStop(0.7, '#0a0a1a');
+  bgGrad.addColorStop(1, '#050510');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, w, h);
+  
+  // 星座连线
+  ctx.strokeStyle = 'rgba(139,92,246,0.15)';
+  ctx.lineWidth = 1;
+  const constellationPoints = [];
+  for (let i = 0; i < 8; i++) {
+    constellationPoints.push({
+      x: 50 + Math.random() * (w - 100),
+      y: 50 + Math.random() * (h - 100)
+    });
+  }
+  for (let i = 0; i < constellationPoints.length - 1; i++) {
+    ctx.beginPath();
+    ctx.moveTo(constellationPoints[i].x, constellationPoints[i].y);
+    ctx.lineTo(constellationPoints[i+1].x, constellationPoints[i+1].y);
+    ctx.stroke();
+  }
+  constellationPoints.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(167,139,250,0.4)';
+    ctx.fill();
+  });
+  
+  // 远景星星
+  for (let i = 0; i < 80; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const r = Math.random() * 1;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.3 + 0.1})`;
+    ctx.fill();
+  }
+  
+  // 中景星星
+  for (let i = 0; i < 40; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const r = Math.random() * 1.5 + 0.5;
+    const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
+    glowGrad.addColorStop(0, 'rgba(255,255,255,0.5)');
+    glowGrad.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = glowGrad;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  }
+  
+  // 近景亮星
+  for (let i = 0; i < 8; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x - 5, y);
+    ctx.lineTo(x + 5, y);
+    ctx.moveTo(x, y - 5);
+    ctx.lineTo(x, y + 5);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+  }
+  
+  // 星云
+  const nebula1 = ctx.createRadialGradient(100, 200, 0, 100, 200, 150);
+  nebula1.addColorStop(0, 'rgba(139,92,246,0.15)');
+  nebula1.addColorStop(1, 'rgba(139,92,246,0)');
+  ctx.fillStyle = nebula1;
+  ctx.fillRect(0, 0, w, h);
+  
+  const nebula2 = ctx.createRadialGradient(400, 600, 0, 400, 600, 180);
+  nebula2.addColorStop(0, 'rgba(212,175,55,0.12)');
+  nebula2.addColorStop(1, 'rgba(212,175,55,0)');
+  ctx.fillStyle = nebula2;
+  ctx.fillRect(0, 0, w, h);
+  
+  // 顶部装饰线
+  ctx.strokeStyle = 'rgba(167,139,250,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(w * 0.2, 60);
+  ctx.lineTo(w * 0.8, 60);
+  ctx.stroke();
+  
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(167,139,250,0.6)';
+  ctx.fillText('✦', w * 0.15, 64);
+  ctx.fillText('✦', w * 0.85, 64);
+  
+  // 副标题
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.8)';
+  ctx.shadowColor = 'rgba(167,139,250,0.4)';
+  ctx.shadowBlur = 10;
+  ctx.fillText('✦ 宇宙漫游日志 ✦', w / 2, 100);
+  
+  // 名字
+  const nameGrad = ctx.createLinearGradient(w/2 - 100, 0, w/2 + 100, 0);
+  nameGrad.addColorStop(0, '#f0d78c');
+  nameGrad.addColorStop(0.5, '#FFD700');
+  nameGrad.addColorStop(1, '#f0d78c');
+  ctx.fillStyle = nameGrad;
+  ctx.font = 'bold 26px sans-serif';
+  ctx.shadowColor = 'rgba(255,215,0,0.6)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(`亲爱的 ${posterName}`, w / 2, 150);
+  
+  // 类型背景光晕
+  const typeGlow = ctx.createRadialGradient(w/2, 300, 0, w/2, 300, 100);
+  typeGlow.addColorStop(0, 'rgba(139,92,246,0.2)');
+  typeGlow.addColorStop(1, 'rgba(139,92,246,0)');
+  ctx.fillStyle = typeGlow;
+  ctx.beginPath();
+  ctx.arc(w/2, 300, 100, 0, Math.PI * 2);
+  ctx.fill();
+  
+  // 类型代码
+  ctx.font = 'bold 70px sans-serif';
+  ctx.fillStyle = '#fff';
+  ctx.shadowColor = 'rgba(167,139,250,1)';
+  ctx.shadowBlur = 30;
+  ctx.fillText(currentType, w / 2, 330);
+  
+  // 类型名称
+  ctx.font = '21px sans-serif';
+  ctx.fillStyle = 'rgba(212,175,55,0.9)';
+  ctx.shadowColor = 'rgba(212,175,55,0.5)';
+  ctx.shadowBlur = 10;
+  ctx.fillText(currentData.name + ' · ' + currentData.sub, w / 2, 390);
+  
+  // 特质标签
+  ctx.shadowBlur = 0;
+  const traits = currentData.traits;
+  const tagWidth = 90;
+  const tagHeight = 25;
+  const startX = w / 2 - tagWidth - 10;
+  
+  traits.forEach((trait, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const x = startX + col * (tagWidth + 20);
+    const y = 430 + row * (tagHeight + 10);
+    
+    const tagGrad = ctx.createLinearGradient(x, y, x + tagWidth, y);
+    tagGrad.addColorStop(0, 'rgba(139,92,246,0.15)');
+    tagGrad.addColorStop(1, 'rgba(212,175,55,0.15)');
+    ctx.fillStyle = tagGrad;
+    ctx.beginPath();
+    ctx.roundRect(x, y, tagWidth, tagHeight, 12);
+    ctx.fill();
+    
+    ctx.strokeStyle = 'rgba(167,139,250,0.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    ctx.font = '14px sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.85)';
+    ctx.textAlign = 'center';
+    ctx.fillText(trait, x + tagWidth / 2, y + 17);
+  });
+  
+  // 宇宙编码
+  ctx.font = 'bold 19px "Courier New", monospace';
+  ctx.fillStyle = '#FFD700';
+  ctx.shadowColor = 'rgba(255,215,0,0.5)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(cosmicCode, w / 2, 560);
+  
+  // 寄语
+  const quote = '你习惯了缝合破碎的秩序，把混乱裁剪成蓝图。所有人都仰仗你的清醒，但我只想抱抱你的疲惫。不需要永远扛着整座山，偶尔放下，去看看星空。';
+  ctx.font = '15px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.shadowBlur = 5;
+  
+  const maxW = w - 80;
+  const lines = [];
+  let line = '';
+  for (let i = 0; i < quote.length; i++) {
+    const test = line + quote[i];
+    if (ctx.measureText(test).width > maxW) {
+      lines.push(line);
+      line = quote[i];
+    } else {
+      line = test;
+    }
+  }
+  lines.push(line);
+  
+  let quoteY = 620;
+  lines.forEach(l => {
+    ctx.fillText(l, w / 2, quoteY);
+    quoteY += 28;
+  });
+  
+  // 署名
+  ctx.font = 'italic 13px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.7)';
+  ctx.shadowBlur = 8;
+  ctx.fillText(`—— 宇宙给 ${posterName} 的私语`, w / 2, quoteY + 30);
+  
+  // 底部
+  ctx.strokeStyle = 'rgba(167,139,250,0.2)';
+  ctx.lineWidth = 1;
+  ctx.shadowBlur = 0;
+  ctx.beginPath();
+  ctx.moveTo(w * 0.15, h - 70);
+  ctx.lineTo(w * 0.85, h - 70);
+  ctx.stroke();
+  
+  ctx.font = '12px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.fillText('星辰人格 MBTI 测试', w / 2, h - 50);
+}
+
+// ═══════════════════════════════════════════════════════════
+// 海报风格2：极简白金风
+// ═══════════════════════════════════════════════════════════
+function drawMinimalPoster(ctx, canvas, posterName) {
+  const w = canvas.width;
+  const h = canvas.height;
+  
+  // 渐变背景
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+  bgGrad.addColorStop(0, '#1a1a1a');
+  bgGrad.addColorStop(1, '#0a0a0a');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, w, h);
+  
+  // 简约装饰线
+  ctx.strokeStyle = 'rgba(212,175,55,0.3)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(w * 0.1, 100);
+  ctx.lineTo(w * 0.9, 100);
+  ctx.stroke();
+  
+  ctx.beginPath();
+  ctx.moveTo(w * 0.1, h - 100);
+  ctx.lineTo(w * 0.9, h - 100);
+  ctx.stroke();
+  
+  // 类型代码
+  ctx.font = 'bold 100px sans-serif';
+  ctx.fillStyle = '#fff';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(212,175,55,0.5)';
+  ctx.shadowBlur = 30;
+  ctx.fillText(currentType, w / 2, h / 2 - 50);
+  
+  // 类型名称
+  ctx.font = '24px sans-serif';
+  ctx.fillStyle = 'rgba(212,175,55,0.9)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(currentData.name, w / 2, h / 2 + 10);
+  
+  // 副标题
+  ctx.font = '16px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.5)';
+  ctx.shadowBlur = 0;
+  ctx.fillText(currentData.sub, w / 2, h / 2 + 40);
+  
+  // 名字
+  ctx.font = '18px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.fillText(`致 ${posterName}`, w / 2, h - 160);
+  
+  // 宇宙编码
+  ctx.font = '14px "Courier New", monospace';
+  ctx.fillStyle = 'rgba(212,175,55,0.6)';
+  ctx.fillText(cosmicCode, w / 2, h - 130);
+  
+  // 特质
+  ctx.font = '12px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  const traitsText = currentData.traits.join('  ·  ');
+  ctx.fillText(traitsText, w / 2, h / 2 + 80);
+  
+  // 底部
+  ctx.font = '11px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fillText('星辰人格 MBTI', w / 2, h - 50);
+}
+
+// ═══════════════════════════════════════════════════════════
+// 海报风格3：霓虹赛博风
+// ═══════════════════════════════════════════════════════════
+function drawNeonPoster(ctx, canvas, posterName) {
+  const w = canvas.width;
+  const h = canvas.height;
+  
+  // 深紫黑背景
+  ctx.fillStyle = '#0d0015';
+  ctx.fillRect(0, 0, w, h);
+  
+  // 霓虹网格线
+  ctx.strokeStyle = 'rgba(139,92,246,0.1)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 15; i++) {
+    ctx.beginPath();
+    ctx.moveTo(i * 40, 0);
+    ctx.lineTo(i * 40, h);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(0, i * 70);
+    ctx.lineTo(w, i * 70);
+    ctx.stroke();
+  }
+  
+  // 霓虹光晕
+  const neonGlow1 = ctx.createRadialGradient(w * 0.3, 150, 0, w * 0.3, 150, 200);
+  neonGlow1.addColorStop(0, 'rgba(236,72,153,0.25)');
+  neonGlow1.addColorStop(1, 'transparent');
+  ctx.fillStyle = neonGlow1;
+  ctx.fillRect(0, 0, w, h);
+  
+  const neonGlow2 = ctx.createRadialGradient(w * 0.7, h - 200, 0, w * 0.7, h - 200, 200);
+  neonGlow2.addColorStop(0, 'rgba(79,163,212,0.25)');
+  neonGlow2.addColorStop(1, 'transparent');
+  ctx.fillStyle = neonGlow2;
+  ctx.fillRect(0, 0, w, h);
+  
+  // 类型代码 - 多层发光
+  ctx.font = 'bold 90px sans-serif';
+  ctx.textAlign = 'center';
+  
+  for (let i = 4; i > 0; i--) {
+    ctx.fillStyle = `rgba(236,72,153,${0.1 * i})`;
+    ctx.shadowColor = 'rgba(236,72,153,1)';
+    ctx.shadowBlur = 15 * i;
+    ctx.fillText(currentType, w / 2, h / 2 - 40);
+  }
+  ctx.fillStyle = '#fff';
+  ctx.shadowBlur = 25;
+  ctx.fillText(currentType, w / 2, h / 2 - 40);
+  
+  // 类型名称
+  ctx.font = '25px sans-serif';
+  ctx.fillStyle = '#4fa3d4';
+  ctx.shadowColor = 'rgba(79,163,212,1)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(currentData.name, w / 2, h / 2 + 10);
+  
+  // 副标题
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  ctx.shadowBlur = 0;
+  ctx.fillText(currentData.sub, w / 2, h / 2 + 40);
+  
+  // 装饰线
+  ctx.strokeStyle = 'rgba(236,72,153,0.8)';
+  ctx.lineWidth = 2;
+  ctx.shadowColor = 'rgba(236,72,153,1)';
+  ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.moveTo(w * 0.3, h / 2 + 55);
+  ctx.lineTo(w * 0.7, h / 2 + 55);
+  ctx.stroke();
+  
+  // 特质
+  ctx.font = '13px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,1)';
+  ctx.shadowColor = 'rgba(167,139,250,0.8)';
+  ctx.shadowBlur = 10;
+  const traitsText = currentData.traits.join('  ◆  ');
+  ctx.fillText(traitsText, w / 2, h / 2 + 85);
+  
+  // 名字
+  ctx.font = 'bold 18px sans-serif';
+  ctx.fillStyle = '#ec4899';
+  ctx.shadowColor = 'rgba(236,72,153,0.8)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(`${posterName} 的星辰人格`, w / 2, h - 190);
+  
+  // 宇宙编码
+  ctx.font = '14px "Courier New", monospace';
+  ctx.fillStyle = '#4fa3d4';
+  ctx.shadowColor = 'rgba(79,163,212,0.8)';
+  ctx.shadowBlur = 10;
+  ctx.fillText(cosmicCode, w / 2, h - 160);
+  
+  // 底部
+  ctx.font = '11px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.shadowBlur = 0;
+  ctx.fillText('✦ 星辰人格 MBTI ✦', w / 2, h - 50);
+}
+
+// ═══════════════════════════════════════════════════════════
+// 海报风格4：梦幻渐变风
+// ═══════════════════════════════════════════════════════════
+function drawDreamyPoster(ctx, canvas, posterName) {
+  const w = canvas.width;
+  const h = canvas.height;
+  
+  // 梦幻渐变背景
+  const bgGrad = ctx.createLinearGradient(0, 0, w, h);
+  bgGrad.addColorStop(0, '#1a0a2e');
+  bgGrad.addColorStop(0.3, '#16213e');
+  bgGrad.addColorStop(0.6, '#1a1a3e');
+  bgGrad.addColorStop(1, '#0f0f2d');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, w, h);
+  
+  // 柔和光斑
+  const colors = [
+    'rgba(139,92,246,0.08)',
+    'rgba(236,72,153,0.06)',
+    'rgba(79,163,212,0.06)',
+    'rgba(212,175,55,0.05)'
+  ];
+  for (let i = 0; i < 6; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const r = 80 + Math.random() * 100;
+    const glow = ctx.createRadialGradient(x, y, 0, x, y, r);
+    glow.addColorStop(0, colors[i % 4]);
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  // 散落的小星星
+  for (let i = 0; i < 40; i++) {
+    const x = Math.random() * w;
+    const y = Math.random() * h;
+    const r = Math.random() * 1.5;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.4 + 0.2})`;
+    ctx.fill();
+  }
+  
+  // 顶部装饰
+  ctx.font = '16px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'rgba(167,139,250,0.6)';
+  ctx.fillText('✦ ✦ ✦', w / 2, 90);
+  
+  // 名字问候
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.6)';
+  ctx.fillText('亲爱的', w / 2, 140);
+  
+  const nameGrad = ctx.createLinearGradient(w/2 - 75, 0, w/2 + 75, 0);
+  nameGrad.addColorStop(0, '#f0d78c');
+  nameGrad.addColorStop(0.5, '#fff');
+  nameGrad.addColorStop(1, '#f0d78c');
+  ctx.fillStyle = nameGrad;
+  ctx.font = 'bold 28px sans-serif';
+  ctx.shadowColor = 'rgba(212,175,55,0.5)';
+  ctx.shadowBlur = 15;
+  ctx.fillText(posterName, w / 2, 175);
+  
+  // 类型代码
+  ctx.font = 'bold 80px sans-serif';
+  const typeGrad = ctx.createLinearGradient(0, 250, 0, 350);
+  typeGrad.addColorStop(0, '#a78bfa');
+  typeGrad.addColorStop(1, '#ec4899');
+  ctx.fillStyle = typeGrad;
+  ctx.shadowColor = 'rgba(167,139,250,0.6)';
+  ctx.shadowBlur = 25;
+  ctx.fillText(currentType, w / 2, 340);
+  
+  // 类型名称
+  ctx.font = '22px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.shadowBlur = 8;
+  ctx.fillText(currentData.name, w / 2, 380);
+  
+  // 副标题
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(167,139,250,0.8)';
+  ctx.shadowBlur = 0;
+  ctx.fillText(currentData.sub, w / 2, 410);
+  
+  // 分隔线
+  ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(w * 0.2, 450);
+  ctx.lineTo(w * 0.8, 450);
+  ctx.stroke();
+  
+  // 特质
+  ctx.font = '14px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.7)';
+  currentData.traits.forEach((trait, i) => {
+    const x = w / 2 + (i - 1.5) * 100;
+    ctx.fillText(trait, x, 490);
+  });
+  
+  // 宇宙编码
+  ctx.font = '16px "Courier New", monospace';
+  ctx.fillStyle = 'rgba(212,175,55,0.8)';
+  ctx.shadowColor = 'rgba(212,175,55,0.5)';
+  ctx.shadowBlur = 12;
+  ctx.fillText(cosmicCode, w / 2, 550);
+  
+  // 底部
+  ctx.font = '12px sans-serif';
+  ctx.fillStyle = 'rgba(255,255,255,0.4)';
+  ctx.shadowBlur = 0;
+  ctx.fillText('星辰人格 MBTI 测试', w / 2, h - 50);
+}
+
+// 下载函数
+function download(canvasId, styleName) {
+  const canvas = document.getElementById(canvasId);
+  const link = document.createElement('a');
+  link.download = `星辰人格_${styleName}.png`;
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+// 初始化绘制所有海报
+window.onload = function() {
+  // 深邃星空
+  const cosmicCanvas = document.getElementById('cosmicCanvas');
+  drawCosmicPoster(cosmicCanvas.getContext('2d'), cosmicCanvas, posterName);
+  
+  // 极简白金
+  const minimalCanvas = document.getElementById('minimalCanvas');
+  drawMinimalPoster(minimalCanvas.getContext('2d'), minimalCanvas, posterName);
+  
+  // 霓虹赛博
+  const neonCanvas = document.getElementById('neonCanvas');
+  drawNeonPoster(neonCanvas.getContext('2d'), neonCanvas, posterName);
+  
+  // 梦幻渐变
+  const dreamyCanvas = document.getElementById('dreamyCanvas');
+  drawDreamyPoster(dreamyCanvas.getContext('2d'), dreamyCanvas, posterName);
+};
+</script>
+</body>
+</html>

@@ -26,7 +26,7 @@
   }
 
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -38,19 +38,19 @@
 
   /* Stars Canvas */
   #stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
-  
+
   .app { position:relative; z-index:1; min-height:100dvh; }
 
   .screen { display:none; min-height:100dvh; padding: 20px 20px 40px; }
   .screen.active { display:flex; flex-direction:column; animation:fadeIn .5s ease; }
-  
+
   @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
 
   /* ═════════════════════
      INTRO SCREEN
   ═════════════════════ */
   .intro { align-items:center; justify-content:center; text-align:center; gap:32px; padding-top:40px; }
-  
+
   .logo-mark {
     width:80px; height:80px; border:2px solid var(--gold);
     border-radius:50%; display:flex; align-items:center; justify-content:center;
@@ -63,7 +63,7 @@
     0%,100%{box-shadow:0 0 20px rgba(212,175,55,.2)}
     50%{box-shadow:0 0 50px rgba(212,175,55,.4)}
   }
-  
+
   .title-block h1 {
     font-family: 'Ma Shan Zheng', cursive;
     font-size: clamp(2.2rem, 10vw, 3.2rem);
@@ -174,18 +174,18 @@
   /* ═════════════════════
      QUIZ SCREEN - 深空漫游体验
   ═════════════════════ */
-  
-  .quiz { 
-    padding-top: 16px; 
-    gap: 0; 
+
+  .quiz {
+    padding-top: 16px;
+    gap: 0;
     position: relative;
     overflow: hidden;
   }
-  
+
   /* ═════════════════════
      答题页宇宙氛围 - 沉浸式星空
   ═════════════════════ */
-  
+
   /* 深空背景层 */
   .deep-space {
     position: absolute;
@@ -193,7 +193,7 @@
     pointer-events: none;
     z-index: 0;
   }
-  
+
   /* 星尘粒子 - 缓慢上升 */
   .stardust-layer {
     position: absolute;
@@ -201,7 +201,7 @@
     overflow: hidden;
     pointer-events: none;
   }
-  
+
   .stardust {
     position: absolute;
     width: 2px;
@@ -212,7 +212,7 @@
     animation: stardust-rise 20s linear infinite;
     opacity: 0;
   }
-  
+
   @keyframes stardust-rise {
     0% {
       transform: translateY(100vh) translateX(0);
@@ -225,7 +225,7 @@
       opacity: 0;
     }
   }
-  
+
   /* 流星划过 - 增强版 */
   .shooting-stars {
     position: absolute;
@@ -234,15 +234,15 @@
     z-index: 10;
     pointer-events: none;
   }
-  
+
   .shooting-star {
     position: absolute;
     width: 200px;
     height: 3px;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      rgba(255,255,255,0.3) 20%, 
-      rgba(255,255,255,1) 50%, 
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255,255,255,0.3) 20%,
+      rgba(255,255,255,1) 50%,
       rgba(167,139,250,0.8) 80%,
       rgba(139,92,246,0.4) 100%
     );
@@ -250,12 +250,12 @@
     transform: rotate(-45deg);
     opacity: 0;
     filter: blur(0.3px);
-    box-shadow: 
+    box-shadow:
       0 0 10px rgba(255,255,255,0.8),
       0 0 20px rgba(167,139,250,0.6),
       0 0 30px rgba(139,92,246,0.4);
   }
-  
+
   /* 流星尾部拖尾效果 */
   .shooting-star::before {
     content: '';
@@ -271,7 +271,7 @@
     );
     filter: blur(2px);
   }
-  
+
   /* 流星头部亮点 */
   .shooting-star::after {
     content: '';
@@ -284,111 +284,111 @@
     border-radius: 50%;
     box-shadow: 0 0 15px #fff, 0 0 25px rgba(167,139,250,0.8), 0 0 40px rgba(139,92,246,0.5);
   }
-  
+
   /* 大流星 - 主流星 */
-  .shooting-star-1 { 
-    top: 5%; 
-    left: 80%; 
+  .shooting-star-1 {
+    top: 5%;
+    left: 80%;
     animation: shooting-big 4s ease-out infinite;
     animation-delay: 0s;
   }
-  
-  .shooting-star-2 { 
-    top: 25%; 
-    left: 20%; 
+
+  .shooting-star-2 {
+    top: 25%;
+    left: 20%;
     animation: shooting-big 5s ease-out infinite;
     animation-delay: 1.5s;
   }
-  
-  .shooting-star-3 { 
-    top: 50%; 
-    left: 90%; 
+
+  .shooting-star-3 {
+    top: 50%;
+    left: 90%;
     animation: shooting-big 4.5s ease-out infinite;
     animation-delay: 3s;
   }
-  
+
   /* 中等流星 */
-  .shooting-star-4 { 
-    top: 15%; 
-    left: 50%; 
+  .shooting-star-4 {
+    top: 15%;
+    left: 50%;
     animation: shooting-mid 5.5s ease-out infinite;
     animation-delay: 0.8s;
     width: 150px;
     height: 2px;
   }
-  
-  .shooting-star-5 { 
-    top: 70%; 
-    left: 30%; 
+
+  .shooting-star-5 {
+    top: 70%;
+    left: 30%;
     animation: shooting-mid 6s ease-out infinite;
     animation-delay: 2.2s;
     width: 150px;
     height: 2px;
   }
-  
+
   /* 小流星 */
-  .shooting-star-6 { 
-    top: 40%; 
-    left: 10%; 
+  .shooting-star-6 {
+    top: 40%;
+    left: 10%;
     animation: shooting-small 7s ease-out infinite;
     animation-delay: 1s;
     width: 100px;
     height: 1.5px;
     opacity: 0.7;
   }
-  
-  .shooting-star-7 { 
-    top: 85%; 
-    left: 70%; 
+
+  .shooting-star-7 {
+    top: 85%;
+    left: 70%;
     animation: shooting-small 6.5s ease-out infinite;
     animation-delay: 4s;
     width: 100px;
     height: 1.5px;
     opacity: 0.7;
   }
-  
+
   @keyframes shooting-big {
-    0% { 
-      opacity: 0; 
+    0% {
+      opacity: 0;
       transform: rotate(-45deg) translateX(0) translateY(0);
     }
     2% { opacity: 1; }
-    8% { 
-      opacity: 0.9; 
+    8% {
+      opacity: 0.9;
       transform: rotate(-45deg) translateX(-500px) translateY(500px);
     }
     12% { opacity: 0; }
     100% { opacity: 0; }
   }
-  
+
   @keyframes shooting-mid {
-    0% { 
-      opacity: 0; 
+    0% {
+      opacity: 0;
       transform: rotate(-45deg) translateX(0) translateY(0);
     }
     3% { opacity: 0.9; }
-    10% { 
-      opacity: 0.7; 
+    10% {
+      opacity: 0.7;
       transform: rotate(-45deg) translateX(-400px) translateY(400px);
     }
     15% { opacity: 0; }
     100% { opacity: 0; }
   }
-  
+
   @keyframes shooting-small {
-    0% { 
-      opacity: 0; 
+    0% {
+      opacity: 0;
       transform: rotate(-45deg) translateX(0) translateY(0);
     }
     5% { opacity: 0.8; }
-    15% { 
-      opacity: 0.5; 
+    15% {
+      opacity: 0.5;
       transform: rotate(-45deg) translateX(-300px) translateY(300px);
     }
     20% { opacity: 0; }
     100% { opacity: 0; }
   }
-  
+
   /* 星云光晕 */
   .nebula-glow {
     position: absolute;
@@ -396,7 +396,7 @@
     filter: blur(100px);
     animation: nebula-pulse 15s ease-in-out infinite;
   }
-  
+
   .nebula-purple {
     width: 300px;
     height: 300px;
@@ -404,7 +404,7 @@
     top: -100px;
     left: -100px;
   }
-  
+
   .nebula-blue {
     width: 350px;
     height: 350px;
@@ -413,7 +413,7 @@
     right: -150px;
     animation-delay: -8s;
   }
-  
+
   .nebula-gold {
     width: 250px;
     height: 250px;
@@ -423,56 +423,56 @@
     transform: translateX(-50%);
     animation-delay: -4s;
   }
-  
+
   @keyframes nebula-pulse {
     0%, 100% { opacity: 0.6; transform: scale(1) translateX(-50%); }
     50% { opacity: 1; transform: scale(1.2) translateX(-50%); }
   }
-  
+
   .nebula-purple, .nebula-blue {
     animation-name: nebula-drift;
   }
-  
+
   @keyframes nebula-drift {
     0%, 100% { opacity: 0.6; transform: translate(0, 0); }
     50% { opacity: 1; transform: translate(30px, 20px); }
   }
-  
+
   /* 星座连线背景 */
   .constellation-bg {
     position: absolute;
     inset: 0;
     opacity: 0.4;
   }
-  
+
   .constellation-dot {
     fill: rgba(167, 139, 250, 0.6);
     animation: dot-pulse 3s ease-in-out infinite;
   }
-  
+
   .constellation-line {
     stroke: rgba(167, 139, 250, 0.2);
     stroke-width: 1;
     stroke-dasharray: 5 5;
     animation: dash-flow 20s linear infinite;
   }
-  
+
   @keyframes dot-pulse {
     0%, 100% { opacity: 0.4; }
     50% { opacity: 1; }
   }
-  
+
   @keyframes dash-flow {
     to { stroke-dashoffset: -100; }
   }
-  
+
   /* 闪烁星星矩阵 */
   .star-matrix {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
-  
+
   .twinkle-star {
     position: absolute;
     width: 3px;
@@ -481,7 +481,7 @@
     border-radius: 50%;
     animation: star-twinkle 3s ease-in-out infinite;
   }
-  
+
   .s1 { top: 10%; left: 15%; animation-delay: 0s; }
   .s2 { top: 20%; left: 85%; animation-delay: 0.5s; }
   .s3 { top: 35%; left: 8%; animation-delay: 1s; }
@@ -506,20 +506,20 @@
   .s22 { top: 68%; left: 15%; animation-delay: 0.2s; width: 4px; height: 4px; }
   .s23 { top: 42%; left: 75%; animation-delay: 1.4s; }
   .s24 { top: 88%; left: 65%; animation-delay: 2.2s; }
-  
+
   @keyframes star-twinkle {
-    0%, 100% { 
-      opacity: 0.3; 
+    0%, 100% {
+      opacity: 0.3;
       transform: scale(0.8);
       box-shadow: 0 0 4px rgba(255,255,255,0.3);
     }
-    50% { 
-      opacity: 1; 
+    50% {
+      opacity: 1;
       transform: scale(1.3);
       box-shadow: 0 0 12px rgba(255,255,255,0.8), 0 0 20px rgba(167,139,250,0.4);
     }
   }
-  
+
   /* 极光层 */
   .aurora-layer {
     position: absolute;
@@ -527,7 +527,7 @@
     pointer-events: none;
     overflow: hidden;
   }
-  
+
   .aurora {
     position: absolute;
     width: 150%;
@@ -536,11 +536,11 @@
     filter: blur(80px);
     animation: aurora-wave 15s ease-in-out infinite;
   }
-  
+
   .aurora-1 {
     top: -100px;
     left: -25%;
-    background: linear-gradient(180deg, 
+    background: linear-gradient(180deg,
       transparent 0%,
       rgba(139,92,246,0.3) 20%,
       rgba(79,163,212,0.2) 50%,
@@ -549,7 +549,7 @@
     );
     animation-delay: 0s;
   }
-  
+
   .aurora-2 {
     bottom: -100px;
     left: -10%;
@@ -561,36 +561,36 @@
     );
     animation-delay: -7s;
   }
-  
+
   @keyframes aurora-wave {
-    0%, 100% { 
-      transform: translateX(-10%) skewX(-5deg); 
+    0%, 100% {
+      transform: translateX(-10%) skewX(-5deg);
       opacity: 0.1;
     }
-    50% { 
-      transform: translateX(10%) skewX(5deg); 
+    50% {
+      transform: translateX(10%) skewX(5deg);
       opacity: 0.2;
     }
   }
-  
+
   /* 银河带 */
   .milky-way {
     position: absolute;
     inset: 0;
-    background: 
-      radial-gradient(ellipse 80% 30% at 50% 50%, 
-        rgba(167,139,250,0.08) 0%, 
+    background:
+      radial-gradient(ellipse 80% 30% at 50% 50%,
+        rgba(167,139,250,0.08) 0%,
         transparent 50%
       );
     pointer-events: none;
     animation: milky-pulse 10s ease-in-out infinite;
   }
-  
+
   @keyframes milky-pulse {
     0%, 100% { opacity: 0.5; }
     50% { opacity: 0.8; }
   }
-  
+
   /* 漂浮宇宙元素 */
   .floating-elements {
     position: absolute;
@@ -599,7 +599,7 @@
     z-index: 1;
     pointer-events: none;
   }
-  
+
   .floating-planet {
     position: absolute;
     font-size: 1.8rem;
@@ -607,22 +607,22 @@
     animation: float-drift 12s ease-in-out infinite;
     filter: drop-shadow(0 0 15px rgba(255,255,255,0.3));
   }
-  
+
   .p1 { top: 12%; left: 8%; animation-delay: 0s; }
   .p2 { top: 25%; right: 10%; animation-delay: -4s; }
   .p3 { top: 70%; left: 5%; animation-delay: -8s; }
-  
+
   @keyframes float-drift {
-    0%, 100% { 
-      transform: translateY(0) rotate(0deg); 
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
       opacity: 0.15;
     }
-    50% { 
-      transform: translateY(-25px) rotate(10deg); 
+    50% {
+      transform: translateY(-25px) rotate(10deg);
       opacity: 0.3;
     }
   }
-  
+
   /* 顶部引导语 */
   .quiz-guide {
     text-align: center;
@@ -632,23 +632,23 @@
     letter-spacing: 0.3em;
     animation: guide-glow 3s ease-in-out infinite;
   }
-  
+
   .guide-icon {
     display: inline-block;
     margin: 0 8px;
     color: rgba(212, 175, 55, 0.7);
   }
-  
+
   @keyframes guide-glow {
     0%, 100% { opacity: 0.6; }
     50% { opacity: 1; text-shadow: 0 0 20px rgba(167, 139, 250, 0.5); }
   }
-  
+
   /* 问题文字星光效果 */
   .question-text {
     position: relative;
   }
-  
+
   .question-text::before {
     content: '';
     position: absolute;
@@ -659,7 +659,7 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(167,139,250,0.4), transparent);
   }
-  
+
   /* 选项交互光效 - 增强版 */
   .scale-opt {
     position: relative;
@@ -667,7 +667,7 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
   }
-  
+
   .scale-opt::before {
     content: '';
     position: absolute;
@@ -677,38 +677,38 @@
     transition: opacity 0.3s;
     border-radius: inherit;
   }
-  
+
   .scale-opt:hover {
     transform: scale(1.08);
     border-color: rgba(167,139,250,0.5);
   }
-  
+
   .scale-opt:hover::before {
     opacity: 0.6;
   }
-  
+
   .scale-opt:active {
     transform: scale(0.95);
   }
-  
+
   .scale-opt.selected {
     background: linear-gradient(135deg, rgba(139,92,246,0.35), rgba(212,175,55,0.25));
     border-color: var(--purple);
     color: var(--gold-light);
-    box-shadow: 
-      0 0 30px rgba(139,92,246,0.4), 
+    box-shadow:
+      0 0 30px rgba(139,92,246,0.4),
       0 0 60px rgba(139,92,246,0.2),
       inset 0 0 30px rgba(139,92,246,0.15);
     transform: scale(1.1);
     animation: selected-pulse 0.5s ease;
   }
-  
+
   @keyframes selected-pulse {
     0% { transform: scale(1.1); }
     50% { transform: scale(1.15); }
     100% { transform: scale(1.1); }
   }
-  
+
   /* 选项点击粒子效果 */
   .scale-opt .click-particle {
     position: absolute;
@@ -719,7 +719,7 @@
     pointer-events: none;
     animation: particle-burst 0.6s ease-out forwards;
   }
-  
+
   @keyframes particle-burst {
     0% {
       opacity: 1;
@@ -730,22 +730,22 @@
       transform: translate(var(--px), var(--py)) scale(0);
     }
   }
-  
+
   /* 选项数字动画 */
   .scale-opt span {
     display: inline-block;
     transition: transform 0.3s ease;
   }
-  
+
   .scale-opt:hover span {
     animation: number-float 0.5s ease;
   }
-  
+
   @keyframes number-float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-3px); }
   }
-  
+
   /* 问题切换动画 */
   @keyframes question-slide-in {
     0% {
@@ -757,18 +757,18 @@
       transform: translateX(0);
     }
   }
-  
+
   .question-block {
     animation: question-slide-in 0.5s ease forwards;
   }
-  
+
   .quiz-header {
     display:flex; align-items:center; justify-content:space-between;
     margin-bottom:6px;
   }
   .quiz-dim { font-size:.72rem; color:var(--purple-soft); letter-spacing:.2em; text-transform:uppercase; }
   .quiz-counter { font-size:.72rem; color:var(--text-dim); }
-  
+
   .progress-bar { height:3px; background:var(--border); border-radius:2px; margin-bottom:28px; overflow:hidden; }
   .progress-fill { height:100%; background: linear-gradient(90deg, var(--purple), var(--gold)); border-radius:2px; transition: width .5s ease; }
 
@@ -780,9 +780,9 @@
     text-shadow: 0 0 20px rgba(245,243,255,0.15);
   }
   .question-text .q-icon { margin-right:8px; }
-  
+
   .question-options {
-    display:flex; justify-content:space-between; margin-bottom:24px; 
+    display:flex; justify-content:space-between; margin-bottom:24px;
     font-size:clamp(0.85rem,3.2vw,1rem); padding:12px 16px;
     background:rgba(255,255,255,0.05); border-radius:12px;
   }
@@ -836,7 +836,7 @@
     opacity: 0;
     animation: fadeInUp .8s ease .2s forwards;
   }
-  
+
   .cosmic-subtitle {
     font-size: 0.7rem;
     color: rgba(167, 139, 250, 0.7);
@@ -845,7 +845,7 @@
     font-weight: 300;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
   }
-  
+
   .cosmic-name {
     font-size: 1.5rem;
     font-weight: 400;
@@ -858,12 +858,12 @@
     margin-bottom: 20px;
     animation: name-glow 3s ease-in-out infinite;
   }
-  
+
   @keyframes name-glow {
     0%, 100% { filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5)); }
     50% { filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.7)); }
   }
-  
+
   .cosmic-divider {
     display: flex;
     align-items: center;
@@ -871,7 +871,7 @@
     gap: 12px;
     margin-bottom: 20px;
   }
-  
+
   .star-dot {
     width: 4px;
     height: 4px;
@@ -880,18 +880,18 @@
     box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
     animation: twinkle-dot 2s ease-in-out infinite;
   }
-  
+
   .star-line {
     width: 60px;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
   }
-  
+
   @keyframes twinkle-dot {
     0%, 100% { opacity: 0.5; transform: scale(1); }
     50% { opacity: 1; transform: scale(1.3); }
   }
-  
+
   .cosmic-message {
     font-size: 0.85rem;
     color: rgba(200, 200, 220, 0.8);
@@ -899,7 +899,7 @@
     font-weight: 300;
     text-shadow: 0 0 20px rgba(200, 200, 220, 0.2);
   }
-  
+
   @keyframes fadeInUp {
     from{opacity:0;transform:translateY(15px)}
     to{opacity:1;transform:none}
@@ -1021,11 +1021,11 @@
     position:relative;
     opacity:0; animation:fadeInUp .8s ease .8s forwards;
   }
-  
+
   /* ═══════════════════════════════════════════════
      答题完成过渡动画
   ═══════════════════════════════════════════════ */
-  
+
   .quiz-transition {
     position: fixed;
     inset: 0;
@@ -1035,55 +1035,55 @@
     justify-content: center;
     background: radial-gradient(circle at center, #1a1a3e 0%, #050510 100%);
   }
-  
+
   .quiz-transition.active {
     display: flex;
     animation: transition-bg 1.5s ease forwards;
   }
-  
+
   @keyframes transition-bg {
     0% { opacity: 0; }
     20% { opacity: 1; }
     80% { opacity: 1; }
     100% { opacity: 0; }
   }
-  
+
   .transition-content {
     text-align: center;
     animation: transition-float 1.5s ease forwards;
   }
-  
+
   @keyframes transition-float {
     0% { opacity: 0; transform: translateY(30px) scale(0.9); }
     30% { opacity: 1; transform: translateY(0) scale(1); }
     70% { opacity: 1; transform: translateY(-10px) scale(1); }
     100% { opacity: 0; transform: translateY(-50px) scale(0.9); }
   }
-  
+
   .transition-icon {
     font-size: 4rem;
     margin-bottom: 20px;
     animation: icon-pulse 0.8s ease infinite;
   }
-  
+
   @keyframes icon-pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
   }
-  
+
   .transition-text {
     font-size: 1.2rem;
     color: rgba(167, 139, 250, 0.9);
     letter-spacing: 0.2em;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
   }
-  
+
   .transition-stars {
     position: absolute;
     inset: 0;
     pointer-events: none;
   }
-  
+
   .transition-star {
     position: absolute;
     width: 4px;
@@ -1092,10 +1092,10 @@
     border-radius: 50%;
     animation: star-burst 1.5s ease forwards;
   }
-  
+
   @keyframes star-burst {
-    0% { 
-      opacity: 1; 
+    0% {
+      opacity: 1;
       transform: translate(0, 0) scale(0);
     }
     50% {
@@ -1107,18 +1107,18 @@
       transform: translate(calc(var(--tx) * 2), calc(var(--ty) * 2)) scale(0.5);
     }
   }
-  
+
   .soul-letter {
     background: linear-gradient(145deg, rgba(25,25,45,0.7) 0%, rgba(18,18,35,0.8) 50%, rgba(25,25,45,0.7) 100%);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: 20px;
     padding: 32px 28px;
     backdrop-filter: blur(15px);
-    box-shadow: 
+    box-shadow:
       0 8px 32px rgba(0,0,0,0.4),
       inset 0 1px 0 rgba(255,255,255,0.03);
   }
-  
+
   .letter-header {
     font-size: 1.15rem;
     color: #e8c87a;
@@ -1127,7 +1127,7 @@
     font-weight: 500;
     text-shadow: 0 0 25px rgba(232,200,122,0.4);
   }
-  
+
   .letter-body {
     font-size: 0.92rem;
     line-height: 2.2;
@@ -1139,12 +1139,12 @@
     text-shadow: 0 0 25px rgba(245,243,255,0.2);
     word-break: break-word;
   }
-  
+
   .letter-footer {
     margin-top: 24px;
     text-align: right;
   }
-  
+
   .cosmic-code {
     font-size: 11px;
     color: rgba(255, 215, 100, 0.6);
@@ -1152,7 +1152,7 @@
     margin-bottom: 12px;
     font-family: 'Courier New', monospace;
   }
-  
+
   .letter-signature {
     font-size: 0.8rem;
     color: rgba(167,139,250,0.6);
@@ -1168,7 +1168,7 @@
     opacity:0; animation:fadeInUp .8s ease 1s forwards;
   }
   .share-row { display:flex; gap:12px; justify-content:center; margin-bottom:16px; }
-  
+
 /* ═══════════════════════════════════════════════════════════
    海报预览弹窗 - 微信友好
    ═══════════════════════════════════════════════════════════ */
@@ -1263,7 +1263,7 @@
 
   .result-actions { display:flex; gap:10px; width:100%; }
   .result-actions .start-btn { flex:1; font-size:.85rem; padding:13px 16px; }
-  .result-actions .free-btn { 
+  .result-actions .free-btn {
     flex:1; text-align:center; font-size:.85rem; padding:13px 16px;
     background:none; border:1px solid var(--border);
     color:var(--text-dim); border-radius:50px;
@@ -1311,11 +1311,11 @@
 
   /* 海报弹窗 */
   #posterModal { font-family: 'Noto Serif SC', serif !important; }
-  
+
   /* ═══════════════════════════════════════════════
      海报风格选择弹窗
   ═══════════════════════════════════════════════ */
-  
+
   .poster-style-modal {
     position: fixed;
     inset: 0;
@@ -1325,14 +1325,14 @@
     justify-content: center;
     padding: 20px;
   }
-  
+
   .poster-style-mask {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
   }
-  
+
   .poster-style-content {
     position: relative;
     z-index: 10;
@@ -1343,7 +1343,7 @@
     border-radius: 24px;
     padding: 28px 20px;
   }
-  
+
   .poster-style-title {
     text-align: center;
     font-size: 1.2rem;
@@ -1351,14 +1351,14 @@
     margin-bottom: 24px;
     letter-spacing: 0.1em;
   }
-  
+
   .poster-style-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     margin-bottom: 20px;
   }
-  
+
   .poster-style-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1368,13 +1368,13 @@
     cursor: pointer;
     transition: all 0.3s;
   }
-  
+
   .poster-style-card:hover {
     border-color: var(--purple);
     background: rgba(139, 92, 246, 0.1);
     transform: translateY(-2px);
   }
-  
+
   .style-preview {
     width: 80px;
     height: 80px;
@@ -1386,43 +1386,43 @@
     font-size: 1.5rem;
     font-weight: bold;
   }
-  
+
   .cosmic-preview {
     background: linear-gradient(135deg, #1a1a3e, #0a0a1a);
     color: #a78bfa;
     box-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
   }
-  
+
   .minimal-preview {
     background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
     color: #d4af37;
     font-size: 0.9rem;
     border: 1px solid rgba(212, 175, 55, 0.3);
   }
-  
+
   .neon-preview {
     background: linear-gradient(135deg, #1a0a2e, #0d0015);
     color: #ec4899;
     box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
   }
-  
+
   .dreamy-preview {
     background: linear-gradient(135deg, #2d1b4e, #1a0a2e);
     color: #4fa3d4;
     box-shadow: 0 0 20px rgba(79, 163, 212, 0.3);
   }
-  
+
   .style-name {
     font-size: 0.95rem;
     color: #fff;
     margin-bottom: 4px;
   }
-  
+
   .style-desc {
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.5);
   }
-  
+
   .poster-style-close {
     width: 100%;
     padding: 14px;
@@ -1434,7 +1434,7 @@
     cursor: pointer;
     transition: all 0.2s;
   }
-  
+
   .poster-style-close:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -1514,7 +1514,7 @@
         <div class="stardust" style="left: 28%; animation-delay: 3.8s; animation-duration: 17s;"></div>
         <div class="stardust" style="left: 78%; animation-delay: 0.3s; animation-duration: 19s;"></div>
       </div>
-      
+
       <!-- 流星划过 - 7条流星 -->
       <div class="shooting-stars">
         <!-- 大流星 -->
@@ -1528,7 +1528,7 @@
         <div class="shooting-star shooting-star-6"></div>
         <div class="shooting-star shooting-star-7"></div>
       </div>
-      
+
       <!-- 星座连线背景 - 增强版 -->
       <svg class="constellation-bg" viewBox="0 0 400 700">
         <!-- 北方星座 -->
@@ -1562,12 +1562,12 @@
         <line class="constellation-line" x1="250" y1="560" x2="330" y2="600"/>
         <line class="constellation-line" x1="330" y1="600" x2="380" y2="550"/>
       </svg>
-      
+
       <!-- 星云光晕 -->
       <div class="nebula-glow nebula-purple"></div>
       <div class="nebula-glow nebula-blue"></div>
       <div class="nebula-glow nebula-gold"></div>
-      
+
       <!-- 闪烁星星矩阵 - 增强版 24颗 -->
       <div class="star-matrix">
         <div class="twinkle-star s1"></div>
@@ -1595,31 +1595,31 @@
         <div class="twinkle-star s23"></div>
         <div class="twinkle-star s24"></div>
       </div>
-      
+
       <!-- 极光层 -->
       <div class="aurora-layer">
         <div class="aurora aurora-1"></div>
         <div class="aurora aurora-2"></div>
       </div>
-      
+
       <!-- 银河带 -->
       <div class="milky-way"></div>
     </div>
-    
+
     <!-- 漂浮的宇宙元素 -->
     <div class="floating-elements">
       <div class="floating-planet p1">🪐</div>
       <div class="floating-planet p2">🌙</div>
       <div class="floating-planet p3">✨</div>
     </div>
-    
+
     <!-- 顶部引导语 -->
     <div class="quiz-guide">
       <span class="guide-icon">✧</span>
       <span class="guide-text">倾听内心的声音</span>
       <span class="guide-icon">✧</span>
     </div>
-    
+
     <div class="quiz-header">
       <span class="quiz-dim" id="dimLabel">E / I 维度</span>
       <span class="quiz-counter" id="counter">1 / 40</span>
@@ -1655,14 +1655,14 @@
       </div>
       <div class="cosmic-message" id="cosmicMessage">宇宙找到了你的星辰轨迹</div>
     </div>
-    
+
     <!-- 核心人格星球 -->
     <div class="planet-core">
       <div class="planet-glow"></div>
       <div class="planet-main" id="planetType">INFP</div>
       <div class="planet-name" id="planetName">调停者</div>
       <div class="planet-sub" id="planetSub">温柔的理想主义者</div>
-      
+
       <!-- 特质星点散落 -->
       <div class="trait-stars" id="traitStars">
         <span class="trait-star">浪漫理想</span>
@@ -1671,7 +1671,7 @@
         <span class="trait-star">忠于自我</span>
       </div>
     </div>
-    
+
     <!-- 伴星 - 最旺我人格 -->
     <div class="companion-star" id="companionStar">
       <div class="companion-orbit">
@@ -1685,7 +1685,7 @@
         <div class="companion-desc" id="companionDesc">TA能帮你把理想变为现实，行动力满分</div>
       </div>
     </div>
-    
+
     <!-- 专属寄语 -->
     <div class="soul-message">
       <div class="soul-letter">
@@ -1693,11 +1693,11 @@
         <div class="letter-body" id="soulQuote">你心中有一片柔软的星空...</div>
         <div class="letter-footer">
           <div class="cosmic-code" id="cosmicCode">宇宙编码: STAR-XXXX-XXXX</div>
-          <div class="letter-signature" id="soulSignature">—— 宇宙漫游指南</div>
+          <div class="letter-signature" id="soulSignature">-- 宇宙漫游指南</div>
         </div>
       </div>
     </div>
-    
+
     <!-- 分享按钮 -->
     <div class="share-actions">
       <div class="share-row">
@@ -1768,84 +1768,84 @@
 // ═══════════════════════════════════════════════════════════
 const QUOTE_POOLS = {
   INTJ: [
-    "{name}，姐姐想告诉你：你那双总能看透一切的眼睛，其实挺让人羡慕的。你习惯一个人扛着，但偶尔也可以不用那么坚强——你值得被温柔拥抱，而不是总做那个清醒的旁观者。",
+    "{name}，姐姐想告诉你：你那双总能看透一切的眼睛，其实挺让人羡慕的。你习惯一个人扛着，但偶尔也可以不用那么坚强--你值得被温柔拥抱，而不是总做那个清醒的旁观者。",
     "{name}，你总是在规划未来，思考每一个可能的变量。这份缜密是你的天赋，但姐姐想提醒你：当下的美好同样值得被看见。你已经足够好了，不需要一直证明。",
-    "{name}，你习惯用理性丈量世界，把情绪藏在很深的地方。姐姐懂你的孤独，也懂你不想被看穿的保护壳。但偶尔，也可以允许自己被一个人完全看懂——那个人值得。"
+    "{name}，你习惯用理性丈量世界，把情绪藏在很深的地方。姐姐懂你的孤独，也懂你不想被看穿的保护壳。但偶尔，也可以允许自己被一个人完全看懂--那个人值得。"
   ],
   INTP: [
     "{name}，你知道吗？你脑子里那些天马行空的想法，真的很珍贵。姐姐知道你不太擅长表达感情，但这不代表你不温柔。试着把那些藏在心里的柔软说出来，会有人愿意好好听的。",
-    "{name}，你总是在追问「为什么」，对世界充满好奇。这份探索欲是你的光芒。姐姐想告诉你：你的思考方式很独特，不用急着让别人理解——懂你的人会出现的。",
-    "{name}，你更喜欢和概念对话，而不是和人。姐姐理解你的世界，那里面有很多迷人的逻辑和可能。但偶尔也可以走出来，看看这个不那么讲道理的世界——它也很美。"
+    "{name}，你总是在追问「为什么」，对世界充满好奇。这份探索欲是你的光芒。姐姐想告诉你：你的思考方式很独特，不用急着让别人理解--懂你的人会出现的。",
+    "{name}，你更喜欢和概念对话，而不是和人。姐姐理解你的世界，那里面有很多迷人的逻辑和可能。但偶尔也可以走出来，看看这个不那么讲道理的世界--它也很美。"
   ],
   INFJ: [
-    "{name}，你总是比别人想得多一点，感知得深一点。姐姐懂你的累——看透太多，心会很疼。但你不用把整个世界都扛在肩上，偶尔允许自己只做一个普通的人，也很好。",
+    "{name}，你总是比别人想得多一点，感知得深一点。姐姐懂你的累--看透太多，心会很疼。但你不用把整个世界都扛在肩上，偶尔允许自己只做一个普通的人，也很好。",
     "{name}，你总在寻找意义，想要理解每个人的故事。这份深度让你与众不同。姐姐想提醒你：你的敏感是礼物，不是负担。请好好照顾那颗总是为别人跳动的心。",
-    "{name}，你眼里有别人看不见的世界，心里装着很大的理想。姐姐知道你常常感到孤独——但请相信，在这个宇宙里，总有人能读懂你的沉默，听懂你的弦外之音。"
+    "{name}，你眼里有别人看不见的世界，心里装着很大的理想。姐姐知道你常常感到孤独--但请相信，在这个宇宙里，总有人能读懂你的沉默，听懂你的弦外之音。"
   ],
   INFP: [
-    "{name}，你心里的那片星空，真的好美。姐姐知道这个世界有时候不够温柔，但请你一直保持这份柔软——你的浪漫不是天真，而是清醒地选择相信美好。",
+    "{name}，你心里的那片星空，真的好美。姐姐知道这个世界有时候不够温柔，但请你一直保持这份柔软--你的浪漫不是天真，而是清醒地选择相信美好。",
     "{name}，你总是用温柔的目光看待世界，即使被伤害也选择原谅。姐姐心疼你的善良，也想告诉你：你的柔软值得被珍惜，而不是被辜负。",
-    "{name}，你的内心像一本诗集，写满了对美好的向往。姐姐想对你说：这份理想主义很珍贵，即使现实有时残酷，也请继续相信——因为你值得被世界温柔以待。"
+    "{name}，你的内心像一本诗集，写满了对美好的向往。姐姐想对你说：这份理想主义很珍贵，即使现实有时残酷，也请继续相信--因为你值得被世界温柔以待。"
   ],
   ISTJ: [
-    "{name}，你总是默默把每件事都做好，从不邀功。姐姐想提醒你：靠谱是你的超能力，但你也可以偶尔任性一下——你不需要一直做那个「让人放心」的人，偶尔也可以让人担心担心你。",
-    "{name}，你用行动表达关心，而不是语言。姐姐懂你的方式——那些默默记住的细节，那些在背后做的事，都是你深沉的爱。但也记得，有时候说出来，会让爱更透明。",
-    "{name}，你相信规则，相信责任，相信把事情做对。这份稳重让身边的人安心。姐姐想告诉你：你已经足够可靠了，偶尔也可以允许自己放松——不完美的你也值得被爱。"
+    "{name}，你总是默默把每件事都做好，从不邀功。姐姐想提醒你：靠谱是你的超能力，但你也可以偶尔任性一下--你不需要一直做那个「让人放心」的人，偶尔也可以让人担心担心你。",
+    "{name}，你用行动表达关心，而不是语言。姐姐懂你的方式--那些默默记住的细节，那些在背后做的事，都是你深沉的爱。但也记得，有时候说出来，会让爱更透明。",
+    "{name}，你相信规则，相信责任，相信把事情做对。这份稳重让身边的人安心。姐姐想告诉你：你已经足够可靠了，偶尔也可以允许自己放松--不完美的你也值得被爱。"
   ],
   ISFJ: [
-    "{name}，你总是记得所有人，唯独常常忘了自己。姐姐心疼你——付出是你的本能，但接受别人的好也是一种能力。你值得被照顾，而不只是一直照顾别人。",
-    "{name}，你把爱藏在每一个细节里，不求回报。姐姐想告诉你：你的付出都被看见了，即使没人说出口。但也请你学会接受——你值得被同样温柔地对待。",
+    "{name}，你总是记得所有人，唯独常常忘了自己。姐姐心疼你--付出是你的本能，但接受别人的好也是一种能力。你值得被照顾，而不只是一直照顾别人。",
+    "{name}，你把爱藏在每一个细节里，不求回报。姐姐想告诉你：你的付出都被看见了，即使没人说出口。但也请你学会接受--你值得被同样温柔地对待。",
     "{name}，你是最安静的那个守护者，总是在别人需要时出现。姐姐心疼你总是把自己放在最后。请记住：照顾自己不是自私，而是让你能更好地爱这个世界。"
   ],
   ESTJ: [
-    "{name}，你总是冲在最前面，扛下所有责任。姐姐知道你习惯了坚强，但其实你不需要证明自己——你本身就已经足够好了。偶尔停下来，让别人也为你做点什么吧。",
-    "{name}，你用效率和时间管理一切，让世界井井有条。姐姐欣赏你的能力，但也想提醒你：生活不只是任务清单，偶尔也可以无所事事——那样的你，也值得被喜欢。",
+    "{name}，你总是冲在最前面，扛下所有责任。姐姐知道你习惯了坚强，但其实你不需要证明自己--你本身就已经足够好了。偶尔停下来，让别人也为你做点什么吧。",
+    "{name}，你用效率和时间管理一切，让世界井井有条。姐姐欣赏你的能力，但也想提醒你：生活不只是任务清单，偶尔也可以无所事事--那样的你，也值得被喜欢。",
     "{name}，你是天生的组织者，能把混乱变成秩序。这份能力让人敬佩。姐姐想告诉你：偶尔脆弱也不是坏事，不需要一直做那个「什么都能搞定」的人。"
   ],
   ESFJ: [
     "{name}，你是那个总是温暖所有人的人，但姐姐想问问你：你的心有没有被好好照顾过？你不用一直做那个「小太阳」，偶尔也可以躲进云层里，休息一下。",
-    "{name}，你记得每个人的生日，关心每个人的感受。姐姐心疼你把太多能量给了别人。请记得：你也需要被记住、被关心——你的情绪也很重要。",
-    "{name}，你让每个场合都变得温暖，让每个人都感到被欢迎。姐姐想告诉你：你的付出是珍贵的，但也别忘了给自己留一点温柔——你值得被自己善待。"
+    "{name}，你记得每个人的生日，关心每个人的感受。姐姐心疼你把太多能量给了别人。请记得：你也需要被记住、被关心--你的情绪也很重要。",
+    "{name}，你让每个场合都变得温暖，让每个人都感到被欢迎。姐姐想告诉你：你的付出是珍贵的，但也别忘了给自己留一点温柔--你值得被自己善待。"
   ],
   ISTP: [
-    "{name}，你喜欢一个人待着，不太爱说心事。姐姐理解你的独立，但也想告诉你——这个世界上真的有人愿意听你说话，愿意成为你的依靠，不用一个人扛所有事。",
-    "{name}，你更喜欢用手解决问题，而不是用嘴解释。姐姐懂你的沉默——你不需要很多话，也能表达很多。但偶尔说出来，会让那些爱你的人更安心。",
+    "{name}，你喜欢一个人待着，不太爱说心事。姐姐理解你的独立，但也想告诉你--这个世界上真的有人愿意听你说话，愿意成为你的依靠，不用一个人扛所有事。",
+    "{name}，你更喜欢用手解决问题，而不是用嘴解释。姐姐懂你的沉默--你不需要很多话，也能表达很多。但偶尔说出来，会让那些爱你的人更安心。",
     "{name}，你的世界很安静，喜欢用观察代替参与。姐姐想对你说：这份冷静是你的力量，但也别忘了，有时候投入其中，会遇见意想不到的惊喜。"
   ],
   ISFP: [
     "{name}，你总是安安静静地感受着这个世界，用你独特的方式。姐姐想对你说：你的敏感是你的天赋，不要觉得它是一种负担。好好保护你的柔软，它会带你走向美好。",
-    "{name}，你用灵魂感受美，用直觉做选择。姐姐欣赏你的这份随性——你不需要计划每一步，跟着心走，也很好。你的生活方式，就是你的艺术。",
+    "{name}，你用灵魂感受美，用直觉做选择。姐姐欣赏你的这份随性--你不需要计划每一步，跟着心走，也很好。你的生活方式，就是你的艺术。",
     "{name}，你不喜欢表达，但内心却很丰富。姐姐想告诉你：你的安静里有很多故事，不必急着让所有人听懂。但那些愿意等你开口的人，值得你认真对待。"
   ],
   ESTP: [
-    "{name}，你像一阵风，自由又勇敢。姐姐知道你习惯了往前冲，但偶尔也停下来看看身后的风景——有些人一直在默默支持你，你值得被安稳地爱着。",
+    "{name}，你像一阵风，自由又勇敢。姐姐知道你习惯了往前冲，但偶尔也停下来看看身后的风景--有些人一直在默默支持你，你值得被安稳地爱着。",
     "{name}，你总能找到最刺激的那条路，让生活不无聊。姐姐欣赏你的勇气，但也想提醒你：偶尔的停顿不是浪费时间，而是让你更清楚地看见谁值得你的冒险。",
-    "{name}，你活在当下，很少回头看。姐姐想告诉你：往前冲很酷，但也有人愿意陪你慢下来——找到那个人，会让你的旅途更有温度。"
+    "{name}，你活在当下，很少回头看。姐姐想告诉你：往前冲很酷，但也有人愿意陪你慢下来--找到那个人，会让你的旅途更有温度。"
   ],
   ESFP: [
     "{name}，你走到哪里都是光。姐姐知道你习惯了做那个让大家开心的人，但你也值得难过、疲惫、被安慰。你不需要永远灿烂，偶尔阴天也很好。",
-    "{name}，你的笑容能感染很多人，让气氛变得明亮。姐姐心疼你总是把最好的给别人。请记得：你也可以有低落的时候——那样的你，同样值得被爱。",
+    "{name}，你的笑容能感染很多人，让气氛变得明亮。姐姐心疼你总是把最好的给别人。请记得：你也可以有低落的时候--那样的你，同样值得被爱。",
     "{name}，你喜欢站在舞台中央，享受被注视的感觉。姐姐想对你说：你的光芒是真实的，不需要为了别人一直闪耀。偶尔退到幕后，也是另一种美。"
   ],
   ENTJ: [
-    "{name}，你总是知道自己要什么，这很酷。姐姐想提醒你——在成为更好的人的路上，别忘了停下来抱抱现在的自己。你已经足够优秀了，不用一直证明。",
+    "{name}，你总是知道自己要什么，这很酷。姐姐想提醒你--在成为更好的人的路上，别忘了停下来抱抱现在的自己。你已经足够优秀了，不用一直证明。",
     "{name}，你的目标感很强，总能把事情推进到想要的结果。姐姐欣赏你的魄力，但也想告诉你：偶尔示弱不是失败，而是让你更完整。",
     "{name}，你习惯了领导，习惯了承担责任。姐姐心疼你把太多扛在自己身上。请记住：你不需要一直强大，也有人愿意在你疲惫的时候接住你。"
   ],
   ENTP: [
     "{name}，你脑子里总有无数个有趣的想法，这真的很迷人。姐姐想对你说：你不必用调侃来保护自己，真诚的你，也很好。有人会懂你那些藏在玩笑后的真心。",
-    "{name}，你喜欢挑战观点，享受思维的碰撞。姐姐欣赏你的聪明，但也想提醒你：不是每个人都能跟上你的节奏——慢下来解释，会让人更想了解你的世界。",
-    "{name}，你总是能发现别人看不到的可能性。姐姐想告诉你：这份好奇心是你的财富，但偶尔也记得把想法落地——那些愿意陪你执行的人，值得被珍惜。"
+    "{name}，你喜欢挑战观点，享受思维的碰撞。姐姐欣赏你的聪明，但也想提醒你：不是每个人都能跟上你的节奏--慢下来解释，会让人更想了解你的世界。",
+    "{name}，你总是能发现别人看不到的可能性。姐姐想告诉你：这份好奇心是你的财富，但偶尔也记得把想法落地--那些愿意陪你执行的人，值得被珍惜。"
   ],
   ENFJ: [
-    "{name}，你总是照顾所有人的感受，点燃所有人的热情。姐姐心疼你——你为别人做了那么多，什么时候也允许自己被好好爱护一下？你的心也需要休息。",
-    "{name}，你天生能读懂别人，知道怎么让每个人都发光。姐姐想提醒你：在照亮别人的同时，也别忘了照亮自己——你的需求同样重要。",
-    "{name}，你总是把别人的成长放在心上，用温柔推动每一个人。姐姐心疼你总是把自己放在最后。请记住：你也需要被支持、被鼓励——你值得被同样温柔地对待。"
+    "{name}，你总是照顾所有人的感受，点燃所有人的热情。姐姐心疼你--你为别人做了那么多，什么时候也允许自己被好好爱护一下？你的心也需要休息。",
+    "{name}，你天生能读懂别人，知道怎么让每个人都发光。姐姐想提醒你：在照亮别人的同时，也别忘了照亮自己--你的需求同样重要。",
+    "{name}，你总是把别人的成长放在心上，用温柔推动每一个人。姐姐心疼你总是把自己放在最后。请记住：你也需要被支持、被鼓励--你值得被同样温柔地对待。"
   ],
   ENFP: [
-    "{name}，你像一朵永远向阳的花，热情又自由。姐姐想提醒你——追风的时候也要照顾好自己，你的能量珍贵，要用在值得的人和事上。偶尔停下，也很好。",
-    "{name}，你的世界里有很多可能，你总是能看到最好的那条路。姐姐欣赏你的乐观，但也想告诉你：偶尔的低落和迷茫也是可以的——它们也是旅程的一部分。",
-    "{name}，你喜欢连接不同的世界，让每个相遇都有意义。姐姐想对你说：你的热情是礼物，但也记得给自己留一点——你不必点亮所有人，偶尔也让自己休息。"
+    "{name}，你像一朵永远向阳的花，热情又自由。姐姐想提醒你--追风的时候也要照顾好自己，你的能量珍贵，要用在值得的人和事上。偶尔停下，也很好。",
+    "{name}，你的世界里有很多可能，你总是能看到最好的那条路。姐姐欣赏你的乐观，但也想告诉你：偶尔的低落和迷茫也是可以的--它们也是旅程的一部分。",
+    "{name}，你喜欢连接不同的世界，让每个相遇都有意义。姐姐想对你说：你的热情是礼物，但也记得给自己留一点--你不必点亮所有人，偶尔也让自己休息。"
   ]
 };
 
@@ -1854,7 +1854,7 @@ function getPersonalizedQuote(mbtiType, name) {
   // 直接从 MBTI_DATA 获取寄语
   const data = MBTI_DATA[mbtiType];
   if (!data || !data.quote) return '你的星辰轨迹独一无二';
-  
+
   // 替换名字占位符
   return data.quote.replace(/{name}/g, name || '亲爱的');
 }
@@ -2003,7 +2003,7 @@ const QUESTION_POOL = {
     {text:"大型聚会中，你感到：",left:"如鱼得水",right:"有点不自在"},
     {text:"社交活动结束，你觉得：",left:"意犹未尽",right:"终于可以休息了"},
   ],
-  
+
   // S/N 维度 - 42题
   SN: [
     // 问题解决
@@ -2067,7 +2067,7 @@ const QUESTION_POOL = {
     {text:"听故事时，你更在意：",left:"情节发展",right:"人物内心"},
     {text:"你更喜欢讨论：",left:"具体的话题",right:"抽象的观念"},
   ],
-  
+
   // T/F 维度 - 42题
   TF: [
     // 决策偏好
@@ -2137,7 +2137,7 @@ const QUESTION_POOL = {
     {text:"你给人的印象是：",left:"头脑清醒",right:"心地善良"},
     {text:"你觉得哪种说法更像你：",left:"铁面无私",right:"心软"},
   ],
-  
+
   // J/P 维度 - 42题
   JP: [
     // 生活节奏
@@ -2254,7 +2254,7 @@ let QUESTIONS_PER_DIM = 10; // 每维度抽10题，共40题
   const canvas = document.getElementById('stars');
   const ctx = canvas.getContext('2d');
   let W, H, stars = [];
-  
+
   function resize(){
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
@@ -2269,7 +2269,7 @@ let QUESTIONS_PER_DIM = 10; // 每维度抽10题，共40题
   }
   resize();
   window.addEventListener('resize', resize);
-  
+
   function draw(ts){
     ctx.clearRect(0,0,W,H);
     stars.forEach(s=>{
@@ -2320,10 +2320,10 @@ function showLoading() {
   const textData = LOADING_TEXTS[Math.floor(Math.random() * LOADING_TEXTS.length)];
   const textEl = document.getElementById('loadingText');
   const subEl = document.getElementById('loadingSub');
-  
+
   textEl.textContent = textData.main;
   subEl.textContent = textData.sub;
-  
+
   // 打字机效果
   let dotIndex = 0;
   const baseText = textData.main.replace(/[…⋯]+/g, '');
@@ -2331,7 +2331,7 @@ function showLoading() {
     dotIndex = (dotIndex + 1) % LOADING_DOTS.length;
     textEl.textContent = baseText + LOADING_DOTS[dotIndex];
   }, 400);
-  
+
   return dotInterval;
 }
 
@@ -2344,10 +2344,10 @@ function startQuiz(){
   if (userName) {
     localStorage.setItem('mbti_username', userName);
   }
-  
+
   // 显示加载动画
   const dotInterval = showLoading();
-  
+
   // 模拟加载时间，让用户感受"命运感"
   setTimeout(() => {
     clearInterval(dotInterval);
@@ -2372,7 +2372,7 @@ function loadQuestion(){
   if(currentQ >= QUESTIONS.length){ showResult(); return; }
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
-  
+
   // 问题切换动画
   const questionBlock = document.querySelector('.question-block');
   if (questionBlock) {
@@ -2380,22 +2380,22 @@ function loadQuestion(){
     questionBlock.offsetHeight; // 触发重绘
     questionBlock.style.animation = 'question-slide-in 0.5s ease forwards';
   }
-  
+
   document.getElementById('dimLabel').textContent = DIM_NAMES[dimIdx];
   document.getElementById('counter').textContent = `${currentQ+1} / ${QUESTIONS.length}`;
   document.getElementById('progFill').style.width = `${((currentQ)/QUESTIONS.length)*100}%`;
-  
-  document.getElementById('qText').innerHTML = 
+
+  document.getElementById('qText').innerHTML =
     `<span class="q-icon">${['💬','🔍','💡','📋'][dimIdx]}</span>` + q.text +
     `<div class="question-options">
       <div class="opt-left">← ${q.left}</div>
       <div class="opt-right">${q.right} →</div>
     </div>`;
-  
+
   document.getElementById('dimTags').innerHTML = DIM_CLASS.map((c,i)=>
     `<span class="dim-tag ${c}">${['E/I','S/N','T/F','J/P'][i]}</span>`
   ).join('');
-  
+
   selectedVal = null;
   document.querySelectorAll('.scale-opt').forEach(el=>el.classList.remove('selected'));
 }
@@ -2408,16 +2408,16 @@ function selectOpt(el, val){
   selectedVal = val;
   document.querySelectorAll('.scale-opt').forEach(e=>e.classList.remove('selected'));
   el.classList.add('selected');
-  
+
   // 点击粒子效果
   createClickParticles(el);
-  
+
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
   answers[dimIdx].push(val);
   dimScores[dimIdx] += val;
   dimCounts[dimIdx]++;  dimCounts[dimIdx]++;
-  
+
   setTimeout(() => {
     currentQ++;
     if (currentQ < QUESTIONS.length) {
@@ -2434,7 +2434,7 @@ function createClickParticles(el) {
   const rect = el.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
-  
+
   for (let i = 0; i < 8; i++) {
     const particle = document.createElement('div');
     particle.className = 'click-particle';
@@ -2449,7 +2449,7 @@ function createClickParticles(el) {
       z-index: 999;
     `;
     document.body.appendChild(particle);
-    
+
     setTimeout(() => particle.remove(), 600);
   }
 }
@@ -2458,7 +2458,7 @@ function createClickParticles(el) {
 function showTransition() {
   const transition = document.getElementById('quizTransition');
   const starsContainer = document.getElementById('transitionStars');
-  
+
   // 生成星星爆发效果
   starsContainer.innerHTML = '';
   for (let i = 0; i < 20; i++) {
@@ -2475,9 +2475,9 @@ function showTransition() {
     `;
     starsContainer.appendChild(star);
   }
-  
+
   transition.classList.add('active');
-  
+
   // 1.5秒后显示结果
   setTimeout(() => {
     transition.classList.remove('active');
@@ -2495,54 +2495,54 @@ function showResult() {
     userName = '旅人';
     console.log('⚠️ localStorage 为空，使用默认名');
   }
-  
+
   show('result');
-  
+
   // 计算 MBTI 类型
   let type = '';
   type += dimScores[0] > 0 ? 'E' : 'I';
   type += dimScores[1] > 0 ? 'S' : 'N';
   type += dimScores[2] > 0 ? 'T' : 'F';
   type += dimScores[3] > 0 ? 'J' : 'P';
-  
+
   currentType = type;
   currentData = TYPES[type];
-  
+
   // 更新问候语（顶部）
   const displayName = userName || '旅人';
   document.getElementById('cosmicName').textContent = `亲爱的 ${displayName}`;
   document.getElementById('cosmicMessage').textContent = '宇宙找到了你的星辰轨迹';
-  
+
   // 更新核心人格星球
   document.getElementById('planetType').textContent = type;
   document.getElementById('planetName').textContent = currentData.name;
   document.getElementById('planetSub').textContent = currentData.desc;
-  
+
   // 更新特质星点
   const traitsEl = document.getElementById('traitStars');
   traitsEl.innerHTML = currentData.traits.map(t => `<span class="trait-star">${t}</span>`).join('');
-  
+
   // 更新伴星（最旺我人格）
   const matchType = currentData.bestMatch;
   const matchData = TYPES[matchType];
   document.getElementById('companionType').textContent = matchType;
   document.getElementById('companionName').textContent = `${matchType} · ${matchData.name}`;
   document.getElementById('companionDesc').textContent = currentData.matchDesc;
-  
+
   // 更新专属书信
   document.getElementById('letterHeader').textContent = `致 ${displayName}：`;
-  
+
   // 从动态语录池获取专属寄语
   const personalizedQuote = getPersonalizedQuote(type, userName);
   document.getElementById('soulQuote').textContent = personalizedQuote;
-  
+
   // 生成宇宙编码
   const cosmicCode = generateCosmicCode(userName, type);
   document.getElementById('cosmicCode').textContent = `宇宙编码: ${cosmicCode}`;
-  
+
   // 落款
-  document.getElementById('soulSignature').textContent = `—— 宇宙漫游指南 赠予 ${displayName}`;
-  
+  document.getElementById('soulSignature').textContent = `-- 宇宙漫游指南 赠予 ${displayName}`;
+
   // 保存供海报使用
   window.currentCosmicCode = cosmicCode;
   window.currentDisplayName = displayName;
@@ -2564,20 +2564,20 @@ function shareMoment(style = 'cosmic') {
     alert('请先完成测试再生成海报');
     return;
   }
-  
+
   let canvas = document.getElementById('posterCanvas');
   if (!canvas) {
     canvas = document.createElement('canvas');
     canvas.id = 'posterCanvas';
     document.body.appendChild(canvas);
   }
-  
+
   const ctx = canvas.getContext('2d');
   canvas.width = 1080;
   canvas.height = 1920;
-  
+
   const posterName = userName || localStorage.getItem('mbti_username') || '旅人';
-  
+
   // 根据风格生成不同海报
   switch(style) {
     case 'minimal':
@@ -2594,22 +2594,17 @@ function shareMoment(style = 'cosmic') {
       drawCosmicPoster(ctx, canvas, posterName);
       break;
   }
-  
+
   // 显示海报
   const dataUrl = canvas.toDataURL('image/png');
   const posterImg = document.getElementById('posterImage');
   posterImg.src = dataUrl;
-  
+
   const preview = document.getElementById('posterPreview');
   preview.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
 
-// ═══════════════════════════════════════════════════════════
-// 海报风格1：深邃星空风（原版增强）
-// ═══════════════════════════════════════════════════════════
-function drawCosmicPoster(ctx, canvas, posterName) {
-  
 // ═══════════════════════════════════════════════════════════
 // 海报风格1：深邃星空风（原版增强）
 // ═══════════════════════════════════════════════════════════
@@ -2627,13 +2622,13 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   bgGrad.addColorStop(1, '#050510');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // ═══════════════════════════════════════════════
   // 星座连线背景图案
   // ═══════════════════════════════════════════════
   ctx.strokeStyle = 'rgba(139,92,246,0.15)';
   ctx.lineWidth = 1;
-  
+
   // 生成星座点
   const constellationPoints = [];
   for (let i = 0; i < 12; i++) {
@@ -2642,7 +2637,7 @@ function drawCosmicPoster(ctx, canvas, posterName) {
       y: 100 + Math.random() * (canvas.height - 200)
     });
   }
-  
+
   // 绘制连线
   for (let i = 0; i < constellationPoints.length - 1; i++) {
     ctx.beginPath();
@@ -2650,7 +2645,7 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.lineTo(constellationPoints[i+1].x, constellationPoints[i+1].y);
     ctx.stroke();
   }
-  
+
   // 绘制星座节点
   constellationPoints.forEach(p => {
     ctx.beginPath();
@@ -2658,11 +2653,11 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.fillStyle = 'rgba(167,139,250,0.4)';
     ctx.fill();
   });
-  
+
   // ═══════════════════════════════════════════════
   // 多层星星 - 近中远三层
   // ═══════════════════════════════════════════════
-  
+
   // 远景星星（小而暗）
   for (let i = 0; i < 150; i++) {
     const x = Math.random() * canvas.width;
@@ -2674,14 +2669,14 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.fillStyle = `rgba(255,255,255,${alpha})`;
     ctx.fill();
   }
-  
+
   // 中景星星（带微光）
   for (let i = 0; i < 80; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
     const r = Math.random() * 2 + 1;
     const alpha = Math.random() * 0.5 + 0.3;
-    
+
     // 光晕
     const glowGrad = ctx.createRadialGradient(x, y, 0, x, y, r * 3);
     glowGrad.addColorStop(0, `rgba(255,255,255,${alpha})`);
@@ -2690,19 +2685,19 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.beginPath();
     ctx.arc(x, y, r * 3, 0, Math.PI * 2);
     ctx.fill();
-    
+
     // 核心
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fillStyle = '#fff';
     ctx.fill();
   }
-  
+
   // 近景亮星（少数亮点）
   for (let i = 0; i < 15; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
-    
+
     // 十字星芒效果
     ctx.strokeStyle = `rgba(255,255,255,${Math.random() * 0.4 + 0.2})`;
     ctx.lineWidth = 1;
@@ -2712,35 +2707,35 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.moveTo(x, y - 8);
     ctx.lineTo(x, y + 8);
     ctx.stroke();
-    
+
     ctx.beginPath();
     ctx.arc(x, y, 2, 0, Math.PI * 2);
     ctx.fillStyle = '#fff';
     ctx.fill();
   }
-  
+
   // ═══════════════════════════════════════════════
   // 星云光晕装饰
   // ═══════════════════════════════════════════════
-  
+
   // 紫色星云
   const nebula1 = ctx.createRadialGradient(200, 400, 0, 200, 400, 300);
   nebula1.addColorStop(0, 'rgba(139,92,246,0.15)');
   nebula1.addColorStop(1, 'rgba(139,92,246,0)');
   ctx.fillStyle = nebula1;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // 金色星云
   const nebula2 = ctx.createRadialGradient(800, 1200, 0, 800, 1200, 350);
   nebula2.addColorStop(0, 'rgba(212,175,55,0.12)');
   nebula2.addColorStop(1, 'rgba(212,175,55,0)');
   ctx.fillStyle = nebula2;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // ═══════════════════════════════════════════════
   // 顶部装饰区域
   // ═══════════════════════════════════════════════
-  
+
   // 顶部星光线条
   ctx.strokeStyle = 'rgba(167,139,250,0.3)';
   ctx.lineWidth = 1;
@@ -2748,19 +2743,19 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.moveTo(canvas.width * 0.2, 120);
   ctx.lineTo(canvas.width * 0.8, 120);
   ctx.stroke();
-  
+
   // 顶部小星星装饰
   ctx.font = '24px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText('✦', canvas.width * 0.15, 125);
   ctx.fillText('✦', canvas.width * 0.85, 125);
-  
+
   // ═══════════════════════════════════════════════
   // 名字问候区
   // ═══════════════════════════════════════════════
-  
+
   let yOffset = 200;
-  
+
   // 副标题
   ctx.font = '28px sans-serif';
   ctx.fillStyle = 'rgba(167,139,250,0.8)';
@@ -2768,7 +2763,7 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.shadowColor = 'rgba(167,139,250,0.4)';
   ctx.shadowBlur = 15;
   ctx.fillText('✦ 宇宙漫游日志 ✦', canvas.width / 2, yOffset);
-  
+
   // 名字
   yOffset += 100;
   ctx.font = 'bold 52px sans-serif';
@@ -2783,13 +2778,13 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.shadowColor = 'rgba(255,215,0,0.6)';
   ctx.shadowBlur = 25;
   ctx.fillText(`亲爱的 ${posterName}`, canvas.width / 2, yOffset);
-  
+
   // ═══════════════════════════════════════════════
   // 人格类型区 - 核心视觉
   // ═══════════════════════════════════════════════
-  
+
   yOffset += 180;
-  
+
   // 类型代码背景光晕
   const typeGlow = ctx.createRadialGradient(
     canvas.width/2, yOffset, 0,
@@ -2801,14 +2796,14 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.beginPath();
   ctx.arc(canvas.width/2, yOffset, 200, 0, Math.PI * 2);
   ctx.fill();
-  
+
   // 类型代码
   ctx.font = 'bold 140px sans-serif';
   ctx.fillStyle = '#fff';
   ctx.shadowColor = 'rgba(167,139,250,1)';
   ctx.shadowBlur = 40;
   ctx.fillText(currentType, canvas.width / 2, yOffset + 50);
-  
+
   // 类型名称
   yOffset += 130;
   ctx.font = '42px sans-serif';
@@ -2816,11 +2811,11 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.shadowColor = 'rgba(212,175,55,0.5)';
   ctx.shadowBlur = 15;
   ctx.fillText(currentData.name + ' · ' + currentData.sub, canvas.width / 2, yOffset);
-  
+
   // ═══════════════════════════════════════════════
   // 特质标签
   // ═══════════════════════════════════════════════
-  
+
   yOffset += 80;
   const traits = currentData.traits || [];
   const tagWidth = 180;
@@ -2828,14 +2823,14 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   const tagGap = 20;
   const tagsPerRow = 2;
   const startX = canvas.width / 2 - (tagWidth + tagGap) / 2 - tagWidth / 2;
-  
+
   ctx.shadowBlur = 0;
   traits.forEach((trait, i) => {
     const row = Math.floor(i / tagsPerRow);
     const col = i % tagsPerRow;
     const x = startX + col * (tagWidth + tagGap);
     const y = yOffset + row * (tagHeight + tagGap);
-    
+
     // 标签背景
     const tagGrad = ctx.createLinearGradient(x, y, x + tagWidth, y);
     tagGrad.addColorStop(0, 'rgba(139,92,246,0.15)');
@@ -2844,26 +2839,26 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     ctx.beginPath();
     ctx.roundRect(x, y, tagWidth, tagHeight, 25);
     ctx.fill();
-    
+
     // 标签边框
     ctx.strokeStyle = 'rgba(167,139,250,0.3)';
     ctx.lineWidth = 1;
     ctx.stroke();
-    
+
     // 标签文字
     ctx.font = '28px sans-serif';
     ctx.fillStyle = 'rgba(255,255,255,0.85)';
     ctx.textAlign = 'center';
     ctx.fillText(trait, x + tagWidth / 2, y + 35);
   });
-  
+
   // ═══════════════════════════════════════════════
   // 宇宙编码
   // ═══════════════════════════════════════════════
-  
+
   yOffset += 120;
   const cosmicCode = window.currentCosmicCode || 'STAR-XXXX-XXXX';
-  
+
   // 编码背景
   const codeBg = ctx.createLinearGradient(
     canvas.width/2 - 250, yOffset - 30,
@@ -2875,30 +2870,30 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.fillStyle = codeBg;
   ctx.shadowBlur = 0;
   ctx.fillRect(canvas.width/2 - 250, yOffset - 30, 500, 60);
-  
+
   // 编码文字
   ctx.font = 'bold 38px "Courier New", monospace';
   ctx.fillStyle = '#FFD700';
   ctx.shadowColor = 'rgba(255,215,0,0.5)';
   ctx.shadowBlur = 20;
   ctx.fillText(cosmicCode, canvas.width / 2, yOffset + 10);
-  
+
   // ═══════════════════════════════════════════════
   // 专属寄语
   // ═══════════════════════════════════════════════
-  
+
   yOffset += 100;
   const personalizedQuote = getPersonalizedQuote(currentType, posterName);
-  
+
   ctx.font = '30px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.85)';
   ctx.shadowColor = 'rgba(255,255,255,0.2)';
   ctx.shadowBlur = 8;
-  
+
   const maxWidth = 850;
   const lines = [];
   let line = '';
-  
+
   for (let char of personalizedQuote) {
     const testLine = line + char;
     const metrics = ctx.measureText(testLine);
@@ -2910,24 +2905,24 @@ function drawCosmicPoster(ctx, canvas, posterName) {
     }
   }
   if (line) lines.push(line);
-  
+
   const quoteStartY = yOffset;
   const lineHeight = 50;
   lines.forEach((l, i) => {
     ctx.fillText(l, canvas.width / 2, quoteStartY + i * lineHeight);
   });
-  
+
   // 署名
   yOffset = quoteStartY + lines.length * lineHeight + 70;
   ctx.font = 'italic 26px sans-serif';
   ctx.fillStyle = 'rgba(167,139,250,0.7)';
   ctx.shadowBlur = 10;
-  ctx.fillText(`—— 宇宙给 ${posterName} 的私语`, canvas.width / 2, yOffset);
-  
+  ctx.fillText(`-- 宇宙给 ${posterName} 的私语`, canvas.width / 2, yOffset);
+
   // ═══════════════════════════════════════════════
   // 底部装饰
   // ═══════════════════════════════════════════════
-  
+
   // 底部星光线
   ctx.strokeStyle = 'rgba(167,139,250,0.2)';
   ctx.lineWidth = 1;
@@ -2936,7 +2931,7 @@ function drawCosmicPoster(ctx, canvas, posterName) {
   ctx.moveTo(canvas.width * 0.15, canvas.height - 140);
   ctx.lineTo(canvas.width * 0.85, canvas.height - 140);
   ctx.stroke();
-  
+
   // 底部文字
   ctx.font = '24px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.5)';
@@ -2956,7 +2951,7 @@ function drawMinimalPoster(ctx, canvas, posterName) {
   bgGrad.addColorStop(1, '#0a0a0a');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // 简约装饰线
   ctx.strokeStyle = 'rgba(212,175,55,0.3)';
   ctx.lineWidth = 1;
@@ -2964,12 +2959,12 @@ function drawMinimalPoster(ctx, canvas, posterName) {
   ctx.moveTo(canvas.width * 0.1, 200);
   ctx.lineTo(canvas.width * 0.9, 200);
   ctx.stroke();
-  
+
   ctx.beginPath();
   ctx.moveTo(canvas.width * 0.1, canvas.height - 200);
   ctx.lineTo(canvas.width * 0.9, canvas.height - 200);
   ctx.stroke();
-  
+
   // 类型代码 - 超大居中
   ctx.font = 'bold 200px sans-serif';
   ctx.fillStyle = '#fff';
@@ -2977,37 +2972,37 @@ function drawMinimalPoster(ctx, canvas, posterName) {
   ctx.shadowColor = 'rgba(212,175,55,0.5)';
   ctx.shadowBlur = 50;
   ctx.fillText(currentType, canvas.width / 2, canvas.height / 2 - 100);
-  
+
   // 类型名称
   ctx.font = '48px sans-serif';
   ctx.fillStyle = 'rgba(212,175,55,0.9)';
   ctx.shadowBlur = 20;
   ctx.fillText(currentData.name, canvas.width / 2, canvas.height / 2 + 20);
-  
+
   // 副标题
   ctx.font = '32px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.5)';
   ctx.shadowBlur = 0;
   ctx.fillText(currentData.sub, canvas.width / 2, canvas.height / 2 + 70);
-  
+
   // 名字
   ctx.font = '36px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
   ctx.fillText(`致 ${posterName}`, canvas.width / 2, canvas.height - 320);
-  
+
   // 宇宙编码
   ctx.font = '28px "Courier New", monospace';
   ctx.fillStyle = 'rgba(212,175,55,0.6)';
   const cosmicCode = window.currentCosmicCode || 'STAR-XXXX-XXXX';
   ctx.fillText(cosmicCode, canvas.width / 2, canvas.height - 260);
-  
+
   // 特质标签 - 简约横排
   ctx.font = '24px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.6)';
   const traits = currentData.traits || [];
   const traitsText = traits.join('  ·  ');
   ctx.fillText(traitsText, canvas.width / 2, canvas.height / 2 + 150);
-  
+
   // 底部
   ctx.font = '22px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.3)';
@@ -3021,7 +3016,7 @@ function drawNeonPoster(ctx, canvas, posterName) {
   // 深紫黑背景
   ctx.fillStyle = '#0d0015';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // 霓虹网格线
   ctx.strokeStyle = 'rgba(139,92,246,0.15)';
   ctx.lineWidth = 1;
@@ -3035,24 +3030,24 @@ function drawNeonPoster(ctx, canvas, posterName) {
     ctx.lineTo(canvas.width, i * 100);
     ctx.stroke();
   }
-  
+
   // 霓虹光晕
   const neonGlow1 = ctx.createRadialGradient(canvas.width * 0.3, 300, 0, canvas.width * 0.3, 300, 400);
   neonGlow1.addColorStop(0, 'rgba(236,72,153,0.3)');
   neonGlow1.addColorStop(1, 'transparent');
   ctx.fillStyle = neonGlow1;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   const neonGlow2 = ctx.createRadialGradient(canvas.width * 0.7, canvas.height - 400, 0, canvas.width * 0.7, canvas.height - 400, 400);
   neonGlow2.addColorStop(0, 'rgba(79,163,212,0.3)');
   neonGlow2.addColorStop(1, 'transparent');
   ctx.fillStyle = neonGlow2;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // 类型代码 - 霓虹发光
   ctx.font = 'bold 180px sans-serif';
   ctx.textAlign = 'center';
-  
+
   // 多层发光效果
   for (let i = 5; i > 0; i--) {
     ctx.fillStyle = `rgba(236,72,153,${0.1 * i})`;
@@ -3063,20 +3058,20 @@ function drawNeonPoster(ctx, canvas, posterName) {
   ctx.fillStyle = '#fff';
   ctx.shadowBlur = 30;
   ctx.fillText(currentType, canvas.width / 2, canvas.height / 2 - 80);
-  
+
   // 类型名称
   ctx.font = '50px sans-serif';
   ctx.fillStyle = '#4fa3d4';
   ctx.shadowColor = 'rgba(79,163,212,1)';
   ctx.shadowBlur = 20;
   ctx.fillText(currentData.name, canvas.width / 2, canvas.height / 2 + 20);
-  
+
   // 副标题带下划线
   ctx.font = '28px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
   ctx.shadowBlur = 0;
   ctx.fillText(currentData.sub, canvas.width / 2, canvas.height / 2 + 70);
-  
+
   // 装饰线
   ctx.strokeStyle = 'rgba(236,72,153,0.8)';
   ctx.lineWidth = 2;
@@ -3086,7 +3081,7 @@ function drawNeonPoster(ctx, canvas, posterName) {
   ctx.moveTo(canvas.width * 0.3, canvas.height / 2 + 100);
   ctx.lineTo(canvas.width * 0.7, canvas.height / 2 + 100);
   ctx.stroke();
-  
+
   // 特质标签
   ctx.font = '26px sans-serif';
   ctx.fillStyle = 'rgba(167,139,250,1)';
@@ -3095,14 +3090,14 @@ function drawNeonPoster(ctx, canvas, posterName) {
   const traits = currentData.traits || [];
   const traitsText = traits.join('  ◆  ');
   ctx.fillText(traitsText, canvas.width / 2, canvas.height / 2 + 160);
-  
+
   // 名字
   ctx.font = 'bold 36px sans-serif';
   ctx.fillStyle = '#ec4899';
   ctx.shadowColor = 'rgba(236,72,153,0.8)';
   ctx.shadowBlur = 20;
   ctx.fillText(`${posterName} 的星辰人格`, canvas.width / 2, canvas.height - 380);
-  
+
   // 宇宙编码
   ctx.font = '28px "Courier New", monospace';
   ctx.fillStyle = '#4fa3d4';
@@ -3110,7 +3105,7 @@ function drawNeonPoster(ctx, canvas, posterName) {
   ctx.shadowBlur = 15;
   const cosmicCode = window.currentCosmicCode || 'STAR-XXXX-XXXX';
   ctx.fillText(cosmicCode, canvas.width / 2, canvas.height - 320);
-  
+
   // 底部
   ctx.font = '22px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
@@ -3130,7 +3125,7 @@ function drawDreamyPoster(ctx, canvas, posterName) {
   bgGrad.addColorStop(1, '#0f0f2d');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
+
   // 柔和光斑
   for (let i = 0; i < 8; i++) {
     const x = Math.random() * canvas.width;
@@ -3150,7 +3145,7 @@ function drawDreamyPoster(ctx, canvas, posterName) {
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
   }
-  
+
   // 散落的小星星
   for (let i = 0; i < 60; i++) {
     const x = Math.random() * canvas.width;
@@ -3161,18 +3156,18 @@ function drawDreamyPoster(ctx, canvas, posterName) {
     ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.5 + 0.2})`;
     ctx.fill();
   }
-  
+
   // 顶部装饰
   ctx.font = '32px sans-serif';
   ctx.textAlign = 'center';
   ctx.fillStyle = 'rgba(167,139,250,0.6)';
   ctx.fillText('✦ ✦ ✦', canvas.width / 2, 180);
-  
+
   // 名字问候
   ctx.font = '28px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.6)';
   ctx.fillText('亲爱的', canvas.width / 2, 280);
-  
+
   ctx.font = 'bold 56px sans-serif';
   const nameGrad = ctx.createLinearGradient(canvas.width/2 - 150, 0, canvas.width/2 + 150, 0);
   nameGrad.addColorStop(0, '#f0d78c');
@@ -3182,7 +3177,7 @@ function drawDreamyPoster(ctx, canvas, posterName) {
   ctx.shadowColor = 'rgba(212,175,55,0.5)';
   ctx.shadowBlur = 25;
   ctx.fillText(posterName, canvas.width / 2, 350);
-  
+
   // 类型代码
   ctx.font = 'bold 160px sans-serif';
   const typeGrad = ctx.createLinearGradient(0, 500, 0, 700);
@@ -3192,19 +3187,19 @@ function drawDreamyPoster(ctx, canvas, posterName) {
   ctx.shadowColor = 'rgba(167,139,250,0.6)';
   ctx.shadowBlur = 40;
   ctx.fillText(currentType, canvas.width / 2, 680);
-  
+
   // 类型名称
   ctx.font = '44px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.9)';
   ctx.shadowBlur = 10;
   ctx.fillText(currentData.name, canvas.width / 2, 760);
-  
+
   // 副标题
   ctx.font = '28px sans-serif';
   ctx.fillStyle = 'rgba(167,139,250,0.8)';
   ctx.shadowBlur = 0;
   ctx.fillText(currentData.sub, canvas.width / 2, 820);
-  
+
   // 分隔线
   ctx.strokeStyle = 'rgba(255,255,255,0.2)';
   ctx.lineWidth = 1;
@@ -3212,7 +3207,7 @@ function drawDreamyPoster(ctx, canvas, posterName) {
   ctx.moveTo(canvas.width * 0.2, 900);
   ctx.lineTo(canvas.width * 0.8, 900);
   ctx.stroke();
-  
+
   // 特质
   ctx.font = '28px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.7)';
@@ -3221,7 +3216,7 @@ function drawDreamyPoster(ctx, canvas, posterName) {
     const x = canvas.width / 2 + (i - 1.5) * 200;
     ctx.fillText(trait, x, 980);
   });
-  
+
   // 宇宙编码
   ctx.font = '32px "Courier New", monospace';
   ctx.fillStyle = 'rgba(212,175,55,0.8)';
@@ -3229,7 +3224,7 @@ function drawDreamyPoster(ctx, canvas, posterName) {
   ctx.shadowBlur = 15;
   const cosmicCode = window.currentCosmicCode || 'STAR-XXXX-XXXX';
   ctx.fillText(cosmicCode, canvas.width / 2, 1100);
-  
+
   // 底部
   ctx.font = '24px sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.4)';
