@@ -1780,11 +1780,27 @@ function shuffleArray(arr) {
 
 // 随机抽取题目
 function generateRandomQuestions() {
+  // ★★★ 关键修复 ★★★
+  // 每维度约一半题保持原direction，另一半随机翻转direction
+  // 这样无论用户怎么选，E/I、S/N、T/F、J/P 各50%概率
+  // 真正还原用户内心倾向，而不是被题库direction绑架
+  
+  function pickWithFlippedDirection(pool, dim) {
+    const shuffled = shuffleArray(pool).slice(0, QUESTIONS_PER_DIM);
+    const half = Math.floor(QUESTIONS_PER_DIM / 2); // 5题保持L，5题翻转成R
+    return shuffled.map((q, i) => ({
+      ...q,
+      dim,
+      // 随机翻转direction，让两极题目数量均等
+      direction: i < half ? q.direction : (q.direction === 'L' ? 'R' : 'L')
+    }));
+  }
+  
   const selected = [
-    ...shuffleArray(QUESTION_POOL.EI).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:0})),
-    ...shuffleArray(QUESTION_POOL.SN).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:1})),
-    ...shuffleArray(QUESTION_POOL.TF).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:2})),
-    ...shuffleArray(QUESTION_POOL.JP).slice(0, QUESTIONS_PER_DIM).map(q => ({...q, dim:3})),
+    ...pickWithFlippedDirection(QUESTION_POOL.EI, 0),
+    ...pickWithFlippedDirection(QUESTION_POOL.SN, 1),
+    ...pickWithFlippedDirection(QUESTION_POOL.TF, 2),
+    ...pickWithFlippedDirection(QUESTION_POOL.JP, 3),
   ];
   // 最后打乱整体顺序
   return shuffleArray(selected);
