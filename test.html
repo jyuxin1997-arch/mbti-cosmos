@@ -858,6 +858,93 @@
     letter-spacing: .15em;
   }
 
+  /* ═══════════════════════════════════════════════════════════
+     今日运势卡片
+  ═══════════════════════════════════════════════════════════ */
+  .fortune-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 8px 0 16px;
+    width: 100%;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .fortune-title {
+    font-size: .72rem;
+    color: rgba(212,175,55,.7);
+    letter-spacing: .2em;
+    margin-bottom: 10px;
+  }
+  
+  .fortune-card {
+    width: 100%;
+    background: rgba(20,16,36,.85);
+    border: 1px solid rgba(212,175,55,.2);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.04);
+    backdrop-filter: blur(8px);
+  }
+  
+  .fortune-stars {
+    text-align: center;
+    font-size: 1rem;
+    color: #FFD700;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px rgba(255,215,0,.4);
+  }
+  
+  .fortune-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .fortune-label {
+    font-size: .7rem;
+    color: rgba(167,139,250,.8);
+    white-space: nowrap;
+    min-width: 48px;
+  }
+  
+  .fortune-text {
+    font-size: .68rem;
+    color: rgba(220,210,240,.8);
+    line-height: 1.5;
+  }
+  
+  .fortune-lucky {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px 0 8px;
+    flex-wrap: wrap;
+  }
+  
+  .lucky-tag {
+    font-size: .62rem;
+    color: rgba(212,175,55,.8);
+    background: rgba(212,175,55,.06);
+    border: 1px solid rgba(212,175,55,.15);
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+  
+  .fortune-tip {
+    font-size: .64rem;
+    color: rgba(200,180,220,.5);
+    text-align: center;
+    font-style: italic;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(212,175,55,.08);
+  }
+
   /* ═════════════════════
      RESULT SCREEN - 星空感
   ═════════════════════ */
@@ -1452,6 +1539,32 @@
       <div class="tarot-caption">✦ 你的灵魂之牌 ✦</div>
     </div>
 
+    <!-- 今日运势 -->
+    <div class="fortune-section" id="fortuneSection">
+      <div class="fortune-title">✦ 今日星辰指引 ✦</div>
+      <div class="fortune-card">
+        <div class="fortune-stars" id="fortuneStars">★★★★★</div>
+        <div class="fortune-row">
+          <span class="fortune-label">💼 事业</span>
+          <span class="fortune-text" id="fortuneCareer">-</span>
+        </div>
+        <div class="fortune-row">
+          <span class="fortune-label">💕 感情</span>
+          <span class="fortune-text" id="fortuneLove">-</span>
+        </div>
+        <div class="fortune-row">
+          <span class="fortune-label">💰 财运</span>
+          <span class="fortune-text" id="fortuneMoney">-</span>
+        </div>
+        <div class="fortune-lucky">
+          <span class="lucky-tag" id="luckyColor">🍀 琥珀金</span>
+          <span class="lucky-tag" id="luckyNum">🔢 7</span>
+          <span class="lucky-tag" id="luckyItem">🎁 暖茶</span>
+        </div>
+        <div class="fortune-tip" id="fortuneTip">-</div>
+      </div>
+    </div>
+
     <!-- 伴星 - 最旺我人格 -->
     <div class="companion-star" id="companionStar">
       <div class="companion-orbit">
@@ -1996,6 +2109,40 @@ const TAROT_MAP = {
 };
 
 // ═══════════════════════════════════════════════════════════
+// 今日运势 — 基于塔罗+日期的确定性随机
+// ═══════════════════════════════════════════════════════════
+const FORTUNE_POOL = [
+  {overall:5, career:"灵感涌现的一天，适合启动新项目",       love:"桃花运旺盛，留意身边温柔的信号",       money:"偏财运佳，也许有意外的惊喜",       lucky:{color:"琥珀金",num:7,item:"暖茶",tip:"今天适合给在意的人发一条问候"}},
+  {overall:4, career:"专注力提升，长期任务有望突破",       love:"感情需要耐心，主动表达比默默等待更有效", money:"财运平稳，不适合冒险投资",           lucky:{color:"薰衣草紫",num:3,item:"笔记本",tip:"把灵感随手记下来，会派上用场"}},
+  {overall:5, career:"贵人运强，把握与前辈交流的机会",     love:"单身者可能遇到聊得来的人",               money:"理财灵感来了，适合做长期规划",       lucky:{color:"星空蓝",num:9,item:"水晶",tip:"信任直觉，第一感觉往往是对的"}},
+  {overall:3, career:"工作节奏偏慢，别着急，沉淀期也有价值", love:"有伴的人适合安排一次深度对话",           money:"消费欲较强，先冷静24小时再决定",     lucky:{color:"森林绿",num:5,item:"绿植",tip:"放慢脚步，享受一个不赶时间的午后"}},
+  {overall:4, career:"适合复盘和优化，回头看看之前的方案",   love:"幽默感是你今天的魅力武器",               money:"小额进账的可能，关注合作机会",       lucky:{color:"珊瑚橙",num:8,item:"香薰蜡烛",tip:"给自己创造一个舒适的小空间"}},
+  {overall:5, career:"创造力爆发，别浪费这波能量",         love:"对的人可能一直就在你身边",               money:"正财稳定，适合谈加薪或新合作",       lucky:{color:"月光银",num:2,item:"白玫瑰",tip:"今天做的决定，未来会感谢自己"}},
+  {overall:4, career:"跨领域合作可能带来意外收获",         love:"坦诚沟通比猜测有效一百倍",               money:"偏财运不错，但不要贪心",             lucky:{color:"暮霞粉",num:6,item:"音乐",tip:"听一首老歌，回忆会给你新的力量"}},
+  {overall:3, career:"可能遇到小阻力，稳住心态最重要",     love:"感情需要一点空间来呼吸",                 money:"谨慎消费，延迟满足会有回报",         lucky:{color:"深海蓝",num:1,item:"书",tip:"今天适合独处充电，别勉强社交"}},
+  {overall:5, career:"执行力拉满，今天适合做决定",         love:"勇敢说出心里话，对方可能等很久了",       money:"财运上扬，适合处理财务事务",         lucky:{color:"晨曦金",num:4,item:"太阳镜",tip:"戴上信心出门，今天气场全开"}},
+  {overall:4, career:"旧问题有新解法，换个角度试试",       love:"细小的体贴比大手笔浪漫更动人",           money:"适合清理不必要的订阅和开支",         lucky:{color:"薄荷青",num:0,item:"手写信",tip:"写一封不寄出的信，整理自己的心意"}},
+  {overall:4, career:"学习吸收力强，适合充电提升",         love:"默契不需要语言，一个眼神就够了",         money:"稳健为主，小额定投是好时机",         lucky:{color:"焦糖棕",num:11,item:"咖啡",tip:"给自己买一杯好咖啡，犒劳努力的自己"}},
+  {overall:3, career:"注意细节，小心疏漏带来的返工",       love:"不要因小事影响整体感情氛围",             money:"冲动消费预警，购物车先放三天",       lucky:{color:"冰川灰",num:10,item:"闹钟",tip:"早睡一次，会发现世界都不一样了"}},
+];
+
+// 简单字符串哈希
+function hashStr(s) {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(h);
+}
+
+function getDailyFortune(mbtiType) {
+  const today = new Date().toDateString(); // 如 "Fri Apr 10 2026"
+  const seed = mbtiType + '|' + today;
+  const idx = hashStr(seed) % FORTUNE_POOL.length;
+  return FORTUNE_POOL[idx];
+}
+
+// ═══════════════════════════════════════════════════════════
 // State
 // ═══════════════════════════════════════════════════════════
 let userName = '';
@@ -2331,6 +2478,17 @@ function showResult() {
   document.getElementById('tarotName').textContent = tarot.name;
   document.getElementById('tarotMeaning').textContent = tarot.meaning;
   document.getElementById('tarotBadge').textContent = type;
+  
+  // ★★★ 今日运势 ★★★
+  const fortune = getDailyFortune(type);
+  document.getElementById('fortuneStars').textContent = '★'.repeat(fortune.overall) + '☆'.repeat(5 - fortune.overall);
+  document.getElementById('fortuneCareer').textContent = fortune.career;
+  document.getElementById('fortuneLove').textContent = fortune.love;
+  document.getElementById('fortuneMoney').textContent = fortune.money;
+  document.getElementById('luckyColor').textContent = '🍀 ' + fortune.lucky.color;
+  document.getElementById('luckyNum').textContent = '🔢 ' + fortune.lucky.num;
+  document.getElementById('luckyItem').textContent = '🎁 ' + fortune.lucky.item;
+  document.getElementById('fortuneTip').textContent = '✨ ' + fortune.lucky.tip;
   
   // 更新问候语（顶部）
   const displayName = userName || '旅人';
