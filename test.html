@@ -722,6 +722,142 @@
   .dim-tag.tf { border-color:rgba(236,72,153,.4); color:var(--pink); }
   .dim-tag.jp { border-color:rgba(78,205,196,.4); color:var(--teal); }
 
+
+  /* ═══════════════════════════════════════════════════════════
+     塔罗牌卡片 — 结果页灵魂之牌
+  ═══════════════════════════════════════════════════════════ */
+  .tarot-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 24px 0 16px;
+    perspective: 800px;
+  }
+  
+  .tarot-card {
+    position: relative;
+    width: 180px;
+    height: 280px;
+    cursor: default;
+    animation: tarot-float 4s ease-in-out infinite;
+  }
+  
+  @keyframes tarot-float {
+    0%, 100% { transform: translateY(0) rotateY(0deg); }
+    50% { transform: translateY(-6px) rotateY(2deg); }
+  }
+  
+  .tarot-glow {
+    position: absolute;
+    inset: -20px;
+    border-radius: 24px;
+    background: radial-gradient(ellipse at center, rgba(139,92,246,.2), rgba(212,175,55,.08), transparent 70%);
+    filter: blur(16px);
+    animation: tarot-glow-pulse 3s ease-in-out infinite;
+    z-index: -1;
+  }
+  @keyframes tarot-glow-pulse {
+    0%, 100% { opacity: .6; }
+    50% { opacity: 1; }
+  }
+  
+  .tarot-border {
+    width: 100%;
+    height: 100%;
+    border: 2px solid rgba(212,175,55,.4);
+    border-radius: 16px;
+    background: linear-gradient(170deg, rgba(20,16,36,.92), rgba(30,22,52,.96));
+    box-shadow: 
+      0 0 0 1px rgba(212,175,55,.1),
+      inset 0 0 30px rgba(139,92,246,.08),
+      0 8px 32px rgba(0,0,0,.4);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* 内框装饰线 */
+  .tarot-border::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(212,175,55,.2);
+    border-radius: 12px;
+    pointer-events: none;
+  }
+  .tarot-border::after {
+    content: '✦';
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: .5rem;
+    color: rgba(212,175,55,.4);
+  }
+  
+  .tarot-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 20px 14px;
+    gap: 4px;
+  }
+  
+  .tarot-num {
+    font-size: .65rem;
+    letter-spacing: .2em;
+    color: rgba(212,175,55,.6);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  .tarot-symbol {
+    font-size: 3.2rem;
+    line-height: 1;
+    margin: 8px 0;
+    filter: drop-shadow(0 0 12px rgba(212,175,55,.3));
+    animation: tarot-symbol-glow 3s ease-in-out infinite;
+  }
+  @keyframes tarot-symbol-glow {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(212,175,55,.2)); }
+    50% { filter: drop-shadow(0 0 20px rgba(212,175,55,.4)); }
+  }
+  
+  .tarot-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(212,175,55,.9);
+    letter-spacing: .15em;
+    margin: 6px 0 2px;
+    text-shadow: 0 0 12px rgba(212,175,55,.3);
+  }
+  
+  .tarot-meaning {
+    font-size: .7rem;
+    color: rgba(200,180,220,.7);
+    line-height: 1.5;
+    text-align: center;
+    max-width: 140px;
+    margin-top: 4px;
+  }
+  
+  .tarot-type-badge {
+    margin-top: auto;
+    font-size: .6rem;
+    letter-spacing: .25em;
+    color: rgba(167,139,250,.7);
+    border: 1px solid rgba(167,139,250,.3);
+    border-radius: 20px;
+    padding: 2px 12px;
+  }
+  
+  .tarot-caption {
+    margin-top: 12px;
+    font-size: .7rem;
+    color: var(--text-dim);
+    letter-spacing: .15em;
+  }
+
   /* ═════════════════════
      RESULT SCREEN - 星空感
   ═════════════════════ */
@@ -1293,6 +1429,23 @@
       </div>
     </div>
     
+    <!-- 灵魂塔罗牌 -->
+    <div class="tarot-section" id="tarotSection">
+      <div class="tarot-card" id="tarotCard">
+        <div class="tarot-border">
+          <div class="tarot-inner">
+            <div class="tarot-num" id="tarotNum">0</div>
+            <div class="tarot-symbol" id="tarotSymbol">🃏</div>
+            <div class="tarot-name" id="tarotName">愚者</div>
+            <div class="tarot-meaning" id="tarotMeaning">无界的探索者</div>
+            <div class="tarot-type-badge" id="tarotBadge">ENTP</div>
+          </div>
+        </div>
+        <div class="tarot-glow"></div>
+      </div>
+      <div class="tarot-caption">✦ 你的灵魂之牌 ✦</div>
+    </div>
+
     <!-- 伴星 - 最旺我人格 -->
     <div class="companion-star" id="companionStar">
       <div class="companion-orbit">
@@ -1803,14 +1956,38 @@ const QUESTION_POOL = {
 // 加载动画文字
 // ═══════════════════════════════════════════════════════════
 const LOADING_TEXTS = [
-  {main:"正在为你链接星轨…",sub:"宇宙正在挑选今日与你共鸣的问题"},
-  {main:"星辰正在排列…",sub:"从亿万轨迹中寻找属于你的那一条"},
+  {main:"正在洗牌…",sub:"命运之牌正在你的星轨上排列"},
+  {main:"塔罗牌缓缓展开…",sub:"属于你的那张牌正在浮出水面"},
   {main:"命运之轮转动中…",sub:"让宇宙为你定制今日的人格密码"},
-  {main:"星河正在汇聚…",sub:"每个问题都带着命运的回响"},
-  {main:"星座正在解析…",sub:"你的星辰人格即将揭晓"},
+  {main:"星河正在汇聚…",sub:"每张牌都带着命运的回响"},
+  {main:"牌阵正在成型…",sub:"你的灵魂之牌即将揭晓"},
+  {main:"星辰正在洗牌…",sub:"宇宙正将你的答案编织成命运之网"},
 ];
 
+
 const LOADING_DOTS = ["…","⋯","⋯⋯","⋯⋯⋯"];
+
+// ═══════════════════════════════════════════════════════════
+// 塔罗牌映射 — MBTI × 大阿尔卡纳
+// ═══════════════════════════════════════════════════════════
+const TAROT_MAP = {
+  INTJ: { num:"IX",  name:"隐者",   symbol:"🔮", meaning:"独行的智者，洞悉万物规律" },
+  INTP: { num:"I",   name:"魔术师", symbol:"🎩", meaning:"万物皆可为用，思想即力量" },
+  INFJ: { num:"II",  name:"女祭司", symbol:"🌙", meaning:"直觉的守望者，聆听无声之语" },
+  INFP: { num:"XVIII",name:"月亮",  symbol:"🌔", meaning:"梦境的旅人，温柔照亮暗夜" },
+  ISTJ: { num:"IV",  name:"皇帝",   symbol:"👑", meaning:"秩序的铸造者，规则即信仰" },
+  ISFJ: { num:"V",   name:"教皇",   symbol:"⛪", meaning:"守护的圣殿，温暖即力量" },
+  ESTJ: { num:"XI",  name:"正义",   symbol:"⚖️", meaning:"天平的执掌者，公正即永恒" },
+  ESFJ: { num:"III", name:"女皇",   symbol:"🌿", meaning:"丰饶的守护神，爱即丰盛" },
+  ISTP: { num:"X",   name:"命运之轮",symbol:"🎡", meaning:"齿轮的操纵者，随机即自由" },
+  ISFP: { num:"XVII",name:"星星",   symbol:"⭐", meaning:"暗夜的微光，美即永恒" },
+  ESTP: { num:"VII", name:"战车",   symbol:"⚡", meaning:"征服的烈焰，行动即胜利" },
+  ESFP: { num:"XIX", name:"太阳",   symbol:"☀️", meaning:"庆典的主角，快乐即真理" },
+  ENTJ: { num:"XVI", name:"塔",     symbol:"🔥", meaning:"变革的雷霆，破而后立" },
+  ENTP: { num:"0",   name:"愚者",   symbol:"🃏", meaning:"无界的探索者，未知即自由" },
+  ENFJ: { num:"XXI", name:"世界",   symbol:"🌍", meaning:"联结的圆环，万物归一" },
+  ENFP: { num:"XIV", name:"节制",   symbol:"🌈", meaning:"平衡的炼金术，融合即创造" },
+};
 
 // ═══════════════════════════════════════════════════════════
 // State
@@ -2132,6 +2309,14 @@ function showResult() {
   currentType = type;
   currentData = TYPES[type];
   
+  // ★★★ 塔罗牌数据填充 ★★★
+  const tarot = TAROT_MAP[type];
+  document.getElementById('tarotNum').textContent = tarot.num;
+  document.getElementById('tarotSymbol').textContent = tarot.symbol;
+  document.getElementById('tarotName').textContent = tarot.name;
+  document.getElementById('tarotMeaning').textContent = tarot.meaning;
+  document.getElementById('tarotBadge').textContent = type;
+  
   // 更新问候语（顶部）
   const displayName = userName || '旅人';
   document.getElementById('cosmicName').textContent = `亲爱的 ${displayName}`;
@@ -2403,6 +2588,40 @@ function shareMoment() {
   ctx.shadowColor = 'rgba(212,175,55,0.5)';
   ctx.shadowBlur = 15;
   ctx.fillText(currentData.name, canvas.width / 2, yOffset);
+  
+  // ═══════════════════════════════════════════════
+  // 塔罗牌信息
+  // ═══════════════════════════════════════════════
+  
+  yOffset += 80;
+  const tarot = TAROT_MAP[currentType];
+  
+  // 塔罗编号
+  ctx.font = '24px sans-serif';
+  ctx.fillStyle = 'rgba(212,175,55,0.5)';
+  ctx.shadowBlur = 0;
+  ctx.fillText(tarot.num, canvas.width / 2, yOffset);
+  
+  // 塔罗符号
+  yOffset += 60;
+  ctx.font = '80px sans-serif';
+  ctx.shadowBlur = 0;
+  ctx.fillText(tarot.symbol, canvas.width / 2, yOffset);
+  
+  // 塔罗名
+  yOffset += 60;
+  ctx.font = 'bold 36px sans-serif';
+  ctx.fillStyle = 'rgba(212,175,55,0.8)';
+  ctx.shadowColor = 'rgba(212,175,55,0.3)';
+  ctx.shadowBlur = 10;
+  ctx.fillText(tarot.name, canvas.width / 2, yOffset);
+  
+  // 塔罗寓意
+  yOffset += 45;
+  ctx.font = '24px sans-serif';
+  ctx.fillStyle = 'rgba(200,180,220,0.6)';
+  ctx.shadowBlur = 5;
+  ctx.fillText(tarot.meaning, canvas.width / 2, yOffset);
   
   // ═══════════════════════════════════════════════
   // 宇宙编码
