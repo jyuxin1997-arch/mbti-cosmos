@@ -513,40 +513,6 @@
     50% { opacity: 0.6; width: 70%; }
   }
   
-  /* 选项 hover 光晕增强 */
-  .scale-opt {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .scale-opt::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(167,139,250,0.3), transparent 70%);
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-  
-  .scale-opt:hover::before {
-    opacity: 1;
-  }
-  
-  .scale-opt.selected::after {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    background: linear-gradient(135deg, rgba(139,92,246,0.4), rgba(212,175,55,0.3));
-    border-radius: 14px;
-    z-index: -1;
-    animation: selected-glow 2s ease-in-out infinite;
-  }
-  
-  @keyframes selected-glow {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-  }
-
   .quiz { padding-top:16px; gap:0; }
   
   .quiz-header {
@@ -566,34 +532,185 @@
     min-height:60px;
     text-shadow: 0 0 20px rgba(245,243,255,0.15);
   }
-  .question-text .q-icon { margin-right:8px; }
+  /* ═══════════════════════════════════════════════════════════
+     竖向选项卡片布局
+  ═══════════════════════════════════════════════════════════ */
   
   .question-options {
-    display:flex; justify-content:space-between; margin-bottom:24px; 
-    font-size:clamp(0.85rem,3.2vw,1rem); padding:12px 16px;
-    background:rgba(255,255,255,0.05); border-radius:12px;
+    display:none; /* 已废弃，用新的 option-cards 代替 */
   }
-  .opt-left { color:var(--gold); text-align:left; flex:1; padding-right:10px; }
-  .opt-right { color:var(--blue); text-align:right; flex:1; padding-left:10px; }
+  
+  /* 维度刻度条（微妙的渐变提示） */
+  .dim-bar {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dim-bar-label {
+    font-size: .6rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+  .dim-bar-track {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--gold), rgba(139,92,246,.5), var(--blue));
+    opacity: .4;
+  }
+  
+  /* 竖向大卡容器 */
+  .option-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  
+  /* 单张选项卡 */
+  .opt-card {
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: all .25s cubic-bezier(.34,1.56,.64,1);
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    /* 磨砂质感 */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  /* 磨砂边框光晕 */
+  .opt-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent);
+    pointer-events: none;
+  }
+  
+  /* 左卡（左选项 = E/S/T/J）微金光晕 */
+  .opt-card.left-card:hover,
+  .opt-card.left-card:active {
+    border-color: rgba(212,175,55,.5);
+    background: rgba(212,175,55,.06);
+    box-shadow: 0 0 24px rgba(212,175,55,.15), inset 0 0 20px rgba(212,175,55,.04);
+    transform: scale(1.02);
+  }
+  .opt-card.left-card.selected {
+    border-color: rgba(212,175,55,.7);
+    background: rgba(212,175,55,.1);
+    box-shadow: 0 0 30px rgba(212,175,55,.25), inset 0 0 24px rgba(212,175,55,.06);
+    transform: scale(1.03);
+  }
+  
+  /* 右卡（右选项 = I/N/F/P）蓝紫光晕 */
+  .opt-card.right-card:hover,
+  .opt-card.right-card:active {
+    border-color: rgba(139,92,246,.5);
+    background: rgba(139,92,246,.06);
+    box-shadow: 0 0 24px rgba(139,92,246,.15), inset 0 0 20px rgba(139,92,246,.04);
+    transform: scale(1.02);
+  }
+  .opt-card.right-card.selected {
+    border-color: rgba(139,92,246,.7);
+    background: rgba(139,92,246,.1);
+    box-shadow: 0 0 30px rgba(139,92,246,.25), inset 0 0 24px rgba(139,92,246,.06);
+    transform: scale(1.03);
+  }
+  
+  /* 选中后短暂停留再跳转 */
+  .opt-card.selected::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    animation: card-pulse .4s ease forwards;
+  }
+  @keyframes card-pulse {
+    0%   { background: transparent; }
+    50%  { background: rgba(255,255,255,.04); }
+    100% { background: transparent; }
+  }
+  
+  /* 卡片内部布局 */
+  .card-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .card-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    transition: transform .25s;
+  }
+  .opt-card:hover .card-icon,
+  .opt-card:active .card-icon {
+    transform: scale(1.15);
+  }
+  .card-text {
+    flex: 1;
+    font-size: clamp(.9rem, 3.5vw, 1.05rem);
+    line-height: 1.5;
+    font-weight: 400;
+    color: var(--text);
+  }
+  .card-body { flex: 1; }
+  .left-card .card-text { text-align: left; color: rgba(240,216,117,.9); }
+  .right-card .card-text { text-align: left; color: rgba(167,139,250,.9); }
+  .card-strength {
+    font-size: .65rem;
+    color: var(--text-dim);
+    margin-top: 6px;
+    opacity: .7;
+  }
+  .left-card .card-strength { text-align: left; }
+  .right-card .card-strength { text-align: left; }
+  
+  /* 选中时的强度指示 */
+  .strength-dots {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+    justify-content: flex-start;
+  }
+  .strength-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all .2s;
+  }
+  .left-card .strength-dot.active {
+    background: var(--gold);
+    box-shadow: 0 0 6px rgba(212,175,55,.6);
+  }
+  .right-card .strength-dot.active {
+    background: var(--purple-soft);
+    box-shadow: 0 0 6px rgba(167,139,250,.6);
+  }
+  
+  /* 底部小提示 */
+  .card-hint {
+    font-size: .65rem;
+    color: var(--text-dim);
+    text-align: center;
+    margin-top: 14px;
+    opacity: .5;
+    letter-spacing: .1em;
+  }
 
-  .scale-row { display:flex; align-items:center; gap:6px; width:100%; }
-  .scale-label { font-size:.65rem; color:var(--text-dim); white-space:nowrap; min-width:38px; text-align:center; }
-  .scale-label.right { text-align:right; }
-  .scale-opts { flex:1; display:flex; justify-content:space-between; }
-  .scale-opt {
-    flex:1; margin:0 2px;
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:12px; padding:14px 4px;
-    text-align:center; font-size:.75rem; color:var(--text-dim);
-    cursor:pointer; transition: all .2s;
-    user-select:none;
-  }
-  .scale-opt:hover, .scale-opt:active { border-color:var(--purple); color:var(--purple); }
-  .scale-opt.selected {
-    background: linear-gradient(135deg, rgba(139,92,246,.2), rgba(139,92,246,.08));
-    border-color:var(--purple); color:var(--purple);
-    box-shadow: 0 0 16px rgba(139,92,246,.2);
-  }
 
   .dim-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
   .dim-tag {
@@ -1142,17 +1259,7 @@
     <div class="dim-tags" id="dimTags"></div>
     <div class="question-block">
       <div class="question-text" id="qText">加载中…</div>
-      <div class="scale-row">
-        <span class="scale-label">完全不符</span>
-        <div class="scale-opts" id="scaleOpts">
-          <div class="scale-opt" data-v="1" onclick="selectOpt(this,1)">1</div>
-          <div class="scale-opt" data-v="2" onclick="selectOpt(this,2)">2</div>
-          <div class="scale-opt" data-v="3" onclick="selectOpt(this,3)">3</div>
-          <div class="scale-opt" data-v="4" onclick="selectOpt(this,4)">4</div>
-          <div class="scale-opt" data-v="5" onclick="selectOpt(this,5)">5</div>
-        </div>
-        <span class="scale-label right">完全符合</span>
-      </div>
+      <div id="optionCards"></div>
     </div>
   </div>
 
@@ -1870,19 +1977,51 @@ function loadQuestion(){
   document.getElementById('counter').textContent = `${currentQ+1} / ${QUESTIONS.length}`;
   document.getElementById('progFill').style.width = `${((currentQ)/QUESTIONS.length)*100}%`;
   
-  document.getElementById('qText').innerHTML = 
-    `<span class="q-icon">${['💬','🔍','💡','📋'][dimIdx]}</span>` + q.text +
-    `<div class="question-options">
-      <div class="opt-left">← ${q.left}</div>
-      <div class="opt-right">${q.right} →</div>
-    </div>`;
+    const icon = ['💬','🔍','💡','📋'][dimIdx];
+    const dimLabel = ['外向倾向 ↔ 内向倾向','感觉倾向 ↔ 直觉倾向','思考倾向 ↔ 情感倾向','判断倾向 ↔ 知觉倾向'][dimIdx];
+    document.getElementById('qText').innerHTML =
+      `<span class="q-icon">${icon}</span>${q.text}
+       <div class="dim-bar"><div class="dim-bar-track"></div></div>`;
+
+    document.getElementById('optionCards').innerHTML = `
+      <div class="option-cards">
+        <div class="opt-card left-card" onclick="selectOpt(this, 4)">
+          <div class="card-row">
+            <span class="card-icon">◀</span>
+            <div class="card-body">
+              <div class="card-text">${q.left}</div>
+              <div class="strength-dots">
+                <span class="strength-dot"></span>
+                <span class="strength-dot"></span>
+                <span class="strength-dot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="card-hint">更像你</div>
+        </div>
+        <div class="opt-card right-card" onclick="selectOpt(this, 2)">
+          <div class="card-row">
+            <span class="card-icon">▶</span>
+            <div class="card-body">
+              <div class="card-text">${q.right}</div>
+              <div class="strength-dots">
+                <span class="strength-dot"></span>
+                <span class="strength-dot"></span>
+                <span class="strength-dot"></span>
+              </div>
+            </div>
+          </div>
+          <div class="card-hint">更像你</div>
+        </div>
+      </div>
+    `;
   
   document.getElementById('dimTags').innerHTML = DIM_CLASS.map((c,i)=>
     `<span class="dim-tag ${c}">${['E/I','S/N','T/F','J/P'][i]}</span>`
   ).join('');
   
   selectedVal = null;
-  document.querySelectorAll('.scale-opt').forEach(el=>el.classList.remove('selected'));
+  document.querySelectorAll('.opt-card').forEach(el=>el.classList.remove('selected'));
 }
 
 const DIM_NAMES = ["外向/内向 E/I", "感觉/直觉 S/N", "思考/情感 T/F", "判断/知觉 J/P"];
@@ -1891,7 +2030,7 @@ const DIM_CLASS = ["ei","sn","tf","jp"];
 function selectOpt(el, val){
   if(selectedVal !== null) return;
   selectedVal = val;
-  document.querySelectorAll('.scale-opt').forEach(e=>e.classList.remove('selected'));
+  document.querySelectorAll('.opt-card').forEach(e=>e.classList.remove('selected'));
   el.classList.add('selected');
   
   const q = QUESTIONS[currentQ];
