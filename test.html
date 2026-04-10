@@ -1416,277 +1416,279 @@ function generateCosmicCode(name, mbti) {
 // ═══════════════════════════════════════════════════════════
 const QUESTION_POOL = {
   // E/I 维度 - 45题
+  // direction: "L" = 左选项代表E（+E得分），右选项代表I（+I得分）
   EI: [
     // 社交能量
-    {text:"社交聚会后，你的状态是：",left:"精力充沛",right:"需要独处充电"},
-    {text:"参加完一场热闹的派对，你最想：",left:"继续下一场",right:"回家休息"},
-    {text:"在人群中待了一整天，你会觉得：",left:"很开心",right:"有点累"},
-    {text:"连续几天社交活动后，你更想：",left:"继续约朋友",right:"宅家休息"},
-    {text:"和一群人聊天，你通常会：",left:"很享受",right:"有点耗能"},
+    {text:"社交聚会后，你的状态是：",left:"精力充沛",right:"需要独处充电",direction:"L"},
+    {text:"参加完一场热闹的派对，你最想：",left:"继续下一场",right:"回家休息",direction:"L"},
+    {text:"在人群中待了一整天，你会觉得：",left:"很开心",right:"有点累",direction:"L"},
+    {text:"连续几天社交活动后，你更想：",left:"继续约朋友",right:"宅家休息",direction:"L"},
+    {text:"和一群人聊天，你通常会：",left:"很享受",right:"有点耗能",direction:"L"},
     // 表达方式
-    {text:"遇到问题时，你更倾向于：",left:"找人讨论",right:"自己思考"},
-    {text:"有想法时，你更喜欢：",left:"马上说出来",right:"先在心里想"},
-    {text:"做决定之前，你更想：",left:"和他人商量",right:"自己想明白"},
-    {text:"遇到困扰，你通常会：",left:"找人倾诉",right:"自己消化"},
-    {text:"有了新想法，你会：",left:"迫不及待分享",right:"先自己琢磨"},
+    {text:"遇到问题时，你更倾向于：",left:"找人讨论",right:"自己思考",direction:"L"},
+    {text:"有想法时，你更喜欢：",left:"马上说出来",right:"先在心里想",direction:"L"},
+    {text:"做决定之前，你更想：",left:"和他人商量",right:"自己想明白",direction:"L"},
+    {text:"遇到困扰，你通常会：",left:"找人倾诉",right:"自己消化",direction:"L"},
+    {text:"有了新想法，你会：",left:"迫不及待分享",right:"先自己琢磨",direction:"L"},
     // 闲暇偏好
-    {text:"周末闲暇，你更喜欢：",left:"约朋友出门",right:"在家安静待着"},
-    {text:"难得的假期，你更想：",left:"和朋友旅行",right:"一个人放松"},
-    {text:"空闲时间，你倾向于：",left:"联系朋友",right:"做自己的事"},
-    {text:"周末晚上，你更常：",left:"约人聚会",right:"宅家追剧"},
-    {text:"闲暇时光，你觉得：",left:"一个人太无聊",right:"一个人很舒服"},
+    {text:"周末闲暇，你更喜欢：",left:"约朋友出门",right:"在家安静待着",direction:"L"},
+    {text:"难得的假期，你更想：",left:"和朋友旅行",right:"一个人放松",direction:"L"},
+    {text:"空闲时间，你倾向于：",left:"联系朋友",right:"做自己的事",direction:"L"},
+    {text:"周末晚上，你更常：",left:"约人聚会",right:"宅家追剧",direction:"L"},
+    {text:"闲暇时光，你觉得：",left:"一个人太无聊",right:"一个人很舒服",direction:"L"},
     // 独处感受
-    {text:"独处对你来说：",left:"有点无聊孤单",right:"享受的时光"},
-    {text:"一个人待着时，你通常：",left:"想找人聊天",right:"很自在"},
-    {text:"长时间独处后，你会：",left:"想见人",right:"还想继续"},
-    {text:"一个人的周末，你会觉得：",left:"有点空虚",right:"很自在"},
-    {text:"独处时，你的状态是：",left:"容易胡思乱想",right:"内心平静充实"},
+    {text:"独处对你来说：",left:"有点无聊孤单",right:"享受的时光",direction:"L"},
+    {text:"一个人待着时，你通常：",left:"想找人聊天",right:"很自在",direction:"L"},
+    {text:"长时间独处后，你会：",left:"想见人",right:"还想继续",direction:"L"},
+    {text:"一个人的周末，你会觉得：",left:"有点空虚",right:"很自在",direction:"L"},
+    {text:"独处时，你的状态是：",left:"容易胡思乱想",right:"内心平静充实",direction:"L"},
     // 陌生人互动
-    {text:"面对陌生人，你通常：",left:"主动搭话",right:"保持距离"},
-    {text:"在陌生环境中，你会：",left:"主动认识人",right:"观察为主"},
-    {text:"参加陌生人很多的聚会，你会：",left:"积极社交",right:"待在角落"},
-    {text:"和不熟的人相处，你觉得：",left:"挺有趣的",right:"有点尴尬"},
-    {text:"认识新朋友，你会：",left:"很主动",right:"比较被动"},
+    {text:"面对陌生人，你通常：",left:"主动搭话",right:"保持距离",direction:"L"},
+    {text:"在陌生环境中，你会：",left:"主动认识人",right:"观察为主",direction:"L"},
+    {text:"参加陌生人很多的聚会，你会：",left:"积极社交",right:"待在角落",direction:"L"},
+    {text:"和不熟的人相处，你觉得：",left:"挺有趣的",right:"有点尴尬",direction:"L"},
+    {text:"认识新朋友，你会：",left:"很主动",right:"比较被动",direction:"L"},
     // 团队角色
-    {text:"在团队中，你更像是：",left:"气氛担当",right:"安静观察者"},
-    {text:"会议讨论时，你更常：",left:"积极发言",right:"先听再说"},
-    {text:"小组作业中，你倾向于：",left:"主导讨论",right:"默默贡献"},
-    {text:"在群体中，你更习惯：",left:"成为焦点",right:"默默支持"},
-    {text:"团队合作时，你觉得：",left:"很高效",right:"不如自己干"},
+    {text:"在团队中，你更像是：",left:"气氛担当",right:"安静观察者",direction:"L"},
+    {text:"会议讨论时，你更常：",left:"积极发言",right:"先听再说",direction:"L"},
+    {text:"小组作业中，你倾向于：",left:"主导讨论",right:"默默贡献",direction:"L"},
+    {text:"在群体中，你更习惯：",left:"成为焦点",right:"默默支持",direction:"L"},
+    {text:"团队合作时，你觉得：",left:"很高效",right:"不如自己干",direction:"L"},
     // 沟通方式
-    {text:"表达想法时，你更喜欢：",left:"当面说清楚",right:"文字慢慢想"},
-    {text:"你更擅长：",left:"口头表达",right:"文字书写"},
-    {text:"重要的事情，你会选择：",left:"当面沟通",right:"发消息说"},
-    {text:"与人沟通，你更偏好：",left:"电话语音",right:"文字聊天"},
-    {text:"向别人解释想法时：",left:"边说边想",right:"先想好再说"},
+    {text:"表达想法时，你更喜欢：",left:"当面说清楚",right:"文字慢慢想",direction:"L"},
+    {text:"你更擅长：",left:"口头表达",right:"文字书写",direction:"L"},
+    {text:"重要的事情，你会选择：",left:"当面沟通",right:"发消息说",direction:"L"},
+    {text:"与人沟通，你更偏好：",left:"电话语音",right:"文字聊天",direction:"L"},
+    {text:"向别人解释想法时：",left:"边说边想",right:"先想好再说",direction:"L"},
     // 社交分享
-    {text:"你的朋友圈更新频率：",left:"经常分享",right:"很少发"},
-    {text:"看到有趣的视频，你会：",left:"转发给朋友",right:"自己收藏"},
-    {text:"有好消息时，你会：",left:"发朋友圈",right:"告诉几个好友"},
-    {text:"旅行时拍的照片，你会：",left:"马上发出来",right:"很少分享"},
-    {text:"社交媒体对你来说是：",left:"分享生活的窗口",right:"偶尔看看的地方"},
+    {text:"你的朋友圈更新频率：",left:"经常分享",right:"很少发",direction:"L"},
+    {text:"看到有趣的视频，你会：",left:"转发给朋友",right:"自己收藏",direction:"L"},
+    {text:"有好消息时，你会：",left:"发朋友圈",right:"告诉几个好友",direction:"L"},
+    {text:"旅行时拍的照片，你会：",left:"马上发出来",right:"很少分享",direction:"L"},
+    {text:"社交媒体对你来说是：",left:"分享生活的窗口",right:"偶尔看看的地方",direction:"L"},
     // 电话接听
-    {text:"接到电话时，你通常：",left:"很开心接听",right:"有点紧张"},
-    {text:"别人突然打电话来，你会：",left:"自然接听",right:"希望先发消息"},
-    {text:"电话响起，你的第一反应是：",left:"接起来",right:"犹豫一下"},
-    {text:"你更倾向于：",left:"打电话沟通",right:"发消息慢慢聊"},
-    {text:"和朋友的联系方式：",left:"经常语音",right:"主要是文字"},
+    {text:"接到电话时，你通常：",left:"很开心接听",right:"有点紧张",direction:"L"},
+    {text:"别人突然打电话来，你会：",left:"自然接听",right:"希望先发消息",direction:"L"},
+    {text:"电话响起，你的第一反应是：",left:"接起来",right:"犹豫一下",direction:"L"},
+    {text:"你更倾向于：",left:"打电话沟通",right:"发消息慢慢聊",direction:"L"},
+    {text:"和朋友的联系方式：",left:"经常语音",right:"主要是文字",direction:"L"},
     // 聚会行为
-    {text:"聚会中，你更常：",left:"主动认识新朋友",right:"和熟人聊天"},
-    {text:"在社交场合，你更像是：",left:"社交蝴蝶",right:"安静观察者"},
-    {text:"朋友聚会，你通常：",left:"组织者",right:"参与者"},
-    {text:"大型聚会中，你感到：",left:"如鱼得水",right:"有点不自在"},
-    {text:"社交活动结束，你觉得：",left:"意犹未尽",right:"终于可以休息了"},
+    {text:"聚会中，你更常：",left:"主动认识新朋友",right:"和熟人聊天",direction:"L"},
+    {text:"在社交场合，你更像是：",left:"社交蝴蝶",right:"安静观察者",direction:"L"},
+    {text:"朋友聚会，你通常：",left:"组织者",right:"参与者",direction:"L"},
+    {text:"大型聚会中，你感到：",left:"如鱼得水",right:"有点不自在",direction:"L"},
+    {text:"社交活动结束，你觉得：",left:"意犹未尽",right:"终于可以休息了",direction:"L"},
   ],
   
   // S/N 维度 - 42题
+  // direction: "L" = 左选项代表S（+S得分），右选项代表N（+N得分）
   SN: [
     // 问题解决
-    {text:"解决问题时，你更看重：",left:"实际可行",right:"创新突破"},
-    {text:"面对难题，你更倾向于：",left:"用已有方法",right:"想新方案"},
-    {text:"做事时，你更在意：",left:"步骤清晰",right:"有创意空间"},
-    {text:"遇到问题，你首先想的是：",left:"怎么解决过",right:"有没有新思路"},
-    {text:"处理事情，你更喜欢：",left:"按规矩来",right:"自己发挥"},
+    {text:"解决问题时，你更看重：",left:"实际可行",right:"创新突破",direction:"L"},
+    {text:"面对难题，你更倾向于：",left:"用已有方法",right:"想新方案",direction:"L"},
+    {text:"做事时，你更在意：",left:"步骤清晰",right:"有创意空间",direction:"L"},
+    {text:"遇到问题，你首先想的是：",left:"怎么解决过",right:"有没有新思路",direction:"L"},
+    {text:"处理事情，你更喜欢：",left:"按规矩来",right:"自己发挥",direction:"L"},
     // 记忆方式
-    {text:"你更擅长记住：",left:"具体细节",right:"整体印象"},
-    {text:"看完一部电影，你更记得：",left:"具体情节",right:"整体感受"},
-    {text:"回忆一件事，你更记得：",left:"具体说了什么",right:"当时的感觉"},
-    {text:"描述过去的经历时：",left:"细节很清楚",right:"大概的感觉"},
-    {text:"别人说的具体数字，你：",left:"容易记住",right:"不太在意"},
+    {text:"你更擅长记住：",left:"具体细节",right:"整体印象",direction:"L"},
+    {text:"看完一部电影，你更记得：",left:"具体情节",right:"整体感受",direction:"L"},
+    {text:"回忆一件事，你更记得：",left:"具体说了什么",right:"当时的感觉",direction:"L"},
+    {text:"描述过去的经历时：",left:"细节很清楚",right:"大概的感觉",direction:"L"},
+    {text:"别人说的具体数字，你：",left:"容易记住",right:"不太在意",direction:"L"},
     // 决策依据
-    {text:"做决定时，你更依赖：",left:"已有经验",right:"直觉判断"},
-    {text:"做选择时，你更看重：",left:"实际利弊",right:"内心感觉"},
-    {text:"买东西时，你更在意：",left:"具体参数",right:"整体感觉"},
-    {text:"选择工作，你更看重：",left:"现实条件",right:"发展潜力"},
-    {text:"做重要决定前：",left:"收集充分信息",right:"相信直觉"},
+    {text:"做决定时，你更依赖：",left:"已有经验",right:"直觉判断",direction:"L"},
+    {text:"做选择时，你更看重：",left:"实际利弊",right:"内心感觉",direction:"L"},
+    {text:"买东西时，你更在意：",left:"具体参数",right:"整体感觉",direction:"L"},
+    {text:"选择工作，你更看重：",left:"现实条件",right:"发展潜力",direction:"L"},
+    {text:"做重要决定前：",left:"收集充分信息",right:"相信直觉",direction:"L"},
     // 兴趣偏好
-    {text:"什么东西更吸引你：",left:"实用价值",right:"创意独特"},
-    {text:"你更感兴趣的是：",left:"现实可行的想法",right:"天马行空的创意"},
-    {text:"选择兴趣爱好时：",left:"选实用的技能",right:"选有趣的体验"},
-    {text:"你觉得更有价值的是：",left:"解决实际问题",right:"探索新的可能"},
-    {text:"看到新事物，你会想：",left:"有什么用",right:"有意思在哪"},
+    {text:"什么东西更吸引你：",left:"实用价值",right:"创意独特",direction:"L"},
+    {text:"你更感兴趣的是：",left:"现实可行的想法",right:"天马行空的创意",direction:"L"},
+    {text:"选择兴趣爱好时：",left:"选实用的技能",right:"选有趣的体验",direction:"L"},
+    {text:"你觉得更有价值的是：",left:"解决实际问题",right:"探索新的可能",direction:"L"},
+    {text:"看到新事物，你会想：",left:"有什么用",right:"有意思在哪",direction:"L"},
     // 理解方式
-    {text:"你更容易理解：",left:"具体的例子",right:"抽象的概念"},
-    {text:"学习新知识，你偏好：",left:"具体案例",right:"理论框架"},
-    {text:"别人解释事情时，你更喜欢：",left:"举例子",right:"讲原理"},
-    {text:"阅读时，你更关注：",left:"具体内容",right:"深层含义"},
-    {text:"理解一个概念，你需要：",left:"具体的例子",right:"整体的理解"},
+    {text:"你更容易理解：",left:"具体的例子",right:"抽象的概念",direction:"L"},
+    {text:"学习新知识，你偏好：",left:"具体案例",right:"理论框架",direction:"L"},
+    {text:"别人解释事情时，你更喜欢：",left:"举例子",right:"讲原理",direction:"L"},
+    {text:"阅读时，你更关注：",left:"具体内容",right:"深层含义",direction:"L"},
+    {text:"理解一个概念，你需要：",left:"具体的例子",right:"整体的理解",direction:"L"},
     // 表达方式
-    {text:"描述一件事，你更常说：",left:"发生了什么",right:"意味着什么"},
-    {text:"告诉别人一件事时：",left:"说具体细节",right:"讲整体感受"},
-    {text:"你的表达方式更偏向：",left:"直白具体",right:"隐喻抽象"},
-    {text:"写东西时，你更喜欢：",left:"写实",right:"写意"},
-    {text:"讲故事时，你会：",left:"详细描述",right:"突出重点"},
+    {text:"描述一件事，你更常说：",left:"发生了什么",right:"意味着什么",direction:"L"},
+    {text:"告诉别人一件事时：",left:"说具体细节",right:"讲整体感受",direction:"L"},
+    {text:"你的表达方式更偏向：",left:"直白具体",right:"隐喻抽象",direction:"L"},
+    {text:"写东西时，你更喜欢：",left:"写实",right:"写意",direction:"L"},
+    {text:"讲故事时，你会：",left:"详细描述",right:"突出重点",direction:"L"},
     // 关注重点
-    {text:"你对未来更关注：",left:"当下的可能",right:"长远的愿景"},
-    {text:"做计划时，你更看重：",left:"近期的安排",right:"未来的方向"},
-    {text:"你更在意：",left:"眼前的事",right:"未来的梦"},
-    {text:"思考问题时，你更关注：",left:"现实层面",right:"可能性"},
-    {text:"你更擅长：",left:"处理当下",right:"展望未来"},
+    {text:"你对未来更关注：",left:"当下的可能",right:"长远的愿景",direction:"L"},
+    {text:"做计划时，你更看重：",left:"近期的安排",right:"未来的方向",direction:"L"},
+    {text:"你更在意：",left:"眼前的事",right:"未来的梦",direction:"L"},
+    {text:"思考问题时，你更关注：",left:"现实层面",right:"可能性",direction:"L"},
+    {text:"你更擅长：",left:"处理当下",right:"展望未来",direction:"L"},
     // 阅读偏好
-    {text:"读一本书，你更喜欢：",left:"按顺序读",right:"跳着看有趣的"},
-    {text:"阅读长文时，你会：",left:"从头读到尾",right:"先看重点"},
-    {text:"看说明书，你会：",left:"仔细阅读",right:"大概浏览"},
-    {text:"学习新东西时：",left:"跟着教程来",right:"自己摸索"},
-    {text:"使用新软件，你会：",left:"看教程",right:"直接上手试"},
+    {text:"读一本书，你更喜欢：",left:"按顺序读",right:"跳着看有趣的",direction:"L"},
+    {text:"阅读长文时，你会：",left:"从头读到尾",right:"先看重点",direction:"L"},
+    {text:"看说明书，你会：",left:"仔细阅读",right:"大概浏览",direction:"L"},
+    {text:"学习新东西时：",left:"跟着教程来",right:"自己摸索",direction:"L"},
+    {text:"使用新软件，你会：",left:"看教程",right:"直接上手试",direction:"L"},
     // 直觉 vs 事实
-    {text:"你更相信：",left:"眼见为实",right:"第六感"},
-    {text:"别人说你更像是：",left:"脚踏实地",right:"天马行空"},
-    {text:"面对未知，你更依赖：",left:"已知的事实",right:"内在的直觉"},
-    {text:"判断一个人，你更看重：",left:"实际表现",right:"整体感觉"},
-    {text:"你认为成功更多来自：",left:"踏实努力",right:"敏锐洞察"},
+    {text:"你更相信：",left:"眼见为实",right:"第六感",direction:"L"},
+    {text:"别人说你更像是：",left:"脚踏实地",right:"天马行空",direction:"L"},
+    {text:"面对未知，你更依赖：",left:"已知的事实",right:"内在的直觉",direction:"L"},
+    {text:"判断一个人，你更看重：",left:"实际表现",right:"整体感觉",direction:"L"},
+    {text:"你认为成功更多来自：",left:"踏实努力",right:"敏锐洞察",direction:"L"},
     // 关注层面
-    {text:"你更在意：",left:"事实本身",right:"背后的意义"},
-    {text:"看新闻时，你更关注：",left:"发生了什么",right:"为什么发生"},
-    {text:"了解一件事，你更想知：",left:"具体情况",right:"深层原因"},
-    {text:"听故事时，你更在意：",left:"情节发展",right:"人物内心"},
-    {text:"你更喜欢讨论：",left:"具体的话题",right:"抽象的观念"},
+    {text:"你更在意：",left:"事实本身",right:"背后的意义",direction:"L"},
+    {text:"看新闻时，你更关注：",left:"发生了什么",right:"为什么发生",direction:"L"},
+    {text:"了解一件事，你更想知：",left:"具体情况",right:"深层原因",direction:"L"},
+    {text:"听故事时，你更在意：",left:"情节发展",right:"人物内心",direction:"L"},
+    {text:"你更喜欢讨论：",left:"具体的话题",right:"抽象的观念",direction:"L"},
   ],
   
   // T/F 维度 - 42题
   TF: [
     // 决策偏好
-    {text:"做决定时，你更在意：",left:"逻辑合理",right:"他人感受"},
-    {text:"选择时，你更看重：",left:"客观事实",right:"人情关系"},
-    {text:"做重要决定时：",left:"理性分析",right:"考虑感情"},
-    {text:"面对两难选择：",left:"选合理的",right:"选感情上的"},
-    {text:"你的决策风格是：",left:"冷静客观",right:"顾及他人"},
+    {text:"做决定时，你更在意：",left:"逻辑合理",right:"他人感受",direction:"L"},
+    {text:"选择时，你更看重：",left:"客观事实",right:"人情关系",direction:"L"},
+    {text:"做重要决定时：",left:"理性分析",right:"考虑感情",direction:"L"},
+    {text:"面对两难选择：",left:"选合理的",right:"选感情上的",direction:"L"},
+    {text:"你的决策风格是：",left:"冷静客观",right:"顾及他人",direction:"L"},
     // 助人方式
-    {text:"朋友倾诉烦恼，你会：",left:"帮TA分析解决",right:"先陪TA难过"},
-    {text:"别人求助时，你更想：",left:"提供解决方案",right:"给予情感支持"},
-    {text:"朋友遇到困难，你的反应是：",left:"帮忙分析",right:"先安慰"},
-    {text:"别人难过时，你会：",left:"想办法解决",right:"陪在身边"},
-    {text:"帮助别人，你更擅长：",left:"出主意",right:"给温暖"},
+    {text:"朋友倾诉烦恼，你会：",left:"帮TA分析解决",right:"先陪TA难过",direction:"L"},
+    {text:"别人求助时，你更想：",left:"提供解决方案",right:"给予情感支持",direction:"L"},
+    {text:"朋友遇到困难，你的反应是：",left:"帮忙分析",right:"先安慰",direction:"L"},
+    {text:"别人难过时，你会：",left:"想办法解决",right:"陪在身边",direction:"L"},
+    {text:"帮助别人，你更擅长：",left:"出主意",right:"给温暖",direction:"L"},
     // 评价取向
-    {text:"你更希望被评价为：",left:"理性客观",right:"温暖体贴"},
-    {text:"别人对你的印象，你更在意：",left:"聪明能干",right:"善良温暖"},
-    {text:"你希望别人说你：",left:"有头脑",right:"有心"},
-    {text:"你觉得更重要的是：",left:"被尊重",right:"被喜欢"},
-    {text:"你更看重哪种评价：",left:"逻辑清晰",right:"情感细腻"},
+    {text:"你更希望被评价为：",left:"理性客观",right:"温暖体贴",direction:"L"},
+    {text:"别人对你的印象，你更在意：",left:"聪明能干",right:"善良温暖",direction:"L"},
+    {text:"你希望别人说你：",left:"有头脑",right:"有心",direction:"L"},
+    {text:"你觉得更重要的是：",left:"被尊重",right:"被喜欢",direction:"L"},
+    {text:"你更看重哪种评价：",left:"逻辑清晰",right:"情感细腻",direction:"L"},
     // 情绪处理
-    {text:"别人情绪激动时，你：",left:"保持冷静分析",right:"想安抚对方"},
-    {text:"面对情绪化的人：",left:"理性应对",right:"被情绪感染"},
-    {text:"处理冲突时：",left:"讲道理",right:"顾感受"},
-    {text:"团队有矛盾时，你会：",left:"分析对错",right:"调解感情"},
-    {text:"别人生气时，你觉得：",left:"需要冷静",right:"需要理解"},
+    {text:"别人情绪激动时，你：",left:"保持冷静分析",right:"想安抚对方",direction:"L"},
+    {text:"面对情绪化的人：",left:"理性应对",right:"被情绪感染",direction:"L"},
+    {text:"处理冲突时：",left:"讲道理",right:"顾感受",direction:"L"},
+    {text:"团队有矛盾时，你会：",left:"分析对错",right:"调解感情",direction:"L"},
+    {text:"别人生气时，你觉得：",left:"需要冷静",right:"需要理解",direction:"L"},
     // 批评方式
-    {text:"批评别人时，你更在意：",left:"指出问题",right:"不伤害对方"},
-    {text:"给别人提意见，你会：",left:"直说问题",right:"委婉表达"},
-    {text:"别人做得不好时：",left:"直接指出",right:"先肯定再说"},
-    {text:"你认为好的批评应该是：",left:"一针见血",right:"温和中肯"},
-    {text:"别人批评你时，你更在意：",left:"说得对不对",right:"态度好不好"},
+    {text:"批评别人时，你更在意：",left:"指出问题",right:"不伤害对方",direction:"L"},
+    {text:"给别人提意见，你会：",left:"直说问题",right:"委婉表达",direction:"L"},
+    {text:"别人做得不好时：",left:"直接指出",right:"先肯定再说",direction:"L"},
+    {text:"你认为好的批评应该是：",left:"一针见血",right:"温和中肯",direction:"L"},
+    {text:"别人批评你时，你更在意：",left:"说得对不对",right:"态度好不好",direction:"L"},
     // 价值观
-    {text:"你更看重：",left:"公平公正",right:"人情世故"},
-    {text:"面对规则和人情：",left:"遵守规则",right:"照顾人情"},
-    {text:"你觉得更应该：",left:"公正无私",right:"情理兼顾"},
-    {text:"评判一件事：",left:"看对错",right:"看立场"},
-    {text:"你认为好的领导应该：",left:"公正严明",right:"体恤下属"},
+    {text:"你更看重：",left:"公平公正",right:"人情世故",direction:"L"},
+    {text:"面对规则和人情：",left:"遵守规则",right:"照顾人情",direction:"L"},
+    {text:"你觉得更应该：",left:"公正无私",right:"情理兼顾",direction:"L"},
+    {text:"评判一件事：",left:"看对错",right:"看立场",direction:"L"},
+    {text:"你认为好的领导应该：",left:"公正严明",right:"体恤下属",direction:"L"},
     // 冲突处理
-    {text:"面对冲突，你更倾向：",left:"讲道理",right:"顾感情"},
-    {text:"和朋友有分歧时：",left:"据理力争",right:"退一步海阔天空"},
-    {text:"争吵后，你会：",left:"分析谁对谁错",right:"想怎么和解"},
-    {text:"处理分歧，你更看重：",left:"解决问题",right:"维护关系"},
-    {text:"别人和你观点不同时：",left:"讨论清楚",right:"求同存异"},
+    {text:"面对冲突，你更倾向：",left:"讲道理",right:"顾感情",direction:"L"},
+    {text:"和朋友有分歧时：",left:"据理力争",right:"退一步海阔天空",direction:"L"},
+    {text:"争吵后，你会：",left:"分析谁对谁错",right:"想怎么和解",direction:"L"},
+    {text:"处理分歧，你更看重：",left:"解决问题",right:"维护关系",direction:"L"},
+    {text:"别人和你观点不同时：",left:"讨论清楚",right:"求同存异",direction:"L"},
     // 成功因素
-    {text:"你认为成功更多来自：",left:"能力实力",right:"人际关系"},
-    {text:"你觉得更重要：",left:"专业能力",right:"人际情商"},
-    {text:"工作中，你更看重：",left:"业绩成果",right:"团队氛围"},
-    {text:"评价一个人成功：",left:"看成就",right:"看幸福感"},
-    {text:"你认为成功需要：",left:"硬实力",right:"软实力"},
+    {text:"你认为成功更多来自：",left:"能力实力",right:"人际关系",direction:"L"},
+    {text:"你觉得更重要：",left:"专业能力",right:"人际情商",direction:"L"},
+    {text:"工作中，你更看重：",left:"业绩成果",right:"团队氛围",direction:"L"},
+    {text:"评价一个人成功：",left:"看成就",right:"看幸福感",direction:"L"},
+    {text:"你认为成功需要：",left:"硬实力",right:"软实力",direction:"L"},
     // 难以接受
-    {text:"你更难接受：",left:"逻辑混乱",right:"冷漠无情"},
-    {text:"什么更让你不舒服：",left:"不公平",right:"不友善"},
-    {text:"你更讨厌：",left:"不讲道理",right:"没有同理心"},
-    {text:"你觉得更糟的是：",left:"不聪明",right:"不善良"},
-    {text:"你更不能忍受：",left:"愚蠢",right:"冷漠"},
+    {text:"你更难接受：",left:"逻辑混乱",right:"冷漠无情",direction:"L"},
+    {text:"什么更让你不舒服：",left:"不公平",right:"不友善",direction:"L"},
+    {text:"你更讨厌：",left:"不讲道理",right:"没有同理心",direction:"L"},
+    {text:"你觉得更糟的是：",left:"不聪明",right:"不善良",direction:"L"},
+    {text:"你更不能忍受：",left:"愚蠢",right:"冷漠",direction:"L"},
     // 团队价值
-    {text:"团队中，你更看重：",left:"效率结果",right:"氛围和谐"},
-    {text:"工作环境对你来说：",left:"效率第一",right:"氛围重要"},
-    {text:"团队协作时：",left:"目标导向",right:"关系导向"},
-    {text:"你认为团队最重要的是：",left:"把事做好",right:"相处融洽"},
-    {text:"领导风格上，你偏好：",left:"雷厉风行",right:"温和包容"},
+    {text:"团队中，你更看重：",left:"效率结果",right:"氛围和谐",direction:"L"},
+    {text:"工作环境对你来说：",left:"效率第一",right:"氛围重要",direction:"L"},
+    {text:"团队协作时：",left:"目标导向",right:"关系导向",direction:"L"},
+    {text:"你认为团队最重要的是：",left:"把事做好",right:"相处融洽",direction:"L"},
+    {text:"领导风格上，你偏好：",left:"雷厉风行",right:"温和包容",direction:"L"},
     // 他人评价
-    {text:"你更常被说：",left:"太直",right:"太感性"},
-    {text:"别人觉得你：",left:"有点冷",right:"有点软"},
-    {text:"朋友对你的评价是：",left:"理智",right:"感性"},
-    {text:"你给人的印象是：",left:"头脑清醒",right:"心地善良"},
-    {text:"你觉得哪种说法更像你：",left:"铁面无私",right:"心软"},
+    {text:"你更常被说：",left:"太直",right:"太感性",direction:"L"},
+    {text:"别人觉得你：",left:"有点冷",right:"有点软",direction:"L"},
+    {text:"朋友对你的评价是：",left:"理智",right:"感性",direction:"L"},
+    {text:"你给人的印象是：",left:"头脑清醒",right:"心地善良",direction:"L"},
+    {text:"你觉得哪种说法更像你：",left:"铁面无私",right:"心软",direction:"L"},
   ],
   
   // J/P 维度 - 42题
   JP: [
     // 生活节奏
-    {text:"你更喜欢的生活节奏：",left:"有计划有条理",right:"灵活随性"},
-    {text:"日常生活，你更倾向于：",left:"按计划进行",right:"看心情来"},
-    {text:"你觉得生活应该：",left:"有规律",right:"自由自在"},
-    {text:"对于日程安排：",left:"喜欢提前规划",right:"顺其自然"},
-    {text:"你的生活态度是：",left:"规划未来",right:"活在当下"},
+    {text:"你更喜欢的生活节奏：",left:"有计划有条理",right:"灵活随性",direction:"L"},
+    {text:"日常生活，你更倾向于：",left:"按计划进行",right:"看心情来",direction:"L"},
+    {text:"你觉得生活应该：",left:"有规律",right:"自由自在",direction:"L"},
+    {text:"对于日程安排：",left:"喜欢提前规划",right:"顺其自然",direction:"L"},
+    {text:"你的生活态度是：",left:"规划未来",right:"活在当下",direction:"L"},
     // 旅行准备
-    {text:"旅行前，你会：",left:"详细规划",right:"说走就走"},
-    {text:"安排旅行时：",left:"提前订好一切",right:"边走边看"},
-    {text:"出去旅游，你更倾向：",left:"做好攻略",right:"随心所欲"},
-    {text:"旅行计划对你来说：",left:"必须的",right:"可有可无"},
-    {text:"假期安排，你会：",left:"提前想好",right:"到时候再说"},
+    {text:"旅行前，你会：",left:"详细规划",right:"说走就走",direction:"L"},
+    {text:"安排旅行时：",left:"提前订好一切",right:"边走边看",direction:"L"},
+    {text:"出去旅游，你更倾向：",left:"做好攻略",right:"随心所欲",direction:"L"},
+    {text:"旅行计划对你来说：",left:"必须的",right:"可有可无",direction:"L"},
+    {text:"假期安排，你会：",left:"提前想好",right:"到时候再说",direction:"L"},
     // 计划执行
-    {text:"你更享受：",left:"按计划完成",right:"即兴发挥"},
-    {text:"有计划的时候，你会：",left:"严格执行",right:"灵活调整"},
-    {text:"对待任务：",left:"尽早完成",right:"临期再做"},
-    {text:"有事情要做时：",left:"马上开始",right:"看心情"},
-    {text:"你觉得计划的作用是：",left:"指导行动",right:"参考一下"},
+    {text:"你更享受：",left:"按计划完成",right:"即兴发挥",direction:"L"},
+    {text:"有计划的时候，你会：",left:"严格执行",right:"灵活调整",direction:"L"},
+    {text:"对待任务：",left:"尽早完成",right:"临期再做",direction:"L"},
+    {text:"有事情要做时：",left:"马上开始",right:"看心情",direction:"L"},
+    {text:"你觉得计划的作用是：",left:"指导行动",right:"参考一下",direction:"L"},
     // 应变能力
-    {text:"面对突发情况，你：",left:"有备选方案",right:"随机应变"},
-    {text:"计划被打乱时：",left:"有点焦虑",right:"无所谓"},
-    {text:"临时改变安排：",left:"不太喜欢",right:"觉得有趣"},
-    {text:"意外发生时，你的状态是：",left:"想找回秩序",right:"顺其自然"},
-    {text:"你对变化的态度是：",left:"不太喜欢",right:"欣然接受"},
+    {text:"面对突发情况，你：",left:"有备选方案",right:"随机应变",direction:"L"},
+    {text:"计划被打乱时：",left:"有点焦虑",right:"无所谓",direction:"L"},
+    {text:"临时改变安排：",left:"不太喜欢",right:"觉得有趣",direction:"L"},
+    {text:"意外发生时，你的状态是：",left:"想找回秩序",right:"顺其自然",direction:"L"},
+    {text:"你对变化的态度是：",left:"不太喜欢",right:"欣然接受",direction:"L"},
     // 整理习惯
-    {text:"你的房间通常是：",left:"整齐有序",right:"随性自然"},
-    {text:"对于物品整理：",left:"定期整理",right:"想起来再说"},
-    {text:"你的书桌/工作台：",left:"很整洁",right:"有点乱"},
-    {text:"整理东西对你来说：",left:"很必要",right:"不着急"},
-    {text:"你的收纳习惯是：",left:"物归原处",right:"随手放"},
+    {text:"你的房间通常是：",left:"整齐有序",right:"随性自然",direction:"L"},
+    {text:"对于物品整理：",left:"定期整理",right:"想起来再说",direction:"L"},
+    {text:"你的书桌/工作台：",left:"很整洁",right:"有点乱",direction:"L"},
+    {text:"整理东西对你来说：",left:"很必要",right:"不着急",direction:"L"},
+    {text:"你的收纳习惯是：",left:"物归原处",right:"随手放",direction:"L"},
     // 时间观念
-    {text:"截止日期对你：",left:"必须提前完成",right:"临近才有动力"},
-    {text:"对于deadline：",left:"提前赶完",right:"最后一刻冲刺"},
-    {text:"有任务要完成：",left:"尽早搞定",right:"拖一拖再说"},
-    {text:"你完成任务的方式：",left:"稳步推进",right:"突击完成"},
-    {text:"你更像是：",left:"早起的鸟儿",right:"夜猫子"},
+    {text:"截止日期对你：",left:"必须提前完成",right:"临近才有动力",direction:"L"},
+    {text:"对于deadline：",left:"提前赶完",right:"最后一刻冲刺",direction:"L"},
+    {text:"有任务要完成：",left:"尽早搞定",right:"拖一拖再说",direction:"L"},
+    {text:"你完成任务的方式：",left:"稳步推进",right:"突击完成",direction:"L"},
+    {text:"你更像是：",left:"早起的鸟儿",right:"夜猫子",direction:"L"},
     // 决策方式
-    {text:"你更倾向于：",left:"先决定再行动",right:"边做边调整"},
-    {text:"做选择时：",left:"想清楚再动",right:"试试再说"},
-    {text:"面对不确定性：",left:"想消除它",right:"享受它"},
-    {text:"你觉得决定：",left:"要慎重",right:"可以改变"},
-    {text:"重要决定：",left:"深思熟虑",right:"相信直觉"},
+    {text:"你更倾向于：",left:"先决定再行动",right:"边做边调整",direction:"L"},
+    {text:"做选择时：",left:"想清楚再动",right:"试试再说",direction:"L"},
+    {text:"面对不确定性：",left:"想消除它",right:"享受它",direction:"L"},
+    {text:"你觉得决定：",left:"要慎重",right:"可以改变",direction:"L"},
+    {text:"重要决定：",left:"深思熟虑",right:"相信直觉",direction:"L"},
     // 工作偏好
-    {text:"工作中，你更喜欢：",left:"明确的任务",right:"开放的空间"},
-    {text:"对于工作安排：",left:"喜欢确定性",right:"喜欢灵活性"},
-    {text:"你更喜欢的工作方式：",left:"有章可循",right:"自由发挥"},
-    {text:"工作中你的风格：",left:"按部就班",right:"见招拆招"},
-    {text:"对于工作流程：",left:"遵守它",right:"改进它"},
+    {text:"工作中，你更喜欢：",left:"明确的任务",right:"开放的空间",direction:"L"},
+    {text:"对于工作安排：",left:"喜欢确定性",right:"喜欢灵活性",direction:"L"},
+    {text:"你更喜欢的工作方式：",left:"有章可循",right:"自由发挥",direction:"L"},
+    {text:"工作中你的风格：",left:"按部就班",right:"见招拆招",direction:"L"},
+    {text:"对于工作流程：",left:"遵守它",right:"改进它",direction:"L"},
     // 周末安排
-    {text:"周末计划，你通常：",left:"提前安排好",right:"看心情决定"},
-    {text:"周末之前：",left:"已经想好做什么",right:"到时候再说"},
-    {text:"空闲时间：",left:"会规划好",right:"随性度过"},
-    {text:"对于休息日：",left:"有安排",right:"随缘"},
-    {text:"你的周末通常是：",left:"充实的",right:"放松的"},
+    {text:"周末计划，你通常：",left:"提前安排好",right:"看心情决定",direction:"L"},
+    {text:"周末之前：",left:"已经想好做什么",right:"到时候再说",direction:"L"},
+    {text:"空闲时间：",left:"会规划好",right:"随性度过",direction:"L"},
+    {text:"对于休息日：",left:"有安排",right:"随缘",direction:"L"},
+    {text:"你的周末通常是：",left:"充实的",right:"放松的",direction:"L"},
     // 规则偏好
-    {text:"你更难以忍受：",left:"计划被打乱",right:"太多条条框框"},
-    {text:"对于规则：",left:"遵守它",right:"质疑它"},
-    {text:"你更喜欢：",left:"有章可循",right:"自由自在"},
-    {text:"面对束缚：",left:"可以接受",right:"感到不适"},
-    {text:"你觉得规矩是：",left:"必要的",right:"可以打破的"},
+    {text:"你更难以忍受：",left:"计划被打乱",right:"太多条条框框",direction:"L"},
+    {text:"对于规则：",left:"遵守它",right:"质疑它",direction:"L"},
+    {text:"你更喜欢：",left:"有章可循",right:"自由自在",direction:"L"},
+    {text:"面对束缚：",left:"可以接受",right:"感到不适",direction:"L"},
+    {text:"你觉得规矩是：",left:"必要的",right:"可以打破的",direction:"L"},
     // 待办习惯
-    {text:"待办事项，你：",left:"列清单逐一完成",right:"记在脑子里"},
-    {text:"你的记事方式：",left:"写下来",right:"靠记忆"},
-    {text:"对于日程：",left:"用日历记录",right:"大概记得"},
-    {text:"你需要提醒自己：",left:"设置提醒",right:"自然记得"},
-    {text:"你管理任务的方式：",left:"工具辅助",right:"凭感觉"},
+    {text:"待办事项，你：",left:"列清单逐一完成",right:"记在脑子里",direction:"L"},
+    {text:"你的记事方式：",left:"写下来",right:"靠记忆",direction:"L"},
+    {text:"对于日程：",left:"用日历记录",right:"大概记得",direction:"L"},
+    {text:"你需要提醒自己：",left:"设置提醒",right:"自然记得",direction:"L"},
+    {text:"你管理任务的方式：",left:"工具辅助",right:"凭感觉",direction:"L"},
     // 他人评价
-    {text:"别人对你的评价：",left:"靠谱有规划",right:"灵活有创意"},
-    {text:"朋友觉得你是：",left:"靠谱的",right:"有趣的"},
-    {text:"你给人的印象：",left:"稳重",right:"随性"},
-    {text:"在别人眼里，你是：",left:"有计划的人",right:"随遇而安的人"},
-    {text:"你觉得别人怎么看你：",left:"可靠",right:"有趣"},
+    {text:"别人对你的评价：",left:"靠谱有规划",right:"灵活有创意",direction:"L"},
+    {text:"朋友觉得你是：",left:"靠谱的",right:"有趣的",direction:"L"},
+    {text:"你给人的印象：",left:"稳重",right:"随性",direction:"L"},
+    {text:"在别人眼里，你是：",left:"有计划的人",right:"随遇而安的人",direction:"L"},
+    {text:"你觉得别人怎么看你：",left:"可靠",right:"有趣",direction:"L"},
   ]
 };
 
@@ -1713,14 +1715,15 @@ if (savedName) {
   userName = savedName;
 }
 let currentQ = 0;
-let answers = [[],[],[],[]];
-let dimScores = [0,0,0,0];
-let dimCounts = [0,0,0,0];
 let selectedVal = null;
 let currentType = '';
 let currentData = null;
 let QUESTIONS = [];
 let QUESTIONS_PER_DIM = 10; // 每维度抽10题，共40题
+
+// ★★★ 修复后的评分系统 ★★★
+// 四维独立计分：[E得分, I得分, S得分, N得分, T得分, F得分, J得分, P得分]
+let letterScores = [0, 0, 0, 0, 0, 0, 0, 0];
 
 // ═══════════════════════════════════════════════════════════
 // Stars Animation
@@ -1834,12 +1837,11 @@ function startQuiz(){
 
 function restart(){
   currentQ = 0;
-  answers = [[],[],[],[]];
-  dimScores = [0,0,0,0];
-  dimCounts = [0,0,0,0];
+  letterScores = [0, 0, 0, 0, 0, 0, 0, 0];
   userName = '';
   QUESTIONS = [];
   document.getElementById('nameInput').value = '';
+  localStorage.removeItem('mbti_username');
   show('intro');
 }
 
@@ -1878,9 +1880,26 @@ function selectOpt(el, val){
   
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
-  answers[dimIdx].push(val);
-  dimScores[dimIdx] += val;
-  dimCounts[dimIdx]++;  dimCounts[dimIdx]++;
+  
+  // ★★★ 修复后的评分逻辑 ★★★
+  // direction: "L" = 选左加左字母得分（1-5分），选右加右字母得分（5-1分）
+  // 左=该维度第一个字母（E/S/T/J），右=第二个字母（I/N/F/P）
+  // 维度索引: 0=E/I, 1=S/N, 2=T/F, 3=J/P
+  const LEFT_LETTER  = [0, 2, 4, 6]; // E, S, T, J → letterScores indices
+  const RIGHT_LETTER = [1, 3, 5, 7]; // I, N, F, P
+  
+  const li = LEFT_LETTER[dimIdx];
+  const ri = RIGHT_LETTER[dimIdx];
+  
+  if (q.direction === 'L') {
+    // 左选项代表第一个字母（E/S/T/J），右选项代表第二个字母（I/N/F/P）
+    letterScores[li] += val;         // 选左 → 该字母得 val 分
+    letterScores[ri] += (6 - val);   // 选右 → 对方字母得 6-val 分（1→5, 5→1）
+  } else {
+    // 右选项代表第一个字母，左选项代表第二个字母（逻辑反转）
+    letterScores[ri] += val;
+    letterScores[li] += (6 - val);
+  }
   
   setTimeout(() => {
     currentQ++;
@@ -1905,12 +1924,55 @@ function showResult() {
   
   show('result');
   
-  // 计算 MBTI 类型
+  // ★★★ 修复后的类型判定逻辑 ★★★
+  // 四维独立比较：letterScores = [E得分, I得分, S得分, N得分, T得分, F得分, J得分, P得分]
+  // 对比规则：得分高者胜出；平局时 Math.random() 决定
   let type = '';
-  type += dimScores[0] > 0 ? 'E' : 'I';
-  type += dimScores[1] > 0 ? 'S' : 'N';
-  type += dimScores[2] > 0 ? 'T' : 'F';
-  type += dimScores[3] > 0 ? 'J' : 'P';
+  
+  // E vs I
+  if (letterScores[0] > letterScores[1]) {
+    type += 'E';
+  } else if (letterScores[0] < letterScores[1]) {
+    type += 'I';
+  } else {
+    // 平局时随机
+    type += Math.random() < 0.5 ? 'E' : 'I';
+  }
+  
+  // S vs N
+  if (letterScores[2] > letterScores[3]) {
+    type += 'S';
+  } else if (letterScores[2] < letterScores[3]) {
+    type += 'N';
+  } else {
+    type += Math.random() < 0.5 ? 'S' : 'N';
+  }
+  
+  // T vs F
+  if (letterScores[4] > letterScores[5]) {
+    type += 'T';
+  } else if (letterScores[4] < letterScores[5]) {
+    type += 'F';
+  } else {
+    type += Math.random() < 0.5 ? 'T' : 'F';
+  }
+  
+  // J vs P
+  if (letterScores[6] > letterScores[7]) {
+    type += 'J';
+  } else if (letterScores[6] < letterScores[7]) {
+    type += 'P';
+  } else {
+    type += Math.random() < 0.5 ? 'J' : 'P';
+  }
+  
+  // Debug 输出，方便测试验证
+  console.log('=== 评分结果 ===');
+  console.log(`E=${letterScores[0]} vs I=${letterScores[1]} → ${type[0]}`);
+  console.log(`S=${letterScores[2]} vs N=${letterScores[3]} → ${type[1]}`);
+  console.log(`T=${letterScores[4]} vs F=${letterScores[5]} → ${type[2]}`);
+  console.log(`J=${letterScores[6]} vs P=${letterScores[7]} → ${type[3]}`);
+  console.log(`最终类型: ${type}`);
   
   currentType = type;
   currentData = TYPES[type];
@@ -1923,7 +1985,7 @@ function showResult() {
   // 更新核心人格星球
   document.getElementById('planetType').textContent = type;
   document.getElementById('planetName').textContent = currentData.name;
-  document.getElementById('planetSub').textContent = currentData.desc;
+  document.getElementById('planetSub').textContent = currentData.sub;
   
   // 更新特质星点
   const traitsEl = document.getElementById('traitStars');
@@ -1934,7 +1996,7 @@ function showResult() {
   const matchData = TYPES[matchType];
   document.getElementById('companionType').textContent = matchType;
   document.getElementById('companionName').textContent = `${matchType} · ${matchData.name}`;
-  document.getElementById('companionDesc').textContent = currentData.matchDesc;
+  document.getElementById('companionDesc').textContent = currentData.bestMatchDesc;
   
   // 更新专属书信
   document.getElementById('letterHeader').textContent = `致 ${displayName}：`;
@@ -1957,12 +2019,11 @@ function showResult() {
 
 function restart() {
   currentQ = 0;
-  answers = [[], [], [], []];
-  dimScores = [0, 0, 0, 0];
-  dimCounts = [0, 0, 0, 0];
+  letterScores = [0, 0, 0, 0, 0, 0, 0, 0];
   userName = '';
   QUESTIONS = [];
   document.getElementById('nameInput').value = '';
+  localStorage.removeItem('mbti_username');
   show('intro');
 }
 
@@ -2173,12 +2234,12 @@ function shareMoment() {
   ctx.arc(canvas.width/2, yOffset, 200, 0, Math.PI * 2);
   ctx.fill();
   
-  // 类型代码
+  // MBTI 类型代码（4字母）
   ctx.font = 'bold 140px sans-serif';
   ctx.fillStyle = '#fff';
   ctx.shadowColor = 'rgba(167,139,250,1)';
   ctx.shadowBlur = 40;
-  ctx.fillText(currentData.name, canvas.width / 2, yOffset + 50);
+  ctx.fillText(currentType, canvas.width / 2, yOffset + 50);
   
   // 类型名称
   yOffset += 130;
@@ -2186,16 +2247,7 @@ function shareMoment() {
   ctx.fillStyle = 'rgba(212,175,55,0.9)';
   ctx.shadowColor = 'rgba(212,175,55,0.5)';
   ctx.shadowBlur = 15;
-  ctx.fillText(currentData.title, canvas.width / 2, yOffset);
-  
-  // ═══════════════════════════════════════════════
-  // 大型 emoji
-  // ═══════════════════════════════════════════════
-  
-  yOffset += 150;
-  ctx.font = '200px sans-serif';
-  ctx.shadowBlur = 0;
-  ctx.fillText(currentData.emoji, canvas.width / 2, yOffset);
+  ctx.fillText(currentData.name, canvas.width / 2, yOffset);
   
   // ═══════════════════════════════════════════════
   // 宇宙编码
