@@ -1969,6 +1969,7 @@
     <div class="share-actions">
       <div class="share-row">
         <button class="share-btn gold" onclick="shareMoment()">✨ 生成星辰海报</button>
+        <button class="share-btn" onclick="shareResultPage()">🔗 分享结果页</button>
       </div>
       <div class="result-actions">
         <button class="free-btn" onclick="restart()">重新测试</button>
@@ -2552,6 +2553,66 @@ function getShortSummary(mbtiType, tarot, name) {
   return `${displayName}身上的「${data.name}」气质很明显，你擅长用自己的方式处理世界。今天抽到「${tarot.name}」，说明此刻最重要的不是证明自己，而是顺着真正有回应的方向往前走。`;
 }
 
+function findTarotByName(name) {
+  if (!name) return null;
+  const entry = Object.entries(TAROT_MAP).find(([, tarot]) => tarot.name === name);
+  return entry ? { ...entry[1], type: entry[0] } : null;
+}
+
+function buildShareUrl() {
+  if (!currentType || !currentData) return '';
+  const tarot = selectedTarot || TAROT_MAP[currentType];
+  const params = new URLSearchParams({
+    share: '1',
+    name: userName || '旅人',
+    type: currentType,
+    tarot: tarot.name
+  });
+  return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+}
+
+async function copyText(text, successMessage) {
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+    } else {
+      const input = document.createElement('textarea');
+      input.value = text;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+    }
+    alert(successMessage);
+  } catch (error) {
+    alert(text);
+  }
+}
+
+function applySharedResult({ name, type, tarotName }) {
+  if (!TYPES[type]) return false;
+  const tarot = findTarotByName(tarotName) || TAROT_MAP[type];
+  userName = name || '旅人';
+  currentType = type;
+  currentData = TYPES[type];
+  selectedTarot = tarot;
+  showResult();
+  return true;
+}
+
+function initSharedResultFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('share') !== '1') return;
+  const ok = applySharedResult({
+    name: params.get('name'),
+    type: params.get('type'),
+    tarotName: params.get('tarot')
+  });
+  if (!ok) {
+    show('intro');
+  }
+}
+
 // ═══════════════════════════════════════════════════════════
 // State
 // ═══════════════════════════════════════════════════════════
@@ -3040,6 +3101,32 @@ function showResult() {
   window.currentDisplayName = displayName;
 }
 
+async function shareResultPage() {
+  const url = buildShareUrl();
+  if (!url) {
+    alert('请先完成测试再分享结果页');
+    return;
+  }
+
+  const tarot = selectedTarot || TAROT_MAP[currentType];
+  const shareData = {
+    title: `${currentType} · ${currentData.name} 的星辰人格结果`,
+    text: `${userName || '旅人'} 抽中了「${tarot.name}」，点开直接看TA的结果页`,
+    url
+  };
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData);
+      return;
+    }
+  } catch (error) {
+    // 用户取消分享时回退为复制链接
+  }
+
+  await copyText(url, '结果页链接已复制，发给朋友后，对方会直接打开你的结果页');
+}
+
 function shareMoment() {
   if (!currentData || !currentType) {
     alert('请先完成测试再生成海报');
@@ -3402,6 +3489,8 @@ function closePoster() {
   preview.style.display = 'none';
   document.body.style.overflow = '';
 }
+
+initSharedResultFromUrl();
 </script>
 
 <!-- 海报生成用的隐藏 Canvas -->
