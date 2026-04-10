@@ -878,6 +878,16 @@
     letter-spacing: .2em;
     margin-bottom: 10px;
   }
+
+  .fortune-oracle {
+    font-size: .76rem;
+    line-height: 1.7;
+    color: rgba(240,216,117,.86);
+    text-align: center;
+    padding: 0 4px 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(212,175,55,.08);
+  }
   
   .fortune-card {
     width: 100%;
@@ -946,44 +956,245 @@
   }
 
   /* ═════════════════════
+     TAROT DRAW SCREEN
+  ═════════════════════ */
+  .tarot-draw-screen {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+    padding-top: 28px;
+  }
+
+  .tarot-draw-head {
+    max-width: 360px;
+  }
+
+  .tarot-draw-kicker {
+    font-size: .72rem;
+    color: rgba(167,139,250,.8);
+    letter-spacing: .32em;
+    margin-bottom: 10px;
+  }
+
+  .tarot-draw-title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    color: var(--gold-light);
+    margin-bottom: 10px;
+    text-shadow: 0 0 24px rgba(212,175,55,.25);
+  }
+
+  .tarot-draw-desc {
+    font-size: .82rem;
+    color: var(--text-dim);
+    line-height: 1.75;
+  }
+
+  .tarot-choice-grid {
+    width: 100%;
+    max-width: 390px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    perspective: 1200px;
+  }
+
+  .tarot-choice {
+    position: relative;
+    height: 220px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    perspective: 1000px;
+  }
+
+  .tarot-choice-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform .8s cubic-bezier(.22,.9,.28,1);
+  }
+
+  .tarot-choice.flipped .tarot-choice-inner {
+    transform: rotateY(180deg);
+  }
+
+  .tarot-choice-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden;
+  }
+
+  .tarot-choice-back {
+    border: 1px solid rgba(212,175,55,.28);
+    background:
+      radial-gradient(circle at 50% 35%, rgba(212,175,55,.18), transparent 35%),
+      linear-gradient(160deg, rgba(24,18,46,.96), rgba(11,10,26,.98));
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.04),
+      0 10px 30px rgba(0,0,0,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tarot-choice-back::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 14px;
+    border: 1px solid rgba(212,175,55,.15);
+  }
+
+  .tarot-back-pattern {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: rgba(240,216,117,.9);
+  }
+
+  .tarot-back-star {
+    font-size: 1.8rem;
+    text-shadow: 0 0 16px rgba(212,175,55,.35);
+  }
+
+  .tarot-back-ring {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(167,139,250,.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(167,139,250,.75);
+    font-size: .75rem;
+    letter-spacing: .18em;
+  }
+
+  .tarot-choice-front {
+    transform: rotateY(180deg);
+    border: 1px solid rgba(212,175,55,.35);
+    background:
+      radial-gradient(circle at 50% 25%, rgba(212,175,55,.18), transparent 34%),
+      linear-gradient(180deg, rgba(29,21,50,.98), rgba(12,11,27,.98));
+    box-shadow:
+      0 14px 40px rgba(0,0,0,.4),
+      inset 0 0 18px rgba(139,92,246,.08);
+    padding: 16px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .tarot-choice.selected {
+    transform: translateY(-8px) scale(1.03);
+  }
+
+  .tarot-choice.locked {
+    cursor: default;
+  }
+
+  .tarot-choice.dimmed {
+    opacity: .45;
+    transform: scale(.96);
+  }
+
+  .tarot-choice-num {
+    font-size: .62rem;
+    color: rgba(212,175,55,.58);
+    letter-spacing: .18em;
+  }
+
+  .tarot-choice-symbol {
+    font-size: 2.2rem;
+    line-height: 1;
+  }
+
+  .tarot-choice-name {
+    font-size: .92rem;
+    color: rgba(240,216,117,.95);
+    font-weight: 700;
+    letter-spacing: .08em;
+  }
+
+  .tarot-choice-meaning {
+    font-size: .66rem;
+    color: rgba(220,210,240,.7);
+    line-height: 1.5;
+  }
+
+  .tarot-draw-tip {
+    min-height: 1.4em;
+    font-size: .76rem;
+    color: rgba(200,180,220,.72);
+    letter-spacing: .08em;
+  }
+
+  @media (max-width: 380px) {
+    .tarot-choice-grid {
+      gap: 10px;
+    }
+    .tarot-choice {
+      height: 196px;
+    }
+    .tarot-choice-name {
+      font-size: .82rem;
+    }
+  }
+
+  /* ═════════════════════
      RESULT SCREEN - 星空感
   ═════════════════════ */
   .result {
     align-items:center; text-align:center;
-    padding-top:30px; gap:0;
+    padding-top:22px; gap:0;
     position:relative;
+  }
+
+  .result > * {
+    width: 100%;
+    max-width: 380px;
   }
 
   /* 名字问候 - 金黄渐变高亮 */
   .cosmic-greeting {
     text-align: center;
-    margin-bottom: 32px;
-    padding: 24px 20px;
+    margin-bottom: 18px;
+    padding: 14px 16px 6px;
     position: relative;
     opacity: 0;
     animation: fadeInUp .8s ease .2s forwards;
   }
   
   .cosmic-subtitle {
-    font-size: 0.7rem;
+    font-size: 0.64rem;
     color: rgba(167, 139, 250, 0.7);
-    letter-spacing: 0.4em;
-    margin-bottom: 16px;
+    letter-spacing: 0.28em;
+    margin-bottom: 10px;
     font-weight: 300;
     text-shadow: 0 0 20px rgba(167, 139, 250, 0.3);
   }
   
   .cosmic-name {
-    font-size: 1.7rem;
+    font-size: 1.38rem;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.14em;
     background: linear-gradient(135deg, #fff5cc, #FFD700, #fff5cc, #f0d78c);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     filter: drop-shadow(0 0 18px rgba(255,215,0,0.6));
-    margin-bottom: 20px;
+    margin-bottom: 12px;
     animation: name-glow 3s ease-in-out infinite, name-shimmer 4s linear infinite;
   }
   
@@ -1000,8 +1211,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 12px;
   }
   
   .star-dot {
@@ -1014,7 +1225,7 @@
   }
   
   .star-line {
-    width: 60px;
+    width: 42px;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
   }
@@ -1025,9 +1236,9 @@
   }
   
   .cosmic-message {
-    font-size: 0.85rem;
+    font-size: 0.76rem;
     color: rgba(200, 200, 220, 0.8);
-    letter-spacing: 0.2em;
+    letter-spacing: 0.12em;
     font-weight: 300;
     text-shadow: 0 0 20px rgba(200, 200, 220, 0.2);
   }
@@ -1040,12 +1251,13 @@
   /* 核心人格星球 - 发光效果 */
   .planet-core {
     position:relative;
-    margin-bottom:60px;
+    margin-bottom:26px;
   }
   .planet-main {
-    width:140px; height:140px; border-radius:50%;
+    width:110px; height:110px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
-    font-size:3.2rem; font-weight:700; color:var(--gold);
+    margin:0 auto;
+    font-size:2.45rem; font-weight:700; color:var(--gold);
     position:relative; z-index:2;
     animation: planet-float 4s ease-in-out infinite;
     text-shadow: 0 0 30px var(--gold-glow), 0 0 60px rgba(212,175,55,0.3);
@@ -1055,166 +1267,105 @@
     50%{transform:translateY(-8px)}
   }
   .planet-glow {
-    position:absolute; inset:-30px;
+    position:absolute;
     border-radius:50%;
     background: radial-gradient(circle, rgba(212,175,55,.25), rgba(212,175,55,.05) 50%, transparent 70%);
     animation: glow-pulse 3s ease-in-out infinite;
     z-index:1;
+    width:146px; height:146px;
+    left:50%; top:-18px;
+    transform:translateX(-50%);
   }
   @keyframes glow-pulse {
     0%,100%{opacity:.6;transform:scale(1)}
     50%{opacity:1;transform:scale(1.08)}
   }
   .planet-name {
-    font-size:1.4rem; color:var(--gold-light);
-    margin-top:16px; letter-spacing:.15em;
+    font-size:1.15rem; color:var(--gold-light);
+    margin-top:12px; letter-spacing:.12em;
     font-weight:300;
     text-shadow: 0 0 20px rgba(212,175,55,0.4);
   }
   .planet-sub {
-    font-size:.9rem; color:var(--text-dim); margin-top:6px;
+    font-size:.78rem; color:var(--text-dim); margin-top:4px;
     text-shadow: 0 0 15px rgba(245,243,255,0.1);
   }
 
-  /* 特质星点散落 */
+  /* 特质标签 */
   .trait-stars {
-    position:absolute;
-    width:280px; height:280px;
-    top:50%; left:50%;
-    transform:translate(-50%, -50%);
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    margin: 14px auto 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
     pointer-events:none; z-index:3;
   }
   .trait-star {
-    position:absolute;
-    font-size:.8rem; color:var(--gold-light);
+    position:static;
+    font-size:.68rem; color:var(--gold-light);
     opacity:.8;
     white-space:nowrap;
-    animation: twinkle 2s ease-in-out infinite;
-    text-shadow: 0 0 10px rgba(212,175,55,0.6);
-  }
-  .trait-star:nth-child(1) { top:5%; left:15%; animation-delay:0s; }
-  .trait-star:nth-child(2) { top:15%; right:10%; animation-delay:.4s; }
-  .trait-star:nth-child(3) { bottom:20%; left:8%; animation-delay:.8s; }
-  .trait-star:nth-child(4) { bottom:8%; right:15%; animation-delay:1.2s; }
-  @keyframes twinkle {
-    0%,100%{opacity:.5;transform:scale(1)}
-    50%{opacity:1;transform:scale(1.05)}
-  }
-
-  /* 伴星 - 最旺我人格 */
-  .companion-star {
-    margin-top:-30px; margin-bottom:40px;
-    position:relative;
-    opacity:0; animation:fadeInUp .8s ease .6s forwards;
-  }
-  .companion-orbit {
-    width:200px; height:60px;
-    margin:0 auto; position:relative;
-  }
-  .companion-planet {
-    width:70px; height:70px; border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, rgba(212,175,55,.3), rgba(212,175,55,.1));
-    border:1px solid rgba(212,175,55,.4);
-    display:flex; align-items:center; justify-content:center;
-    position:absolute; right:0; top:-5px;
-    animation: orbit-float 5s ease-in-out infinite;
-    box-shadow: 0 0 20px rgba(212,175,55,0.3);
-  }
-  @keyframes orbit-float {
-    0%,100%{transform:translateY(0) rotate(0deg)}
-    50%{transform:translateY(-5px) rotate(3deg)}
-  }
-  .companion-type {
-    font-size:1.3rem; color:var(--gold);
-    text-shadow: 0 0 15px rgba(212,175,55,0.5);
-  }
-  .companion-info {
-    margin-top:12px;
-  }
-  .companion-title {
-    font-size:.75rem; color:var(--text-dim); letter-spacing:.2em;
-    margin-bottom:6px;
-    text-shadow: 0 0 10px rgba(245,243,255,0.1);
-  }
-  .companion-name {
-    font-size:1rem; color:var(--gold-light);
-    text-shadow: 0 0 15px rgba(212,175,55,0.3);
-  }
-  .companion-desc {
-    font-size:.78rem; color:var(--text-dim); margin-top:8px;
-    max-width:260px; line-height:1.6;
-    text-shadow: 0 0 10px rgba(245,243,255,0.1);
-  }
-
-  /* 专属寄语 - 星光阴影 */
-  .soul-message {
-    width:100%; max-width:360px;
-    margin-top:30px;
-    position:relative;
-    opacity:0; animation:fadeInUp .8s ease .8s forwards;
-  }
-  
-  .soul-letter {
-    background: linear-gradient(145deg, rgba(25,25,45,0.7) 0%, rgba(18,18,35,0.8) 50%, rgba(25,25,45,0.7) 100%);
-    border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 20px;
-    padding: 32px 28px;
-    backdrop-filter: blur(15px);
-    box-shadow: 
-      0 8px 32px rgba(0,0,0,0.4),
-      inset 0 1px 0 rgba(255,255,255,0.03);
-  }
-  
-  .letter-header {
-    font-size: 1.2rem;
-    color: #f0d88c;
-    letter-spacing: 0.25em;
-    margin-bottom: 26px;
-    font-weight: 500;
-    text-shadow: 0 0 30px rgba(240,216,140,0.5);
-  }
-  
-  .letter-body {
-    font-size: 0.95rem;
-    line-height: 2.4;
-    color: rgba(235, 235, 245, 0.97);
-    letter-spacing: 0.12em;
-    font-weight: 300;
-    text-align: justify;
-    padding: 0 8px;
-    text-shadow: 0 0 20px rgba(245,243,255,0.15);
-    word-break: break-word;
-    text-indent: 2em;
-  }
-  
-  .letter-footer {
-    margin-top: 24px;
-    text-align: right;
-  }
-  
-  .cosmic-code {
-    font-size: 11px;
-    color: rgba(255, 215, 100, 0.6);
-    letter-spacing: 2px;
-    margin-bottom: 12px;
-    font-family: 'Courier New', monospace;
-  }
-  
-  .letter-signature {
-    font-size: 0.8rem;
-    color: rgba(167,139,250,0.6);
-    letter-spacing: 0.1em;
-    font-weight: 300;
-    font-style: italic;
-    text-shadow: 0 0 15px rgba(167,139,250,0.2);
+    animation:none;
+    text-shadow:none;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(212,175,55,.16);
   }
 
   /* 分享按钮区 */
   .share-actions {
-    margin-top:40px; width:100%; max-width:320px;
+    margin-top:26px; width:100%; max-width:320px;
     opacity:0; animation:fadeInUp .8s ease 1s forwards;
   }
   .share-row { display:flex; gap:12px; justify-content:center; margin-bottom:16px; }
+
+  .result-summary {
+    width: 100%;
+    max-width: 380px;
+    margin-top: 14px;
+    padding: 18px 16px;
+    background: rgba(18,16,34,.78);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 28px rgba(0,0,0,.25);
+  }
+
+  .result-summary-title {
+    font-size: .72rem;
+    color: rgba(212,175,55,.78);
+    letter-spacing: .22em;
+    margin-bottom: 12px;
+  }
+
+  .result-summary-text {
+    font-size: .8rem;
+    line-height: 1.8;
+    color: rgba(235,235,245,.88);
+    text-align: left;
+  }
+
+  .result-summary-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    justify-content: center;
+  }
+
+  .summary-chip {
+    font-size: .64rem;
+    color: rgba(200,180,220,.82);
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.08);
+    background: rgba(255,255,255,.04);
+    letter-spacing: .06em;
+  }
   
 /* ═══════════════════════════════════════════════════════════
    海报预览弹窗 - 微信友好
@@ -1492,6 +1643,20 @@
     </div>
   </div>
 
+  <!-- TAROT DRAW -->
+  <div class="screen tarot-draw-screen" id="tarotDraw">
+    <div class="tarot-draw-head">
+      <div class="tarot-draw-kicker">✦ 命运抽牌时刻 ✦</div>
+      <div class="tarot-draw-title">请凭直觉选一张牌</div>
+      <div class="tarot-draw-desc">
+        三张牌正在回应你刚刚写下的答案，
+        选中最让你心里一动的那一张，揭开今日的塔罗指引。
+      </div>
+    </div>
+    <div class="tarot-choice-grid" id="tarotChoiceGrid"></div>
+    <div class="tarot-draw-tip" id="tarotDrawTip">轻触其中一张，命运就会翻面。</div>
+  </div>
+
   <!-- RESULT - 星空感 -->
   <div class="screen result" id="result">
     <!-- 宇宙漫游问候 -->
@@ -1543,6 +1708,7 @@
     <div class="fortune-section" id="fortuneSection">
       <div class="fortune-title">✦ 今日星辰指引 ✦</div>
       <div class="fortune-card">
+        <div class="fortune-oracle" id="fortuneOracle">-</div>
         <div class="fortune-stars" id="fortuneStars">★★★★★</div>
         <div class="fortune-row">
           <span class="fortune-label">💼 事业</span>
@@ -1565,29 +1731,12 @@
       </div>
     </div>
 
-    <!-- 伴星 - 最旺我人格 -->
-    <div class="companion-star" id="companionStar">
-      <div class="companion-orbit">
-        <div class="companion-planet">
-          <span class="companion-type" id="companionType">ENTJ</span>
-        </div>
-      </div>
-      <div class="companion-info">
-        <div class="companion-title">✦ 你的光芒，总有TA在悉心守护 ✦</div>
-        <div class="companion-name" id="companionName">ENTJ · 指挥官</div>
-        <div class="companion-desc" id="companionDesc">TA能帮你把理想变为现实，行动力满分</div>
-      </div>
-    </div>
-    
-    <!-- 专属寄语 -->
-    <div class="soul-message">
-      <div class="soul-letter">
-        <div class="letter-header" id="letterHeader">致 远方的星辰：</div>
-        <div class="letter-body" id="soulQuote">你心中有一片柔软的星空...</div>
-        <div class="letter-footer">
-          <div class="cosmic-code" id="cosmicCode">宇宙编码: STAR-XXXX-XXXX</div>
-          <div class="letter-signature" id="soulSignature">—— 宇宙漫游指南</div>
-        </div>
+    <div class="result-summary">
+      <div class="result-summary-title">✦ 今日宇宙批注 ✦</div>
+      <div class="result-summary-text" id="summaryText">你心中有一片柔软的星空...</div>
+      <div class="result-summary-meta">
+        <span class="summary-chip" id="summaryMatch">最佳共鸣 · ENTJ</span>
+        <span class="summary-chip" id="summaryCode">宇宙编码 · STAR-XXXX-XXXX</span>
       </div>
     </div>
     
@@ -2108,6 +2257,25 @@ const TAROT_MAP = {
   ENFP: { num:"XIV", name:"节制",   symbol:"🌈", meaning:"平衡的炼金术，融合即创造" },
 };
 
+const TAROT_ORACLE = {
+  "隐者": "今天别急着向外找答案，真正关键的线索在你自己心里。",
+  "魔术师": "你已经握着开启局面的资源，重要的是先把第一步落下去。",
+  "女祭司": "有些话不用急着说明白，先相信你心里那个安静的判断。",
+  "月亮": "情绪会比平常更敏感，先分清直觉和不安，再决定往哪走。",
+  "皇帝": "秩序会让你更有底气，把边界立住，事情反而更顺。",
+  "教皇": "今天适合回到稳定的方法里，耐心会给你带来安全感。",
+  "正义": "别只看表面的轻重缓急，真正重要的是做那个问心无愧的决定。",
+  "女皇": "柔软不是退让，而是让关系和生活重新长出丰盛感。",
+  "命运之轮": "转机正在靠近，与其死盯计划，不如顺势抓住新变化。",
+  "星星": "别低估你此刻的微光，温柔坚持下去，方向会越来越清晰。",
+  "战车": "今天适合推进、表态、出发，你的行动会比犹豫更有力量。",
+  "太阳": "把自己放到光里，你的坦率和热情会带来很好的回应。",
+  "塔": "旧节奏正在松动，不必怕打破重来，这正是给新机会腾位置。",
+  "愚者": "别急着把一切都想透，带着一点好奇上路，反而更容易遇见答案。",
+  "世界": "很多事正在闭环，你已经比想象中更接近圆满和完成。",
+  "节制": "今天最有力量的不是冲刺，而是把节奏调回刚刚好的状态。"
+};
+
 // ═══════════════════════════════════════════════════════════
 // 今日运势 — 基于塔罗+日期的确定性随机
 // ═══════════════════════════════════════════════════════════
@@ -2135,11 +2303,28 @@ function hashStr(s) {
   return Math.abs(h);
 }
 
-function getDailyFortune(mbtiType) {
+function getDailyFortune(mbtiType, tarotName = '') {
   const today = new Date().toDateString(); // 如 "Fri Apr 10 2026"
-  const seed = mbtiType + '|' + today;
+  const seed = mbtiType + '|' + tarotName + '|' + today;
   const idx = hashStr(seed) % FORTUNE_POOL.length;
-  return FORTUNE_POOL[idx];
+  const base = FORTUNE_POOL[idx];
+  return {
+    ...base,
+    oracle: `「${tarotName}」提醒你：${TAROT_ORACLE[tarotName] || '今天适合放慢半步，听一听内心真正想靠近什么。'}`
+  };
+}
+
+function getTarotChoices(mbtiType) {
+  const entries = Object.entries(TAROT_MAP).map(([type, tarot]) => ({ ...tarot, type }));
+  const selected = { ...TAROT_MAP[mbtiType], type: mbtiType };
+  const others = shuffleArray(entries.filter(item => item.type !== mbtiType)).slice(0, 2);
+  return shuffleArray([selected, ...others]);
+}
+
+function getShortSummary(mbtiType, tarot, name) {
+  const displayName = name || '你';
+  const data = MBTI_DATA[mbtiType];
+  return `${displayName}身上的「${data.name}」气质很明显，你擅长用自己的方式处理世界。今天抽到「${tarot.name}」，说明此刻最重要的不是证明自己，而是顺着真正有回应的方向往前走。`;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -2157,6 +2342,9 @@ let currentType = '';
 let currentData = null;
 let QUESTIONS = [];
 let QUESTIONS_PER_DIM = 10; // 每维度抽10题，共40题
+let tarotChoices = [];
+let selectedTarot = null;
+let tarotLocked = false;
 
 // ★★★ 修复后的评分系统 ★★★
 // 四维独立计分：[E得分, I得分, S得分, N得分, T得分, F得分, J得分, P得分]
@@ -2283,6 +2471,9 @@ function startQuiz(){
   setTimeout(() => {
     clearInterval(dotInterval);
     QUESTIONS = generateRandomQuestions();
+    tarotChoices = [];
+    selectedTarot = null;
+    tarotLocked = false;
     show('quiz');
     loadQuestion();
   }, 1500 + Math.random() * 1000); // 1.5-2.5秒
@@ -2293,13 +2484,16 @@ function restart(){
   letterScores = [0, 0, 0, 0, 0, 0, 0, 0];
   userName = '';
   QUESTIONS = [];
+  tarotChoices = [];
+  selectedTarot = null;
+  tarotLocked = false;
   document.getElementById('nameInput').value = '';
   localStorage.removeItem('mbti_username');
   show('intro');
 }
 
 function loadQuestion(){
-  if(currentQ >= QUESTIONS.length){ showResult(); return; }
+  if(currentQ >= QUESTIONS.length){ showTarotDraw(); return; }
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
   
@@ -2400,12 +2594,12 @@ function selectOpt(el, val){
     if (currentQ < QUESTIONS.length) {
       loadQuestion();
     } else {
-      showResult();
+      showTarotDraw();
     }
   }, 300);
 }
 
-function showResult() {
+function computeResultProfile() {
   // ★★★ 强制从 localStorage 恢复用户名 ★★★
   const storedName = localStorage.getItem('mbti_username');
   if (storedName && storedName.trim()) {
@@ -2415,9 +2609,7 @@ function showResult() {
     userName = '旅人';
     console.log('⚠️ localStorage 为空，使用默认名');
   }
-  
-  show('result');
-  
+
   // ★★★ 修复后的类型判定逻辑 ★★★
   // 四维独立比较：letterScores = [E得分, I得分, S得分, N得分, T得分, F得分, J得分, P得分]
   // 对比规则：得分高者胜出；平局时 Math.random() 决定
@@ -2470,17 +2662,82 @@ function showResult() {
   
   currentType = type;
   currentData = TYPES[type];
-  
+}
+
+function renderTarotDraw() {
+  const grid = document.getElementById('tarotChoiceGrid');
+  grid.innerHTML = tarotChoices.map((tarot, index) => `
+    <button
+      class="tarot-choice"
+      id="tarotChoice${index}"
+      onclick="pickTarotCard(${index})"
+      aria-label="选择${tarot.name}"
+    >
+      <div class="tarot-choice-inner">
+        <div class="tarot-choice-face tarot-choice-back">
+          <div class="tarot-back-pattern">
+            <div class="tarot-back-star">✦</div>
+            <div class="tarot-back-ring">ARC</div>
+            <div class="tarot-back-star">✦</div>
+          </div>
+        </div>
+        <div class="tarot-choice-face tarot-choice-front">
+          <div class="tarot-choice-num">${tarot.num}</div>
+          <div class="tarot-choice-symbol">${tarot.symbol}</div>
+          <div class="tarot-choice-name">${tarot.name}</div>
+          <div class="tarot-choice-meaning">${tarot.meaning}</div>
+        </div>
+      </div>
+    </button>
+  `).join('');
+  document.getElementById('tarotDrawTip').textContent = '轻触其中一张，命运就会翻面。';
+}
+
+function showTarotDraw() {
+  computeResultProfile();
+  tarotChoices = getTarotChoices(currentType);
+  selectedTarot = null;
+  tarotLocked = false;
+  renderTarotDraw();
+  show('tarotDraw');
+}
+
+function pickTarotCard(index) {
+  if (tarotLocked) return;
+  tarotLocked = true;
+  selectedTarot = tarotChoices[index];
+  document.getElementById('tarotDrawTip').textContent = `你抽中了「${selectedTarot.name}」，今日的答案正在显现。`;
+
+  tarotChoices.forEach((_, cardIndex) => {
+    const cardEl = document.getElementById(`tarotChoice${cardIndex}`);
+    if (!cardEl) return;
+    cardEl.classList.add('locked');
+    if (cardIndex === index) {
+      cardEl.classList.add('selected', 'flipped');
+    } else {
+      cardEl.classList.add('dimmed');
+    }
+  });
+
+  setTimeout(() => {
+    showResult();
+  }, 1200);
+}
+
+function showResult() {
+  show('result');
+
   // ★★★ 塔罗牌数据填充 ★★★
-  const tarot = TAROT_MAP[type];
+  const tarot = selectedTarot || TAROT_MAP[currentType];
   document.getElementById('tarotNum').textContent = tarot.num;
   document.getElementById('tarotSymbol').textContent = tarot.symbol;
   document.getElementById('tarotName').textContent = tarot.name;
   document.getElementById('tarotMeaning').textContent = tarot.meaning;
-  document.getElementById('tarotBadge').textContent = type;
+  document.getElementById('tarotBadge').textContent = currentType;
   
   // ★★★ 今日运势 ★★★
-  const fortune = getDailyFortune(type);
+  const fortune = getDailyFortune(currentType, tarot.name);
+  document.getElementById('fortuneOracle').textContent = fortune.oracle;
   document.getElementById('fortuneStars').textContent = '★'.repeat(fortune.overall) + '☆'.repeat(5 - fortune.overall);
   document.getElementById('fortuneCareer').textContent = fortune.career;
   document.getElementById('fortuneLove').textContent = fortune.love;
@@ -2496,7 +2753,7 @@ function showResult() {
   document.getElementById('cosmicMessage').textContent = '宇宙找到了你的星辰轨迹';
   
   // 更新核心人格星球
-  document.getElementById('planetType').textContent = type;
+  document.getElementById('planetType').textContent = currentType;
   document.getElementById('planetName').textContent = currentData.name;
   document.getElementById('planetSub').textContent = currentData.sub;
   
@@ -2504,40 +2761,18 @@ function showResult() {
   const traitsEl = document.getElementById('traitStars');
   traitsEl.innerHTML = currentData.traits.map(t => `<span class="trait-star">${t}</span>`).join('');
   
-  // 更新伴星（最旺我人格）
+  // 今日简短批注
   const matchType = currentData.bestMatch;
-  const matchData = TYPES[matchType];
-  document.getElementById('companionType').textContent = matchType;
-  document.getElementById('companionName').textContent = `${matchType} · ${matchData.name}`;
-  document.getElementById('companionDesc').textContent = currentData.bestMatchDesc;
-  
-  // 更新专属书信
-  document.getElementById('letterHeader').textContent = `致 ${displayName}：`;
-  
-  // 从动态语录池获取专属寄语
-  const personalizedQuote = getPersonalizedQuote(type, userName);
-  document.getElementById('soulQuote').textContent = personalizedQuote;
+  document.getElementById('summaryText').textContent = getShortSummary(currentType, tarot, userName);
   
   // 生成宇宙编码
-  const cosmicCode = generateCosmicCode(userName, type);
-  document.getElementById('cosmicCode').textContent = `宇宙编码: ${cosmicCode}`;
-  
-  // 落款
-  document.getElementById('soulSignature').textContent = `—— 宇宙漫游指南 赠予 ${displayName}`;
+  const cosmicCode = generateCosmicCode(userName, currentType);
+  document.getElementById('summaryMatch').textContent = `最佳共鸣 · ${matchType}`;
+  document.getElementById('summaryCode').textContent = `宇宙编码 · ${cosmicCode}`;
   
   // 保存供海报使用
   window.currentCosmicCode = cosmicCode;
   window.currentDisplayName = displayName;
-}
-
-function restart() {
-  currentQ = 0;
-  letterScores = [0, 0, 0, 0, 0, 0, 0, 0];
-  userName = '';
-  QUESTIONS = [];
-  document.getElementById('nameInput').value = '';
-  localStorage.removeItem('mbti_username');
-  show('intro');
 }
 
 function shareMoment() {
@@ -2767,7 +3002,7 @@ function shareMoment() {
   // ═══════════════════════════════════════════════
   
   yOffset += 80;
-  const tarot = TAROT_MAP[currentType];
+  const tarot = selectedTarot || TAROT_MAP[currentType];
   
   // 塔罗编号
   ctx.font = '24px sans-serif';
