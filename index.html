@@ -297,6 +297,33 @@
     left: 85%;
     animation-delay: 1s;
   }
+
+  .meteor.slow {
+    width: 180px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.8), rgba(212,175,55,0.55), rgba(255,255,255,0));
+    filter: blur(0.2px);
+    opacity: 0;
+    animation: meteor-drift 18s linear infinite;
+  }
+
+  .meteor.slow:nth-child(1) {
+    top: 12%;
+    left: 82%;
+    animation-delay: 0s;
+  }
+
+  .meteor.slow:nth-child(2) {
+    top: 36%;
+    left: 92%;
+    animation-delay: 6s;
+  }
+
+  .meteor.slow:nth-child(3) {
+    top: 68%;
+    left: 88%;
+    animation-delay: 12s;
+  }
   
   @keyframes meteor-fall {
     0% {
@@ -309,6 +336,27 @@
       transform: rotate(-45deg) translateX(-300px);
     }
     100% { opacity: 0; }
+  }
+
+  @keyframes meteor-drift {
+    0% {
+      opacity: 0;
+      transform: rotate(-32deg) translate3d(0, 0, 0);
+    }
+    8% {
+      opacity: .55;
+    }
+    56% {
+      opacity: .42;
+    }
+    82% {
+      opacity: 0;
+      transform: rotate(-32deg) translate3d(-420px, 220px, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: rotate(-32deg) translate3d(-420px, 220px, 0);
+    }
   }
   
   /* 星云光晕 - 5团 */
@@ -514,6 +562,91 @@
   }
   
   .quiz { padding-top:16px; gap:0; }
+
+  .quiz-top-card {
+    position: relative;
+    padding: 16px 16px 14px;
+    margin-bottom: 14px;
+    border-radius: 20px;
+    background: linear-gradient(160deg, rgba(18,16,38,.84), rgba(10,10,24,.92));
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow:
+      0 12px 30px rgba(0,0,0,.28),
+      inset 0 1px 0 rgba(255,255,255,.04);
+    overflow: hidden;
+    backdrop-filter: blur(14px);
+  }
+
+  .quiz-top-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at top right, rgba(212,175,55,.12), transparent 30%),
+      radial-gradient(circle at left center, rgba(139,92,246,.14), transparent 32%);
+    pointer-events: none;
+  }
+
+  .quiz-top-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quiz-phase {
+    font-size: .68rem;
+    color: rgba(240,216,117,.85);
+    letter-spacing: .22em;
+  }
+
+  .quiz-energy {
+    font-size: .65rem;
+    color: rgba(200,180,220,.74);
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.07);
+  }
+
+  .quiz-focus {
+    margin-top: 14px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quiz-focus-label {
+    font-size: .64rem;
+    color: rgba(167,139,250,.72);
+    letter-spacing: .18em;
+    margin-bottom: 6px;
+  }
+
+  .quiz-focus-text {
+    font-size: .92rem;
+    line-height: 1.7;
+    color: rgba(245,243,255,.92);
+  }
+
+  .quiz-progress-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quiz-progress-chip {
+    font-size: .62rem;
+    color: rgba(220,210,240,.76);
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.06);
+  }
   
   .quiz-header {
     display:flex; align-items:center; justify-content:space-between;
@@ -526,11 +659,55 @@
   .progress-fill { height:100%; background: linear-gradient(90deg, var(--purple), var(--gold)); border-radius:2px; transition: width .5s ease; }
 
   .question-block { flex:1; }
+  .question-shell {
+    position: relative;
+    padding: 18px 16px 20px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(14,12,31,.82), rgba(8,8,20,.92));
+    border: 1px solid rgba(255,255,255,.06);
+    box-shadow: 0 14px 36px rgba(0,0,0,.24);
+    overflow: hidden;
+  }
+  .question-shell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.04), transparent 40%),
+      radial-gradient(circle at bottom right, rgba(79,163,212,.12), transparent 28%);
+    pointer-events: none;
+  }
+  .question-shell.is-transitioning {
+    animation: question-fade .42s ease;
+  }
   .question-text {
     font-size: clamp(1.05rem, 4.5vw, 1.35rem);
     font-weight:600; line-height:1.6; margin-bottom:20px;
     min-height:60px;
     text-shadow: 0 0 20px rgba(245,243,255,0.15);
+  }
+
+  @keyframes question-fade {
+    0% {
+      opacity: .18;
+      transform: translateY(10px) scale(.985);
+      filter: blur(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  .question-mood {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 18px;
+    font-size: .68rem;
+    color: rgba(200,180,220,.72);
+    letter-spacing: .14em;
+    text-align: center;
   }
   /* ═══════════════════════════════════════════════════════════
      竖向选项卡片布局
@@ -570,6 +747,20 @@
     width: 100%;
     max-width: 380px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    animation: options-rise .45s cubic-bezier(.24,.8,.24,1);
+  }
+
+  @keyframes options-rise {
+    0% {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
   
   /* 单张选项卡 */
@@ -709,6 +900,14 @@
     margin-top: 14px;
     opacity: .5;
     letter-spacing: .1em;
+  }
+
+  .quiz-footer-note {
+    margin-top: 16px;
+    font-size: .68rem;
+    color: rgba(200,180,220,.62);
+    text-align: center;
+    letter-spacing: .08em;
   }
 
 
@@ -1566,6 +1765,12 @@
   <div class="screen quiz" id="quiz">
     <!-- 深空背景层 -->
     <div class="deep-space">
+      <div class="meteor-layer">
+        <div class="meteor slow"></div>
+        <div class="meteor slow"></div>
+        <div class="meteor slow"></div>
+      </div>
+
       <!-- 星尘粒子层 -->
       <div class="stardust-layer">
         <div class="stardust"></div>
@@ -1630,6 +1835,22 @@
       <span class="guide-text">倾听内心的声音</span>
       <span class="guide-icon">✧</span>
     </div>
+
+    <div class="quiz-top-card">
+      <div class="quiz-top-meta">
+        <span class="quiz-phase" id="quizPhase">✦ 人格星图解读中</span>
+        <span class="quiz-energy" id="quizEnergy">心流加载 3%</span>
+      </div>
+      <div class="quiz-focus">
+        <div class="quiz-focus-label">当前正在靠近</div>
+        <div class="quiz-focus-text" id="quizFocusText">你的真实倾向，往往藏在第一反应里。</div>
+      </div>
+      <div class="quiz-progress-meta">
+        <span class="quiz-progress-chip" id="quizPercentChip">探索进度 3%</span>
+        <span class="quiz-progress-chip" id="quizRemainChip">还剩 39 题</span>
+        <span class="quiz-progress-chip" id="quizRhythmChip">建议凭直觉作答</span>
+      </div>
+    </div>
     
     <div class="quiz-header">
       <span class="quiz-dim" id="dimLabel">E / I 维度</span>
@@ -1638,8 +1859,12 @@
     <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:1%"></div></div>
     <div class="dim-tags" id="dimTags"></div>
     <div class="question-block">
-      <div class="question-text" id="qText">加载中…</div>
-      <div id="optionCards"></div>
+      <div class="question-shell">
+        <div class="question-mood" id="questionMood">此刻不需要分析太多，选最像你的那个瞬间。</div>
+        <div class="question-text" id="qText">加载中…</div>
+        <div id="optionCards"></div>
+      </div>
+      <div class="quiz-footer-note" id="quizFooterNote">越自然的回答，最后的结果越有共鸣。</div>
     </div>
   </div>
 
@@ -2496,13 +2721,29 @@ function loadQuestion(){
   if(currentQ >= QUESTIONS.length){ showTarotDraw(); return; }
   const q = QUESTIONS[currentQ];
   const dimIdx = q.dim;
+  const progressPercent = Math.max(1, Math.round(((currentQ + 1) / QUESTIONS.length) * 100));
+  const remaining = QUESTIONS.length - currentQ - 1;
+  const questionShell = document.querySelector('.question-shell');
   
   document.getElementById('dimLabel').textContent = DIM_NAMES[dimIdx];
   document.getElementById('counter').textContent = `${currentQ+1} / ${QUESTIONS.length}`;
   document.getElementById('progFill').style.width = `${((currentQ)/QUESTIONS.length)*100}%`;
+  document.getElementById('quizEnergy').textContent = `心流加载 ${progressPercent}%`;
+  document.getElementById('quizPercentChip').textContent = `探索进度 ${progressPercent}%`;
+  document.getElementById('quizRemainChip').textContent = remaining > 0 ? `还剩 ${remaining} 题` : '最后一题';
+  document.getElementById('quizFocusText').textContent = DIM_FOCUS[dimIdx];
+  document.getElementById('questionMood').textContent = DIM_MOOD[dimIdx];
+  document.getElementById('quizFooterNote').textContent = QUIZ_FOOTER_NOTES[currentQ % QUIZ_FOOTER_NOTES.length];
+  document.getElementById('quizPhase').textContent =
+    currentQ < QUESTIONS.length / 3
+      ? '✦ 人格星图解读中'
+      : currentQ < QUESTIONS.length * 2 / 3
+        ? '✦ 内在倾向浮现中'
+        : '✦ 命运轮廓成型中';
+  document.getElementById('quizRhythmChip').textContent =
+    q.direction === 'L' ? '建议凭直觉作答' : '这一题更适合选本能反应';
   
     const icon = ['💬','🔍','💡','📋'][dimIdx];
-    const dimLabel = ['外向倾向 ↔ 内向倾向','感觉倾向 ↔ 直觉倾向','思考倾向 ↔ 情感倾向','判断倾向 ↔ 知觉倾向'][dimIdx];
     document.getElementById('qText').innerHTML =
       `<span class="q-icon">${icon}</span>${q.text}
        <div class="dim-bar"><div class="dim-bar-track"></div></div>`;
@@ -2543,6 +2784,12 @@ function loadQuestion(){
   document.getElementById('dimTags').innerHTML = DIM_CLASS.map((c,i)=>
     `<span class="dim-tag ${c}">${['E/I','S/N','T/F','J/P'][i]}</span>`
   ).join('');
+
+  if (questionShell) {
+    questionShell.classList.remove('is-transitioning');
+    void questionShell.offsetWidth;
+    questionShell.classList.add('is-transitioning');
+  }
   
   selectedVal = null;
   document.querySelectorAll('.opt-card').forEach(el=>el.classList.remove('selected'));
@@ -2550,6 +2797,24 @@ function loadQuestion(){
 
 const DIM_NAMES = ["外向/内向 E/I", "感觉/直觉 S/N", "思考/情感 T/F", "判断/知觉 J/P"];
 const DIM_CLASS = ["ei","sn","tf","jp"];
+const DIM_FOCUS = [
+  "你在人群与独处之间，真正补充能量的方式",
+  "你更相信眼前事实，还是更容易捕捉隐藏趋势",
+  "你做决定时，心和脑哪一边更先开口",
+  "你面对生活时，更偏爱秩序还是流动"
+];
+const DIM_MOOD = [
+  "把自己放回熟悉的社交场景，选你最自然会做的那个反应。",
+  "不要想哪边更正确，去选你平时最本能注意到的东西。",
+  "这一题没有标准答案，只是在还原你最常见的决策习惯。",
+  "想象日常节奏里的自己，哪个选项更接近你的真实状态。"
+];
+const QUIZ_FOOTER_NOTES = [
+  "越自然的回答，最后的结果越有共鸣。",
+  "不用追求完美答案，第一反应通常最接近你。",
+  "每一题都在帮宇宙拼出你的性格轮廓。",
+  "保持轻松，你的选择会慢慢显出稳定模式。"
+];
 
 function selectOpt(el, val){
   if(selectedVal !== null) return;
@@ -2596,7 +2861,7 @@ function selectOpt(el, val){
     } else {
       showTarotDraw();
     }
-  }, 300);
+  }, 420);
 }
 
 function computeResultProfile() {
