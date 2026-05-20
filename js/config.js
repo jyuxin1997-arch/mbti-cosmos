@@ -1,7 +1,7 @@
 // === 全局配置 ===
 window.AppConfig = {
-  SUPABASE_URL: '',  // 用户在 Supabase 控制台创建后填入
-  SUPABASE_ANON_KEY: '',  // 用户在 Supabase 控制台创建后填入
+  SUPABASE_URL: 'https://vurbnizpicrfxttclnza.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_Jk0dl4ZO05xKNkr70pFuTg_TliLkt6Z',
   FOOTBALL_API_TOKEN: '',  // 用户在 football-data.org 注册后填入
   SITE_URL: 'https://jyuxin1997-arch.github.io/mbti-cosmos/',
   API_POLL_INTERVAL: 300000, // 5分钟轮询
