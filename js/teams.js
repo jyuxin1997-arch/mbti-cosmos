@@ -4,6 +4,8 @@
   var escapeHtml = window.Utils.escapeHtml;
 
   var teams = [];
+  var selectedA = '';  // 已选的 A 队名称
+  var selectedB = '';  // 已选的 B 队名称
 
   // ========== UTILITY ==========
   function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
@@ -73,8 +75,20 @@
       (function(card) {
         card.addEventListener('click', function() {
           var name = card.dataset.team;
-          // 跳转到首页预测器，带 URL 参数
-          window.location.href = 'index.html?a=' + encodeURIComponent(name);
+          // 按架构设计：支持 A/B 队选择逻辑
+          // 如果 A 队未选，或 A/B 相同，则填入 A 队
+          // 否则填入 B 队
+          if (!selectedA || selectedA === selectedB) {
+            selectedA = name;
+          } else {
+            selectedB = name;
+          }
+          // 构建跳转 URL
+          var url = 'index.html?a=' + encodeURIComponent(selectedA);
+          if (selectedB && selectedB !== selectedA) {
+            url += '&b=' + encodeURIComponent(selectedB);
+          }
+          window.location.href = url;
         });
       })(cards[i]);
     }

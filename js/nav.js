@@ -144,7 +144,7 @@
     if (phone.length < 7) { showToast('请输入有效的手机号（至少7位）'); return; }
     if (!nickname) { showToast('请输入昵称'); return; }
 
-    if (window.AuthService && window.SupabaseClient && window.SupabaseClient.isReady()) {
+    if (window.AuthService && window.SupabaseClient && window.SupabaseClient.isReady && window.SupabaseClient.isReady()) {
       // 使用 AuthService 登录
       if (loginSubmitBtn) {
         loginSubmitBtn.disabled = true;

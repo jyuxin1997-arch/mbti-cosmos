@@ -30,21 +30,35 @@
       return '<div class="ranking-card ' + t.cls + '">'
         + '<div class="tier"><span class="dot"></span>' + t.label + '</div>'
         + t.teams.map(function(tm) {
-          return '<div class="rank-line" data-team="' + tm.cn + '"><div class="rank-team"><span>' + tm.flag + '</span><span>' + tm.cn + '</span></div><span class="rank-score">' + tm.rating + '</span></div>';
+          return '<div class="rank-line"><div class="rank-team" data-team="' + tm.cn + '" data-action="teams"><span>' + tm.flag + '</span><span>' + tm.cn + '</span></div><span class="rank-score" data-team="' + tm.cn + '" data-action="predictor">' + tm.rating + '</span></div>';
         }).join('')
         + '</div>';
     }).join('');
 
-    // 绑定球队行项点击事件
-    var rankLines = document.querySelectorAll('.rank-line');
-    for (var i = 0; i < rankLines.length; i++) {
-      (function(line) {
-        line.addEventListener('click', function() {
-          var name = line.dataset.team;
-          // 跳转到首页预测器
+    // 绑定球队名称点击 → 球队百科详情
+    var rankTeams = document.querySelectorAll('.rank-team[data-action="teams"]');
+    for (var i = 0; i < rankTeams.length; i++) {
+      (function(el) {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var name = el.dataset.team;
+          window.location.href = 'teams.html?highlight=' + encodeURIComponent(name);
+        });
+      })(rankTeams[i]);
+    }
+
+    // 绑定评分点击 → 预测器
+    var rankScores = document.querySelectorAll('.rank-score[data-action="predictor"]');
+    for (var j = 0; j < rankScores.length; j++) {
+      (function(el) {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var name = el.dataset.team;
           window.location.href = 'index.html?a=' + encodeURIComponent(name);
         });
-      })(rankLines[i]);
+      })(rankScores[j]);
     }
   }
 
