@@ -1,0 +1,52 @@
+classDiagram
+    class profiles {
+        uuid id PK
+        text phone UK
+        text nickname
+        text masked_phone
+        timestamptz created_at
+        timestamptz last_login
+    }
+
+    class posts {
+        bigint id PK
+        uuid author_id FK
+        text title
+        text content
+        text match_key
+        text category
+        bigint likes_count
+        bigint replies_count
+        timestamptz created_at
+    }
+
+    class replies {
+        bigint id PK
+        bigint post_id FK
+        uuid author_id FK
+        text content
+        bigint likes_count
+        timestamptz created_at
+    }
+
+    class post_likes {
+        uuid user_id FK
+        bigint post_id FK
+        timestamptz created_at
+    }
+
+    class reply_likes {
+        uuid user_id FK
+        bigint reply_id FK
+        timestamptz created_at
+    }
+
+    profiles ||--o{ posts : "author_id"
+    profiles ||--o{ replies : "author_id"
+    profiles ||--o{ post_likes : "user_id"
+    profiles ||--o{ reply_likes : "user_id"
+    posts ||--o{ replies : "post_id"
+    posts ||--o{ post_likes : "post_id"
+    replies ||--o{ reply_likes : "reply_id"
+    post_likes }o--|| posts : ""
+    reply_likes }o--|| replies : ""

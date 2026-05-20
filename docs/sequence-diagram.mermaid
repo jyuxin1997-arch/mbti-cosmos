@@ -1,0 +1,133 @@
+%% 5.1 手机号+昵称登录流程
+sequenceDiagram
+    participant U as 用户
+    participant AU as AuthService
+    participant SB as Supabase
+    participant DB as PostgreSQL
+
+    U->>AU: 输入手机号+昵称，点击登录
+    AU->>SB: 查询 profiles WHERE phone = ?
+    SB->>DB: SELECT * FROM profiles WHERE phone = ?
+    DB-->>SB: 返回结果
+
+    alt 手机号已存在（老用户）
+        SB-->>AU: 返回 profile 记录
+        AU->>SB: auth.signInAnonymously()
+        SB-->>AU: 返回 session (user.id)
+        AU->>SB: UPDATE profiles SET last_login = now() WHERE id = ?
+        AU->>AU: 更新 currentUser
+    else 手机号不存在（新用户）
+        AU->>SB: auth.signInAnonymously()
+        SB-->>AU: 返回 session (user.id)
+        AU->>SB: INSERT INTO profiles (id, phone, nickname, masked_phone)
+        SB-->>AU: 插入成功
+        AU->>AU: 更新 currentUser
+    end
+
+    AU-->>U: 登录成功，显示昵称
+    AU->>AU: 触发 onAuthChange 回调
+
+---
+
+%% 5.2 社区发帖 + 实时可见流程
+sequenceDiagram
+    participant U as 用户A
+    participant CS as CommunityService
+    participant SB as Supabase
+    participant RT as Realtime
+    participant U2 as 用户B（其他浏览器）
+
+    U->>CS: 点击发帖（标题+内容+match_key）
+    CS->>SB: INSERT INTO posts (author_id, title, content, match_key)
+    SB->>SB: RLS 校验 auth.uid() = author_id
+    SB-->>CS: 返回新帖子数据
+
+    SB->>RT: postgres_changes INSERT 事件
+    RT-->>U2: CommunityService.onInsert 回调
+    U2->>U2: prependToPostList(newPost)
+
+    CS-->>U: 本地也添加到列表
+
+---
+
+%% 5.3 社区回帖 + 实时可见流程
+sequenceDiagram
+    participant U as 用户A
+    participant CS as CommunityService
+    participant SB as Supabase
+    participant RT as Realtime
+    participant U2 as 用户B
+
+    U->>CS: 点击回复（postId + content）
+    CS->>SB: INSERT INTO replies (post_id, author_id, content)
+    SB-->>CS: 返回新回复
+
+    SB->>SB: 触发 trigger: UPDATE posts SET replies_count = replies_count + 1
+
+    SB->>RT: postgres_changes INSERT 事件（replies 表）
+    RT-->>U2: CommunityService.onReplyInsert 回调
+    U2->>U2: appendToReplyList(newReply)
+
+    CS-->>U: 本地添加到回复列表
+
+---
+
+%% 5.4 预测图片卡片生成流程
+sequenceDiagram
+    participant U as 用户
+    participant PC as PredictionCardService
+    participant C as Canvas API
+    participant QR as QRCode.js
+
+    U->>PC: 点击"生成预测卡片"
+    PC->>PC: 组装 predictionData
+
+    PC->>C: 创建 OffscreenCanvas(680, 400)
+    PC->>C: drawBackground() — 深色渐变
+    PC->>C: drawTeams() — 队旗+队名+VS
+    PC->>C: drawProbBars() — 胜率条形图
+    PC->>C: drawInsights() — 预计比分+倾向
+
+    PC->>PC: 生成分享 URL
+    PC->>QR: new QRCode(url) → 二维码图片数据
+    PC->>C: drawQRCode() — 右下角二维码
+    PC->>C: drawBranding() — 站名水印
+
+    C-->>PC: canvas.toBlob('image/png')
+    PC-->>U: 显示预览 + 下载/分享按钮
+
+    alt 用户点击下载
+        PC->>PC: downloadCard(blob, "预测卡片.png")
+    end
+
+    alt 用户点击分享
+        PC->>PC: shareCard(blob) — navigator.share()
+    end
+
+---
+
+%% 5.5 football-data.org API 轮询+缓存流程
+sequenceDiagram
+    participant APP as App.init()
+    participant LD as LiveDataService
+    participant Cache as localStorage
+    participant API as football-data.org
+
+    APP->>LD: startPolling(300000)
+
+    loop 每 5 分钟
+        LD->>Cache: getCached()
+        alt 缓存存在且未过期
+            Cache-->>LD: 返回缓存数据
+        else 缓存过期或不存在
+            LD->>API: GET /v4/competitions/WC/matches (X-Auth-Token)
+            alt API 成功
+                API-->>LD: 返回 match 数据
+                LD->>Cache: setCached(data, timestamp)
+            else API 失败
+                LD->>Cache: 尝试使用过期缓存
+                Cache-->>LD: 返回过期数据或 null
+            end
+        end
+        LD-->>APP: 更新实时赛况 UI
+    end
