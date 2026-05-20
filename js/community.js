@@ -36,6 +36,39 @@
     bindEvents();
     loadPosts();
     subscribeNewPosts();
+    applyUrlParams();
+
+    // 页面卸载时清理 Realtime 订阅
+    window.addEventListener('beforeunload', function() {
+      unsubscribe();
+    });
+  }
+
+  // ========== URL 参数处理 ==========
+  function applyUrlParams() {
+    var params = new URLSearchParams(window.location.search);
+    var matchKey = params.get('match_key');
+    var postId = params.get('post');
+
+    if (matchKey) {
+      currentMatchKey = matchKey;
+      currentFilter = 'all';
+      // 重置筛选按钮
+      var allBtns = $('communityFilters').querySelectorAll('button');
+      for (var i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.toggle('active', allBtns[i].dataset.filter === 'all');
+      }
+      postOffset = 0;
+      hasMorePosts = true;
+      loadPosts();
+    }
+
+    if (postId) {
+      var id = parseInt(postId, 10);
+      if (!isNaN(id)) {
+        openPostDetail(id);
+      }
+    }
   }
 
   // ========== 事件绑定 ==========
@@ -599,7 +632,7 @@
     openPostDetail: openPostDetail,
     subscribeNewPosts: subscribeNewPosts,
     unsubscribe: unsubscribe,
-    // 额外暴露供 app.js 调用
+    // 设置 match_key 筛选（本页内直接设值刷新，不跳转）
     setMatchKey: function(key) {
       currentMatchKey = key || '';
       currentFilter = 'all';
@@ -627,6 +660,7 @@
       postOffset = 0;
       hasMorePosts = true;
       loadPosts();
-    }
+    },
+    applyUrlParams: applyUrlParams
   };
 })();

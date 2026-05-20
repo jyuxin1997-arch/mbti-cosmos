@@ -1,0 +1,30 @@
+/* === 百科页样式 === */
+
+/* 搜索筛选工具栏 */
+.team-tools{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.team-tools input,.team-tools select{padding:8px 12px;background:var(--panel);border:1px solid var(--line);border-radius:8px;font-size:13px;color:var(--text)}
+.team-tools input{flex:1;min-width:160px}
+
+/* 球队卡片网格 */
+.teams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.team-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;cursor:pointer;transition:.2s}
+.team-card:hover{border-color:var(--green-2);transform:translateY(-2px)}
+.team-card.highlight{border-color:var(--gold);box-shadow:0 0 12px rgba(240,192,77,.3)}
+.team-card .top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.team-card .flag{font-size:28px}
+.team-card .info .cn{font-size:14px;font-weight:600}
+.team-card .info .en{font-size:11px;color:var(--muted)}
+.team-card .info .group-tag{font-size:10px;background:var(--panel-2);padding:2px 6px;border-radius:4px;color:var(--green)}
+
+/* 球队卡片内部数据 */
+.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.meta-box{background:var(--panel-2);border-radius:6px;padding:8px;text-align:center}
+.meta-box .label{font-size:10px;color:var(--muted)}
+.meta-box .val{font-size:14px;font-weight:600}
+.style-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.style-tags span{font-size:10px;padding:2px 8px;background:rgba(49,196,122,.1);color:var(--green);border-radius:10px}
+
+/* 百科页响应式 */
+@media(max-width:768px){
+  .teams-grid{grid-template-columns:1fr}
+}

@@ -2,10 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <meta name="description" content="2026 FIFA 世界杯胜率预测台 — 实时赛况、智能预测、球迷讨论">
 <meta name="keywords" content="世界杯,2026世界杯,足球预测,胜率,Elo评分,球迷社区">
 <meta property="og:title" content="世界杯胜率预测台">
@@ -18,7 +16,7 @@
 <meta name="twitter:title" content="世界杯胜率预测台">
 <meta name="twitter:description" content="实时赛况 · 智能预测 · 球迷讨论">
 <meta name="twitter:image" content="https://jyuxin1997-arch.github.io/mbti-cosmos/img/og-cover.png">
-<title>世界杯胜率预测台</title>
+<title>首页 - 世界杯胜率预测台</title>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -33,30 +31,31 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-<link rel="stylesheet" href="css/style.css?v=202605202306">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/page-index.css">
 </head>
 <body>
 <div class="page">
 <header class="topbar">
 <div class="topbar-inner">
-<a href="#" class="brand"><span>⚽</span><span>世界杯胜率预测台</span></a>
+<a href="index.html" class="brand"><span>⚽</span><span>世界杯胜率预测台</span></a>
 <nav id="mainNav">
-<a href="#predictor">预测器</a>
-<a href="#live">实时赛况</a>
-<a href="#teams">球队百科</a>
-<a href="#ranking">夺冠热榜</a>
-<a href="#community">球迷社区</a>
+<a href="index.html">预测器</a>
+<a href="live.html">实时赛况</a>
+<a href="teams.html">球队百科</a>
+<a href="ranking.html">夺冠热榜</a>
+<a href="community.html">球迷社区</a>
 <span id="authArea" class="auth-area"></span>
 </nav>
 <button class="hamburger" id="hamburger" aria-label="菜单"><span></span><span></span><span></span></button>
 </div>
 </header>
 <div class="mobile-nav" id="mobileNav">
-<a href="#predictor">预测器</a>
-<a href="#live">实时赛况</a>
-<a href="#teams">球队百科</a>
-<a href="#ranking">夺冠热榜</a>
-<a href="#community">球迷社区</a>
+<a href="index.html">预测器</a>
+<a href="live.html">实时赛况</a>
+<a href="teams.html">球队百科</a>
+<a href="ranking.html">夺冠热榜</a>
+<a href="community.html">球迷社区</a>
 <span id="authAreaMobile" class="auth-area"></span>
 </div>
 
@@ -68,7 +67,7 @@
 <p class="hero-copy">实时赛况推送，Elo + 泊松模型驱动预测，球迷社区自由讨论。全部免费，零广告。</p>
 <div class="hero-actions">
 <a href="#predictor" class="btn btn-primary">开始预测 →</a>
-<a href="#live" class="btn btn-ghost">查看赛况</a>
+<a href="live.html" class="btn btn-ghost">查看赛况</a>
 </div>
 </div>
 <aside class="hero-card">
@@ -158,76 +157,10 @@
 <button class="share-btn" id="shareBtn">📤 分享预测结果</button>
 <div class="discuss-section">
 <h4>💬 球迷讨论</h4>
-<div class="discuss-input" id="discussInput"></div>
 <div class="discuss-list" id="discussList"><p style="color:var(--muted);font-size:12px">选择两支球队后即可查看讨论</p></div>
-<div class="discuss-note">💡 讨论数据由社区驱动，所有用户可见</div>
 </div>
 </div>
 </div>
-</section>
-
-<section id="live" class="section">
-<div class="section-head">
-<p class="section-kicker">Live Center</p>
-<h2>实时赛况</h2>
-<p class="section-note">赛程、比分、积分榜实时更新</p>
-</div>
-<div class="live-layout">
-<div class="live-panel">
-<div class="panel-title"><span class="live-dot"></span>赛事实时流</div>
-<div class="feed" id="feedList"></div>
-<div class="data-source" id="dataSource">数据来源：football-data.org · 最后更新：<span id="lastUpdate">--</span></div>
-</div>
-<div class="live-panel">
-<div class="panel-title">📅 重点赛程</div>
-<div id="fixtureList"></div>
-</div>
-</div>
-</section>
-
-<section id="teams" class="section">
-<div class="section-head">
-<p class="section-kicker">Team Encyclopedia</p>
-<h2>球队百科</h2>
-</div>
-
-<div class="team-tools">
-<input type="text" id="teamSearch" placeholder="搜索球队...">
-<select id="groupFilter"><option value="">全部小组</option></select>
-<select id="confedFilter"><option value="">全部足联</option></select>
-</div>
-<div class="teams-grid" id="teamsGrid"></div>
-</section>
-
-<section id="ranking" class="section">
-<div class="section-head">
-<p class="section-kicker">Power Rankings</p>
-<h2>夺冠热榜</h2>
-<p class="section-note">基于 Elo 评分模型，不代表最终赛果</p>
-</div>
-<div class="ranking-grid" id="rankingGrid"></div>
-</section>
-
-<!-- 社区板块 -->
-<section id="community" class="section community-section">
-  <div class="shell">
-    <div class="community-header">
-      <h2>🏟️ 球迷社区</h2>
-      <button class="btn-new-post" id="btnNewPost">+ 发帖</button>
-    </div>
-    <div class="community-filters" id="communityFilters">
-      <button class="active" data-filter="all">全部</button>
-      <button data-filter="discussion">💬 讨论</button>
-      <button data-filter="prediction">🎯 预测</button>
-      <button data-filter="news">📰 资讯</button>
-    </div>
-    <div id="postList">
-      <div style="text-align:center;padding:40px;color:var(--muted)">加载中...</div>
-    </div>
-    <div id="loadMorePosts" style="text-align:center;padding:16px;display:none">
-      <button style="background:var(--panel-2);color:var(--muted);padding:8px 24px;border-radius:8px;cursor:pointer">加载更多</button>
-    </div>
-  </div>
 </section>
 
 <p class="sources">
@@ -241,79 +174,36 @@
 </main>
 </div>
 
-<!-- 登录弹窗 -->
-<div class="login-modal" id="loginModal">
-<div class="login-card">
-<h3>📱 手机号登录</h3>
-<p>输入手机号和昵称即可参与讨论</p>
-<div class="field">
-<label>手机号</label>
-<input type="tel" id="loginPhone" placeholder="请输入手机号" maxlength="11" pattern="[0-9]*">
-</div>
-<div class="field">
-<label>昵称</label>
-<input type="text" id="loginNickname" placeholder="给自己取个名字" maxlength="12">
-</div>
-<button class="login-submit" id="loginSubmitBtn">登录</button>
-<button class="close-login" id="closeLogin">取消</button>
-</div>
-</div>
-
-<!-- 发帖弹窗 -->
-<div class="modal-overlay" id="newPostModal">
-  <div class="modal-card" style="position:relative">
-    <span class="btn-close" id="closeNewPost">&times;</span>
-    <h3>发帖</h3>
-    <input type="text" id="postTitle" placeholder="标题" maxlength="100">
-    <textarea id="postContent" placeholder="说说你的看法..." maxlength="2000"></textarea>
-    <select id="postCategory">
-      <option value="discussion">💬 讨论</option>
-      <option value="prediction">🎯 预测</option>
-      <option value="news">📰 资讯</option>
-    </select>
-    <input type="text" id="postMatchKey" placeholder="关联比赛（如：阿根廷_vs_巴西，可留空）">
-    <button class="btn-submit" id="submitPost">发布</button>
-  </div>
-</div>
-
-<!-- 帖子详情弹窗 -->
-<div class="modal-overlay" id="postDetailModal">
-  <div class="modal-card" style="position:relative;max-width:640px">
-    <span class="btn-close" id="closePostDetail">&times;</span>
-    <div class="post-detail">
-      <h3 id="detailPostTitle"></h3>
-      <div class="post-meta" id="detailPostMeta"></div>
-      <div class="post-body" id="detailPostBody"></div>
-      <div class="post-actions" id="detailPostActions"></div>
-    </div>
-    <div id="replyList"></div>
-    <div class="reply-input-area" id="replyInputArea">
-      <input type="text" id="replyInput" placeholder="写下你的回复..." maxlength="500">
-      <button id="submitReply">回复</button>
-    </div>
-  </div>
-</div>
+<!-- 底部 Tab 栏 -->
+<nav class="tab-bar" id="tabBar">
+<a href="index.html"><span class="tab-icon">🏠</span><span class="tab-label">首页</span></a>
+<a href="live.html"><span class="tab-icon">⚽</span><span class="tab-label">赛况</span></a>
+<a href="community.html"><span class="tab-icon">🏟</span><span class="tab-label">社区</span></a>
+<a href="ranking.html"><span class="tab-icon">📊</span><span class="tab-label">热榜</span></a>
+<a href="teams.html"><span class="tab-icon">📖</span><span class="tab-label">百科</span></a>
+</nav>
 
 <!-- 预测卡片弹窗 -->
 <div class="modal-overlay" id="cardPreviewModal">
-  <div class="modal-card" style="position:relative;text-align:center">
-    <span class="btn-close" id="closeCardPreview">&times;</span>
-    <h3>预测卡片</h3>
-    <div class="card-preview"><img id="cardPreviewImg" src="" alt="预测卡片"></div>
-    <div class="card-actions">
-      <button class="btn-download" id="btnDownloadCard">保存图片</button>
-      <button class="btn-share" id="btnShareCard">分享</button>
-    </div>
-  </div>
+<div class="modal-card" style="position:relative;text-align:center">
+<span class="btn-close" id="closeCardPreview">&times;</span>
+<h3>预测卡片</h3>
+<div class="card-preview"><img id="cardPreviewImg" src="" alt="预测卡片"></div>
+<div class="card-actions">
+<button class="btn-download" id="btnDownloadCard">保存图片</button>
+<button class="btn-share" id="btnShareCard">分享</button>
+</div>
+</div>
 </div>
 
-<script src="js/config.js?v=202605202306"></script>
-<script src="js/utils.js?v=202605202306"></script>
-<script src="js/supabase-client.js?v=202605202306"></script>
-<script src="js/auth.js?v=202605202306"></script>
-<script src="js/live-data.js?v=202605202306"></script>
-<script src="js/community.js?v=202605202306"></script>
-<script src="js/prediction-card.js?v=202605202306"></script>
-<script src="js/app.js?v=202605202306"></script>
+<!-- 登录弹窗由 nav.js 动态注入 -->
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/predictor.js"></script>
+<script src="js/prediction-card.js"></script>
 </body>
 </html>

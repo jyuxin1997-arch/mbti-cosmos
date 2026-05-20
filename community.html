@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="2026 FIFA 世界杯球迷社区 — 讨论、预测、资讯，自由交流">
+<title>球迷社区 - 世界杯胜率预测台</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/page-community.css">
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+<div class="topbar-inner">
+<a href="index.html" class="brand"><span>⚽</span><span>世界杯胜率预测台</span></a>
+<nav id="mainNav">
+<a href="index.html">预测器</a>
+<a href="live.html">实时赛况</a>
+<a href="teams.html">球队百科</a>
+<a href="ranking.html">夺冠热榜</a>
+<a href="community.html">球迷社区</a>
+<span id="authArea" class="auth-area"></span>
+</nav>
+<button class="hamburger" id="hamburger" aria-label="菜单"><span></span><span></span><span></span></button>
+</div>
+</header>
+<div class="mobile-nav" id="mobileNav">
+<a href="index.html">预测器</a>
+<a href="live.html">实时赛况</a>
+<a href="teams.html">球队百科</a>
+<a href="ranking.html">夺冠热榜</a>
+<a href="community.html">球迷社区</a>
+<span id="authAreaMobile" class="auth-area"></span>
+</div>
+
+<main>
+<div class="shell">
+<section id="community" class="section community-section">
+  <div class="community-header">
+    <h2>🏟️ 球迷社区</h2>
+    <button class="btn-new-post" id="btnNewPost">+ 发帖</button>
+  </div>
+  <div class="community-filters" id="communityFilters">
+    <button class="active" data-filter="all">全部</button>
+    <button data-filter="discussion">💬 讨论</button>
+    <button data-filter="prediction">🎯 预测</button>
+    <button data-filter="news">📰 资讯</button>
+  </div>
+  <div id="postList">
+    <div style="text-align:center;padding:40px;color:var(--muted)">加载中...</div>
+  </div>
+  <div id="loadMorePosts" style="text-align:center;padding:16px;display:none">
+    <button style="background:var(--panel-2);color:var(--muted);padding:8px 24px;border-radius:8px;cursor:pointer">加载更多</button>
+  </div>
+</section>
+</div>
+</main>
+</div>
+
+<nav class="tab-bar" id="tabBar">
+<a href="index.html"><span class="tab-icon">🏠</span><span class="tab-label">首页</span></a>
+<a href="live.html"><span class="tab-icon">⚽</span><span class="tab-label">赛况</span></a>
+<a href="community.html"><span class="tab-icon">🏟</span><span class="tab-label">社区</span></a>
+<a href="ranking.html"><span class="tab-icon">📊</span><span class="tab-label">热榜</span></a>
+<a href="teams.html"><span class="tab-icon">📖</span><span class="tab-label">百科</span></a>
+</nav>
+
+<!-- 发帖弹窗 -->
+<div class="modal-overlay" id="newPostModal">
+  <div class="modal-card" style="position:relative">
+    <span class="btn-close" id="closeNewPost">&times;</span>
+    <h3>发帖</h3>
+    <input type="text" id="postTitle" placeholder="标题" maxlength="100">
+    <textarea id="postContent" placeholder="说说你的看法..." maxlength="2000"></textarea>
+    <select id="postCategory">
+      <option value="discussion">💬 讨论</option>
+      <option value="prediction">🎯 预测</option>
+      <option value="news">📰 资讯</option>
+    </select>
+    <input type="text" id="postMatchKey" placeholder="关联比赛（如：阿根廷_vs_巴西，可留空）">
+    <button class="btn-submit" id="submitPost">发布</button>
+  </div>
+</div>
+
+<!-- 帖子详情弹窗 -->
+<div class="modal-overlay" id="postDetailModal">
+  <div class="modal-card" style="position:relative;max-width:640px">
+    <span class="btn-close" id="closePostDetail">&times;</span>
+    <div class="post-detail">
+      <h3 id="detailPostTitle"></h3>
+      <div class="post-meta" id="detailPostMeta"></div>
+      <div class="post-body" id="detailPostBody"></div>
+      <div class="post-actions" id="detailPostActions"></div>
+    </div>
+    <div id="replyList"></div>
+    <div class="reply-input-area" id="replyInputArea">
+      <input type="text" id="replyInput" placeholder="写下你的回复..." maxlength="500">
+      <button id="submitReply">回复</button>
+    </div>
+  </div>
+</div>
+
+<!-- 登录弹窗由 nav.js 动态注入 -->
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/community.js"></script>
+</body>
+</html>

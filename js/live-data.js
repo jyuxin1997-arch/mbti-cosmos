@@ -58,15 +58,15 @@
     if (pollTimer) clearInterval(pollTimer);
     // 立即执行一次
     fetchFromAPI().then(function(data) {
-      if (data && window.App && window.App.renderLiveData) {
-        window.App.renderLiveData(data);
+      if (data && window.LiveApp && window.LiveApp.renderLiveData) {
+        window.LiveApp.renderLiveData(data);
       }
     });
     // 定时轮询
     pollTimer = setInterval(async function() {
       var data = await fetchFromAPI();
-      if (data && window.App && window.App.renderLiveData) {
-        window.App.renderLiveData(data);
+      if (data && window.LiveApp && window.LiveApp.renderLiveData) {
+        window.LiveApp.renderLiveData(data);
       }
     }, interval || config.API_POLL_INTERVAL);
   }

@@ -1,0 +1,28 @@
+/* === 赛况页样式 === */
+
+/* 赛况布局 */
+.live-layout{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.live-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px}
+.panel-title{font-size:13px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.live-dot{width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* 资讯流 */
+.feed{max-height:400px;overflow-y:auto}
+.feed-item{padding:12px;background:var(--panel-2);border-radius:8px;margin-bottom:8px}
+.feed-tag{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:4px}
+.feed-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.feed-text{font-size:12px;color:var(--muted)}
+
+/* 赛程卡片 */
+.fixture-card{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--panel-2);border-radius:8px;margin-bottom:6px}
+.fixture-time{font-size:11px;color:var(--muted)}
+.fixture-score{font-size:16px;font-weight:700;min-width:60px;text-align:center}
+
+/* 数据来源 */
+.data-source{font-size:11px;color:var(--muted);margin-top:12px;text-align:right}
+
+/* 赛况页响应式 */
+@media(max-width:768px){
+  .live-layout{grid-template-columns:1fr}
+}

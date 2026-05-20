@@ -1,0 +1,103 @@
+/* === 首页样式（Hero + 预测器 + H2H + 分享 + 讨论入口 + 预测卡片弹窗） === */
+
+/* Hero 区域 */
+.hero{padding:80px 0 40px;background:radial-gradient(ellipse at 20% 0%,rgba(49,196,122,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(240,192,77,.06) 0%,transparent 60%)}
+.hero-grid{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:center}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:8px;font-weight:500}
+.hero h1{font-size:clamp(28px,4vw,42px);font-weight:700;line-height:1.2;margin-bottom:12px}
+.hero-copy{color:var(--muted);font-size:15px;margin-bottom:24px;max-width:480px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+/* 开幕战卡片 */
+.hero-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px}
+.scoreboard-head{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+
+/* 倒计时 */
+.countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.count-cell{text-align:center;background:var(--panel-2);border-radius:6px;padding:8px 4px}
+.count-val{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.count-label{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* 开幕战信息 */
+.fixture-mini{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--panel-2);border-radius:8px;margin-top:8px}
+.fixture-teams{font-size:13px;font-weight:500}
+.fixture-city{font-size:11px;color:var(--muted)}
+
+/* 免责声明 */
+.disclaimer-bar{margin:0 auto;max-width:1180px;padding:12px 20px;background:rgba(239,79,69,.08);border:1px solid rgba(239,79,69,.2);border-radius:8px;font-size:13px;color:#f09595;text-align:center}
+
+/* 预测器 */
+.predictor-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.control-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.04em}
+.field select,.field input[type="text"]{width:100%;padding:10px 12px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;font-size:14px;color:var(--text);appearance:none;-webkit-appearance:none}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239db2ab' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+.range-wrap{display:flex;align-items:center;gap:10px}
+.range-wrap input[type="range"]{flex:1;accent-color:var(--green)}
+.range-val{font-size:13px;font-weight:600;min-width:32px;text-align:right;color:var(--green)}
+.segmented{display:flex;gap:4px;background:var(--panel-2);border-radius:8px;padding:3px}
+.segmented button{flex:1;padding:7px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:.2s}
+.segmented button.active{background:var(--green);color:var(--ink)}
+.mode-row{display:flex;gap:8px;margin-top:12px}
+.mode-row button{flex:1;padding:8px;border-radius:8px;font-size:12px;border:1px solid var(--line);cursor:pointer;transition:.2s}
+.mode-row button.active{border-color:var(--green);background:rgba(49,196,122,.1);color:var(--green)}
+
+/* 结果面板 */
+.result-panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px}
+.result-teams{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px}
+.team-badge{text-align:center;min-width:100px}
+.team-badge .flag{font-size:36px;display:block;margin-bottom:4px}
+.team-badge .name{font-size:14px;font-weight:500}
+.center-ball{font-size:14px;color:var(--muted);font-weight:600;padding:8px 12px;border:1px solid var(--line);border-radius:8px}
+.prob-list{margin-bottom:20px}
+.prob-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.prob-label{font-size:12px;min-width:40px;text-align:right;color:var(--muted)}
+.prob-bar-wrap{flex:1;height:24px;background:var(--panel-2);border-radius:4px;overflow:hidden;position:relative}
+.prob-bar{height:100%;border-radius:4px;transition:width .4s}
+.prob-bar.win-a{background:var(--green)}
+.prob-bar.draw{background:var(--gold)}
+.prob-bar.win-b{background:var(--blue)}
+.prob-pct{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600}
+.insights{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.insight-card{background:var(--panel-2);border-radius:8px;padding:12px;text-align:center}
+.insight-card .label{font-size:11px;color:var(--muted);margin-bottom:4px}
+.insight-card .value{font-size:18px;font-weight:700}
+.verdict{text-align:center;padding:12px;background:var(--panel-2);border-radius:8px;font-size:14px;font-weight:500;color:var(--gold);margin-bottom:16px}
+
+/* H2H 历史交锋 */
+.h2h-box{margin-top:16px;background:var(--panel-2);border-radius:8px;padding:16px}
+.h2h-box h4{font-size:13px;margin-bottom:10px;color:var(--muted)}
+.h2h-stats{display:flex;gap:12px;margin-bottom:10px}
+.h2h-stat{flex:1;text-align:center;padding:8px;background:var(--panel);border-radius:6px}
+.h2h-stat .num{font-size:18px;font-weight:700}
+.h2h-stat .lbl{font-size:10px;color:var(--muted)}
+.h2h-table{width:100%;font-size:12px;border-collapse:collapse}
+.h2h-table th{text-align:left;padding:6px 8px;color:var(--muted);border-bottom:1px solid var(--line)}
+.h2h-table td{padding:6px 8px;border-bottom:1px solid rgba(38,56,51,.5)}
+
+/* 分享按钮 */
+.share-btn{display:block;width:100%;padding:10px;margin-top:12px;background:rgba(49,196,122,.1);border:1px solid var(--green-2);border-radius:8px;font-size:13px;font-weight:500;color:var(--green);cursor:pointer;text-align:center;transition:.2s}
+.share-btn:hover{background:rgba(49,196,122,.2)}
+
+/* 讨论区入口 */
+.discuss-section{margin-top:20px;border-top:1px solid var(--line);padding-top:20px}
+.discuss-section h4{font-size:14px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* 预测卡片弹窗 */
+.card-preview{text-align:center;margin:16px 0}
+.card-preview img{max-width:100%;border-radius:8px}
+.card-actions{display:flex;gap:12px;margin-top:16px}
+.card-actions button{flex:1;padding:10px;border-radius:8px;font-weight:600;cursor:pointer}
+.btn-download{background:var(--green);color:var(--ink)}
+.btn-share{background:var(--blue);color:#fff}
+
+/* 首页响应式 */
+@media(max-width:768px){
+  .hero-grid{grid-template-columns:1fr}
+  .predictor-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .countdown{grid-template-columns:repeat(2,1fr)}
+  .insights{grid-template-columns:1fr}
+}

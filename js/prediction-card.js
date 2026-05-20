@@ -167,7 +167,7 @@
     }
 
     // === 右下角二维码 ===
-    var shareUrl = window.App && window.App.buildShareUrl ? window.App.buildShareUrl() : window.location.href;
+    var shareUrl = window.PredictorApp && window.PredictorApp.buildShareUrl ? window.PredictorApp.buildShareUrl() : window.location.href;
     try {
       var qrDiv = document.createElement('div');
       qrDiv.style.position = 'absolute';

@@ -1,52 +1,151 @@
 classDiagram
-    class profiles {
-        uuid id PK
-        text phone UK
-        text nickname
-        text masked_phone
-        timestamptz created_at
-        timestamptz last_login
+    class AppConfig {
+        <<global config>>
+        +string SUPABASE_URL
+        +string SUPABASE_ANON_KEY
+        +string FOOTBALL_API_TOKEN
+        +string SITE_URL
+        +int API_POLL_INTERVAL
+        +int API_CACHE_TTL
+        +string CACHE_KEY_LIVE
+        +string CACHE_KEY_USER
+        +int POSTS_PER_PAGE
+        +string MATCH_KEY_SEPARATOR
     }
 
-    class posts {
-        bigint id PK
-        uuid author_id FK
-        text title
-        text content
-        text match_key
-        text category
-        bigint likes_count
-        bigint replies_count
-        timestamptz created_at
+    class Utils {
+        <<global utility>>
+        +$(id) Element
+        +escapeHtml(text) string
+        +showToast(msg) void
+        +formatTime(isoStr) string
     }
 
-    class replies {
-        bigint id PK
-        bigint post_id FK
-        uuid author_id FK
-        text content
-        bigint likes_count
-        timestamptz created_at
+    class SupabaseClient {
+        <<singleton>>
+        -SupabaseClient _instance
+        +getInstance() SupabaseClient
+        +isReady() boolean
     }
 
-    class post_likes {
-        uuid user_id FK
-        bigint post_id FK
-        timestamptz created_at
+    class AuthService {
+        <<auth service>>
+        -Profile currentUser
+        -Function[] authChangeCallbacks
+        +login(phone, nickname) Promise~Profile~
+        +logout() Promise~void~
+        +restoreSession() Promise~Profile~
+        +getCurrentUser() ProfileOrNull
+        +isLoggedIn() boolean
+        +onAuthChange(callback) void
     }
 
-    class reply_likes {
-        uuid user_id FK
-        bigint reply_id FK
-        timestamptz created_at
+    class NavService {
+        <<navigation service>>
+        +init() void
+        +injectLoginModal() void
+        +setActiveNav() void
+        +setupHamburger() void
+        +renderAuthUI(user) void
+        +setupLoginEvents() void
+        +handleLogin() void
     }
 
-    profiles ||--o{ posts : "author_id"
-    profiles ||--o{ replies : "author_id"
-    profiles ||--o{ post_likes : "user_id"
-    profiles ||--o{ reply_likes : "user_id"
-    posts ||--o{ replies : "post_id"
-    posts ||--o{ post_likes : "post_id"
-    replies ||--o{ reply_likes : "reply_id"
-    post_likes }o--|| posts : ""
-    reply_likes }o--|| replies : ""
+    class PredictorApp {
+        <<index.html only>>
+        -Object state
+        -Team[] teams
+        -H2H[] h2hData
+        +init() void
+        +loadData() void
+        +calculate() PredictionResultOrNull
+        +renderPrediction() void
+        +renderH2H() void
+        +populateSelectors() void
+        +updateCountdown() void
+        +applyUrlParams() void
+        +buildShareUrl() string
+        +getState() Object
+    }
+
+    class PredictionCardService {
+        <<index.html only>>
+        +init() void
+        +generateCard(teamA, teamB, prediction) string
+        +showCardModal(dataUrl) void
+        +downloadCard(dataUrl) void
+        +shareCard(dataUrl) void
+    }
+
+    class LiveApp {
+        <<live.html only>>
+        -Team[] teams
+        -Fixture[] fixtures
+        -FeedItem[] feedItems
+        +init() void
+        +loadData() void
+        +renderFixtures() void
+        +renderFeed() void
+        +renderLiveData(data) void
+    }
+
+    class LiveDataService {
+        <<live.html only>>
+        +getLiveMatches() Promise~Object~
+        +fetchFromAPI() Promise~Object~
+        +startPolling(interval) void
+        +stopPolling() void
+    }
+
+    class TeamsApp {
+        <<teams.html only>>
+        -Team[] teams
+        +init() void
+        +loadData() void
+        +renderTeams() void
+        +applyUrlParams() void
+    }
+
+    class RankingApp {
+        <<ranking.html only>>
+        -Team[] teams
+        +init() void
+        +loadData() void
+        +renderRanking() void
+    }
+
+    class CommunityService {
+        <<community.html only>>
+        -string currentFilter
+        -string currentMatchKey
+        -Post[] posts
+        -RealtimeChannel realtimeChannel
+        +init() void
+        +loadPosts(append) void
+        +getPosts(category, matchKey, limit, offset) Promise~Post[]~
+        +createPost(title, content, matchKey, category) void
+        +openPostDetail(postId) void
+        +getReplies(postId) Promise~Reply[]~
+        +createReply(postId, content) void
+        +togglePostLike(postId) void
+        +toggleReplyLike(replyId) void
+        +setMatchKey(key) void
+        +unsubscribe() void
+    }
+
+    AppConfig <-- SupabaseClient : reads config
+    AppConfig <-- AuthService : reads config
+    AppConfig <-- LiveDataService : reads config
+    Utils <-- NavService : uses $, escapeHtml, showToast
+    Utils <-- PredictorApp : uses $, escapeHtml, showToast
+    Utils <-- LiveApp : uses $, escapeHtml
+    Utils <-- TeamsApp : uses $, escapeHtml
+    Utils <-- RankingApp : uses $
+    Utils <-- CommunityService : uses $, escapeHtml, showToast, formatTime
+    SupabaseClient <-- AuthService : gets instance
+    SupabaseClient <-- CommunityService : gets instance
+    AuthService <-- NavService : reads user, onAuthChange
+    AuthService <-- PredictorApp : reads user for discuss link
+    AuthService <-- CommunityService : reads user for posting
+    PredictorApp <-- PredictionCardService : provides team/prediction data
+    LiveDataService <-- LiveApp : pushes data via renderLiveData callback

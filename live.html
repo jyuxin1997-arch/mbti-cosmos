@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="2026 FIFA 世界杯实时赛况 — 比分、赛程、积分榜实时更新">
+<title>实时赛况 - 世界杯胜率预测台</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/page-live.css">
+</head>
+<body>
+<div class="page">
+<header class="topbar">
+<div class="topbar-inner">
+<a href="index.html" class="brand"><span>⚽</span><span>世界杯胜率预测台</span></a>
+<nav id="mainNav">
+<a href="index.html">预测器</a>
+<a href="live.html">实时赛况</a>
+<a href="teams.html">球队百科</a>
+<a href="ranking.html">夺冠热榜</a>
+<a href="community.html">球迷社区</a>
+<span id="authArea" class="auth-area"></span>
+</nav>
+<button class="hamburger" id="hamburger" aria-label="菜单"><span></span><span></span><span></span></button>
+</div>
+</header>
+<div class="mobile-nav" id="mobileNav">
+<a href="index.html">预测器</a>
+<a href="live.html">实时赛况</a>
+<a href="teams.html">球队百科</a>
+<a href="ranking.html">夺冠热榜</a>
+<a href="community.html">球迷社区</a>
+<span id="authAreaMobile" class="auth-area"></span>
+</div>
+
+<main>
+<div class="shell">
+<section id="live" class="section">
+<div class="section-head">
+<p class="section-kicker">Live Center</p>
+<h2>实时赛况</h2>
+<p class="section-note">赛程、比分、积分榜实时更新</p>
+</div>
+<div class="live-layout">
+<div class="live-panel">
+<div class="panel-title"><span class="live-dot"></span>赛事实时流</div>
+<div class="feed" id="feedList"></div>
+<div class="data-source" id="dataSource">数据来源：football-data.org · 最后更新：<span id="lastUpdate">--</span></div>
+</div>
+<div class="live-panel">
+<div class="panel-title">📅 重点赛程</div>
+<div id="fixtureList"></div>
+</div>
+</div>
+</section>
+
+<p class="sources">
+数据来源：<a href="https://www.football-data.org" target="_blank">football-data.org</a> ·
+模型：Elo 评分 + 泊松分布
+</p>
+</div>
+</main>
+</div>
+
+<nav class="tab-bar" id="tabBar">
+<a href="index.html"><span class="tab-icon">🏠</span><span class="tab-label">首页</span></a>
+<a href="live.html"><span class="tab-icon">⚽</span><span class="tab-label">赛况</span></a>
+<a href="community.html"><span class="tab-icon">🏟</span><span class="tab-label">社区</span></a>
+<a href="ranking.html"><span class="tab-icon">📊</span><span class="tab-label">热榜</span></a>
+<a href="teams.html"><span class="tab-icon">📖</span><span class="tab-label">百科</span></a>
+</nav>
+
+<!-- 登录弹窗由 nav.js 动态注入 -->
+
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/live-data.js"></script>
+<script src="js/live.js"></script>
+</body>
+</html>
