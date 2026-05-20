@@ -9,31 +9,21 @@
   var hasMorePosts = true;
   var realtimeChannel = null;
 
-  // ========== 工具函数 ==========
-  function escapeHtml(text) {
-    var div = document.createElement('div');
-    div.textContent = text || '';
-    return div.innerHTML;
-  }
+  // ========== 引用公共工具 ==========
+  var $ = window.Utils.$;
+  var escapeHtml = window.Utils.escapeHtml;
+  var showToast = window.Utils.showToast;
+  var formatTime = window.Utils.formatTime;
 
-  function formatTime(isoStr) {
-    if (!isoStr) return '';
-    try {
-      return new Date(isoStr).toLocaleString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    } catch(e) { return isoStr; }
-  }
-
-  function $(id) { return document.getElementById(id); }
-
-  function showToast(msg) {
-    var existing = document.querySelector('.toast-msg');
-    if (existing) existing.remove();
-    var el = document.createElement('div');
-    el.className = 'toast-msg';
-    el.textContent = msg;
-    el.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);padding:10px 20px;border-radius:8px;z-index:999;font-size:14px;color:var(--text);box-shadow:0 4px 12px rgba(0,0,0,.3)';
-    document.body.appendChild(el);
-    setTimeout(function() { el.remove(); }, 3000);
+  // ========== 超时包装 ==========
+  var TIMEOUT_MS = 8000;
+  function withTimeout(promise) {
+    return Promise.race([
+      promise,
+      new Promise(function(_, reject) {
+        setTimeout(function() { reject(new Error('请求超时，请检查网络')); }, TIMEOUT_MS);
+      })
+    ]);
   }
 
   // ========== 初始化 ==========
@@ -141,6 +131,10 @@
     var sb = window.SupabaseClient.getInstance();
     if (!sb) return;
 
+    if (!append) {
+      $('postList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">加载中...</div>';
+    }
+
     var query = sb
       .from('posts')
       .select('*, profiles(nickname)')
@@ -154,9 +148,10 @@
       query = query.eq('match_key', currentMatchKey);
     }
 
-    query.then(function(result) {
+    withTimeout(query).then(function(result) {
       if (result.error) {
         console.error('[Community] 加载帖子失败:', result.error);
+        $('postList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">加载失败<button onclick="window.CommunityService.retryLoad()" style="margin-left:8px;padding:4px 12px;border-radius:4px;background:var(--panel-2);color:var(--accent);cursor:pointer">重试</button></div>';
         return;
       }
       var newPosts = result.data || [];
@@ -175,6 +170,7 @@
       postOffset = posts.length;
     }).catch(function(err) {
       console.error('[Community] 加载帖子异常:', err);
+      $('postList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">' + escapeHtml(err.message || '网络异常') + '<button onclick="window.CommunityService.retryLoad()" style="margin-left:8px;padding:4px 12px;border-radius:4px;background:var(--panel-2);color:var(--accent);cursor:pointer">重试</button></div>';
     });
   }
 
@@ -623,6 +619,11 @@
       for (var i = 0; i < allBtns.length; i++) {
         allBtns[i].classList.toggle('active', allBtns[i].dataset.filter === 'all');
       }
+      postOffset = 0;
+      hasMorePosts = true;
+      loadPosts();
+    },
+    retryLoad: function() {
       postOffset = 0;
       hasMorePosts = true;
       loadPosts();

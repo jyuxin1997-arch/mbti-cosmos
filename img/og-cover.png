@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628"/>
+      <stop offset="100%" style="stop-color:#1a2a4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="600" y="200" text-anchor="middle" font-size="120" fill="#fff">⚽</text>
+  <text x="600" y="330" text-anchor="middle" font-family="sans-serif" font-size="56" font-weight="bold" fill="#fff">世界杯胜率预测台</text>
+  <text x="600" y="400" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#8aa4cc">实时赛况 · 智能预测 · 球迷讨论</text>
+  <text x="600" y="460" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#5a7a9a">2026 FIFA World Cup</text>
+  <rect x="100" y="530" width="1000" height="2" fill="#2a4a6a" rx="1"/>
+  <text x="600" y="570" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#4a6a8a">Elo评分 + 泊松分布 · 全免费 · 零广告</text>
+</svg>

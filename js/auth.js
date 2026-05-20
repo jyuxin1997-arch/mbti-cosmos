@@ -13,49 +13,47 @@
     var sb = window.SupabaseClient.getInstance();
     if (!sb) throw new Error('Supabase 未配置');
 
-    // 1. 查询 profiles 是否已有该手机号
-    var result1 = await sb
+    // 1. 匿名登录获取 uid
+    var authResult = await sb.auth.signInAnonymously();
+    var authError = authResult.error;
+    if (authError) {
+      // 如果匿名认证未开启，给出明确提示
+      if (authError.message && authError.message.indexOf('not allowed') !== -1) {
+        throw new Error('匿名登录未开启，请在 Supabase Dashboard → Authentication → Providers 中启用 Anonymous Sign-ins');
+      }
+      throw authError;
+    }
+    var uid = authResult.data.user.id;
+
+    // 2. 查询 profiles 是否已有该手机号
+    var profileResult = await sb
       .from('profiles')
       .select('*')
       .eq('phone', phone)
       .maybeSingle();
-    var existingProfile = result1.data;
-    var queryError = result1.error;
-    if (queryError) throw queryError;
+    if (profileResult.error) throw profileResult.error;
 
-    // 2. 匿名登录获取 uid
-    var result2 = await sb.auth.signInAnonymously();
-    var authData = result2.data;
-    var authError = result2.error;
-    if (authError) throw authError;
-
-    var uid = authData.user.id;
+    var existingProfile = profileResult.data;
 
     if (existingProfile) {
-      // 老用户：更新 last_login，同步 uid（重要：匿名登录每次设备 uid 不同，需更新）
-      var result3 = await sb
+      // 老用户：更新 auth_uid 和 last_login（不修改 id，避免 FK 冲突）
+      var updateResult = await sb
         .from('profiles')
-        .update({ last_login: new Date().toISOString(), id: uid })
-        .eq('phone', phone);
-      var updateError = result3.error;
-      // 注意：如果 uid 冲突（已有该 uid 的 profile），需要先删除旧 uid 的 profile
-      // 但这种情况极少，MVP 阶段暂不处理
-      if (updateError) {
-        // 回退：只更新 last_login，不改 uid
-        await sb.from('profiles').update({ last_login: new Date().toISOString() }).eq('phone', phone);
-      }
-      currentUser = Object.assign({}, existingProfile, { id: uid, last_login: new Date().toISOString() });
-    } else {
-      // 新用户：创建 profile
-      var result4 = await sb
-        .from('profiles')
-        .insert({ id: uid, phone: phone, nickname: nickname, masked_phone: maskPhone(phone) })
+        .update({ auth_uid: uid, last_login: new Date().toISOString() })
+        .eq('phone', phone)
         .select()
         .single();
-      var newProfile = result4.data;
-      var insertError = result4.error;
-      if (insertError) throw insertError;
-      currentUser = newProfile;
+      if (updateResult.error) throw updateResult.error;
+      currentUser = updateResult.data;
+    } else {
+      // 新用户：创建 profile，id 与 auth_uid 都设为匿名 uid
+      var insertResult = await sb
+        .from('profiles')
+        .insert({ id: uid, auth_uid: uid, phone: phone, nickname: nickname, masked_phone: maskPhone(phone) })
+        .select()
+        .single();
+      if (insertResult.error) throw insertResult.error;
+      currentUser = insertResult.data;
     }
 
     // 保存到 localStorage
@@ -67,7 +65,7 @@
   async function logout() {
     var sb = window.SupabaseClient.getInstance();
     if (sb) {
-      await sb.auth.signOut();
+      try { await sb.auth.signOut(); } catch(e) { /* ignore */ }
     }
     currentUser = null;
     localStorage.removeItem(config.CACHE_KEY_USER);
@@ -75,37 +73,52 @@
   }
 
   async function restoreSession() {
-    // 优先从 localStorage 恢复
+    // 优先从 localStorage 恢复（快速显示）
     var cached = localStorage.getItem(config.CACHE_KEY_USER);
     if (cached) {
       try {
         currentUser = JSON.parse(cached);
         _fireAuthChange(currentUser);
-        return currentUser;
       } catch(e) { /* ignore */ }
     }
 
-    // 尝试从 Supabase session 恢复
+    // 尝试从 Supabase session 恢复（验证有效性）
     var sb = window.SupabaseClient.getInstance();
-    if (!sb) return null;
+    if (!sb) return currentUser;
 
-    var sessionResult = await sb.auth.getSession();
-    var session = sessionResult.data.session;
-    if (session && session.user) {
-      var profileResult = await sb
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .maybeSingle();
-      var profile = profileResult.data;
-      if (profile) {
-        currentUser = profile;
-        localStorage.setItem(config.CACHE_KEY_USER, JSON.stringify(currentUser));
-        _fireAuthChange(currentUser);
-        return currentUser;
+    try {
+      var sessionResult = await sb.auth.getSession();
+      var session = sessionResult.data.session;
+      if (session && session.user) {
+        // 先通过 auth_uid 查找
+        var profileResult = await sb
+          .from('profiles')
+          .select('*')
+          .eq('auth_uid', session.user.id)
+          .maybeSingle();
+        if (profileResult.data) {
+          currentUser = profileResult.data;
+          localStorage.setItem(config.CACHE_KEY_USER, JSON.stringify(currentUser));
+          _fireAuthChange(currentUser);
+          return currentUser;
+        }
+        // fallback: 通过 id 查找（兼容旧数据）
+        profileResult = await sb
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .maybeSingle();
+        if (profileResult.data) {
+          currentUser = profileResult.data;
+          localStorage.setItem(config.CACHE_KEY_USER, JSON.stringify(currentUser));
+          _fireAuthChange(currentUser);
+          return currentUser;
+        }
       }
+    } catch(e) {
+      console.warn('[Auth] 恢复会话失败:', e);
     }
-    return null;
+    return currentUser;
   }
 
   function getCurrentUser() { return currentUser; }
@@ -113,7 +126,6 @@
 
   function onAuthChange(callback) {
     authChangeCallbacks.push(callback);
-    // 立即回调一次当前状态
     if (currentUser) callback(currentUser);
   }
 

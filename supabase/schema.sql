@@ -4,6 +4,7 @@
 -- 1. profiles 表
 CREATE TABLE IF NOT EXISTS profiles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  auth_uid uuid,
   phone text UNIQUE NOT NULL,
   nickname text NOT NULL,
   masked_phone text,
