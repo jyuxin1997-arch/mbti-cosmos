@@ -137,7 +137,7 @@
 
     var query = sb
       .from('posts')
-      .select('*, profiles(nickname)')
+      .select('*, author:profiles(nickname)')
       .order('created_at', { ascending: false })
       .range(postOffset, postOffset + config.POSTS_PER_PAGE - 1);
 
@@ -180,7 +180,7 @@
 
     var query = sb
       .from('posts')
-      .select('*, profiles(nickname)')
+      .select('*, author:profiles(nickname)')
       .order('created_at', { ascending: false });
 
     if (category && category !== 'all') {
@@ -215,7 +215,7 @@
     var html = '';
     for (var i = 0; i < postData.length; i++) {
       var post = postData[i];
-      var author = (post.profiles && post.profiles.nickname) ? post.profiles.nickname : '匿名';
+      var author = (post.author && post.author.nickname) ? post.author.nickname : '匿名';
       var matchLabel = post.match_key ? '⚽ ' + escapeHtml(post.match_key.replace(/_vs_/g, ' VS ')) : '';
       html += '<div class="post-card" data-id="' + post.id + '">'
         + '<div class="post-title">' + escapeHtml(post.title) + '</div>'
@@ -260,7 +260,7 @@
       category: category || 'discussion'
     };
 
-    sb.from('posts').insert(insertData).select('*, profiles(nickname)').single()
+    sb.from('posts').insert(insertData).select('*, author:profiles(nickname)').single()
       .then(function(result) {
         if (result.error) {
           showToast('发帖失败: ' + result.error.message);
@@ -293,7 +293,7 @@
     currentOpenPostId = postId;
 
     // 加载帖子详情
-    sb.from('posts').select('*, profiles(nickname)').eq('id', postId).single()
+    sb.from('posts').select('*, author:profiles(nickname)').eq('id', postId).single()
       .then(function(postResult) {
         if (postResult.error || !postResult.data) {
           showToast('帖子不存在');
@@ -317,7 +317,7 @@
     if (!sb) return Promise.resolve([]);
 
     return sb.from('replies')
-      .select('*, profiles(nickname)')
+      .select('*, author:profiles(nickname)')
       .eq('post_id', postId)
       .order('created_at', { ascending: true })
       .then(function(result) {
@@ -334,7 +334,7 @@
   }
 
   function renderPostDetail(post, replies) {
-    var author = (post.profiles && post.profiles.nickname) ? post.profiles.nickname : '匿名';
+    var author = (post.author && post.author.nickname) ? post.author.nickname : '匿名';
     $('detailPostTitle').textContent = post.title;
     $('detailPostMeta').innerHTML = '<span>👤 ' + escapeHtml(author) + '</span>'
       + '<span>🕐 ' + formatTime(post.created_at) + '</span>'
@@ -376,7 +376,7 @@
     var html = '';
     for (var i = 0; i < replies.length; i++) {
       var r = replies[i];
-      var rAuthor = (r.profiles && r.profiles.nickname) ? r.profiles.nickname : '匿名';
+      var rAuthor = (r.author && r.author.nickname) ? r.author.nickname : '匿名';
       html += '<div class="reply-item" data-reply-id="' + r.id + '">'
         + '<div class="reply-author">' + escapeHtml(rAuthor) + '</div>'
         + '<div class="reply-content">' + escapeHtml(r.content) + '</div>'
@@ -412,7 +412,7 @@
       post_id: postId,
       author_id: user.id,
       content: content
-    }).select('*, profiles(nickname)').single()
+    }).select('*, author:profiles(nickname)').single()
       .then(function(result) {
         if (result.error) {
           showToast('回复失败: ' + result.error.message);
