@@ -25,36 +25,34 @@
     }
     var uid = authResult.data.user.id;
 
-    // 2. 查询 profiles 是否已有该手机号
+    // 2. 查询 profiles 是否已有该手机号（用 limit(1) 防止重复记录报错）
     var profileResult = await sb
       .from('profiles')
       .select('*')
       .eq('phone', phone)
-      .maybeSingle();
+      .limit(1);
     if (profileResult.error) throw profileResult.error;
 
-    var existingProfile = profileResult.data;
+    var existingProfile = (profileResult.data && profileResult.data.length > 0) ? profileResult.data[0] : null;
 
     if (existingProfile) {
       // 老用户：更新 auth_uid 和 last_login（不修改 id，避免 FK 冲突）
       var updateResult = await sb
         .from('profiles')
         .update({ auth_uid: uid, last_login: new Date().toISOString() })
-        .eq('phone', phone)
-        .select()
-        .single();
+        .eq('id', existingProfile.id)
+        .select();
       if (updateResult.error) throw updateResult.error;
-      currentUser = updateResult.data;
+      currentUser = (updateResult.data && updateResult.data.length > 0) ? updateResult.data[0] : existingProfile;
     } else {
       // 新用户：创建 profile，id 与 auth_uid 都设为匿名 uid
       var avatarUrl = (window.Avatars && window.Avatars.random) ? window.Avatars.random() : '⚽';
       var insertResult = await sb
         .from('profiles')
         .insert({ id: uid, auth_uid: uid, phone: phone, nickname: nickname, masked_phone: maskPhone(phone), avatar_url: avatarUrl })
-        .select()
-        .single();
+        .select();
       if (insertResult.error) throw insertResult.error;
-      currentUser = insertResult.data;
+      currentUser = (insertResult.data && insertResult.data.length > 0) ? insertResult.data[0] : null;
     }
 
     // 保存到 localStorage
@@ -96,9 +94,9 @@
           .from('profiles')
           .select('*')
           .eq('auth_uid', session.user.id)
-          .maybeSingle();
-        if (profileResult.data) {
-          currentUser = profileResult.data;
+          .limit(1);
+        if (profileResult.data && profileResult.data.length > 0) {
+          currentUser = profileResult.data[0];
           localStorage.setItem(config.CACHE_KEY_USER, JSON.stringify(currentUser));
           _fireAuthChange(currentUser);
           return currentUser;
@@ -108,8 +106,8 @@
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
-          .maybeSingle();
-        if (profileResult.data) {
+          .limit(1);
+        if (profileResult.data && profileResult.data.length > 0) {
           currentUser = profileResult.data;
           localStorage.setItem(config.CACHE_KEY_USER, JSON.stringify(currentUser));
           _fireAuthChange(currentUser);
