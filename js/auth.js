@@ -36,14 +36,28 @@
     var existingProfile = (profileResult.data && profileResult.data.length > 0) ? profileResult.data[0] : null;
 
     if (existingProfile) {
-      // 老用户：更新 auth_uid 和 last_login（不修改 id，避免 FK 冲突）
-      var updateResult = await sb
-        .from('profiles')
-        .update({ auth_uid: uid, last_login: new Date().toISOString() })
-        .eq('id', existingProfile.id)
-        .select();
-      if (updateResult.error) throw updateResult.error;
-      currentUser = (updateResult.data && updateResult.data.length > 0) ? updateResult.data[0] : existingProfile;
+      // 老用户：通过 SECURITY DEFINER RPC 更新 auth_uid（绕过 RLS 循环依赖）
+      try {
+        var rpcResult = await sb.rpc('login_update_auth_uid', {
+          p_profile_id: existingProfile.id,
+          p_auth_uid: uid
+        });
+        if (rpcResult.error) {
+          console.warn('[Auth] RPC 更新 auth_uid 失败:', rpcResult.error);
+          // fallback: 尝试直接 UPDATE（首次登录后 auth_uid 可能已匹配）
+          var fallbackResult = await sb
+            .from('profiles')
+            .select('*')
+            .eq('id', existingProfile.id)
+            .limit(1);
+          currentUser = (fallbackResult.data && fallbackResult.data.length > 0) ? fallbackResult.data[0] : existingProfile;
+        } else {
+          currentUser = (rpcResult.data && rpcResult.data.length > 0) ? rpcResult.data[0] : existingProfile;
+        }
+      } catch(rpcErr) {
+        console.warn('[Auth] RPC 调用异常:', rpcErr);
+        currentUser = existingProfile;
+      }
     } else {
       // 新用户：创建 profile，id 与 auth_uid 都设为匿名 uid
       var avatarUrl = (window.Avatars && window.Avatars.random) ? window.Avatars.random() : '⚽';
