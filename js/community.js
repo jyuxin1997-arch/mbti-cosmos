@@ -354,7 +354,7 @@
       category: category || 'discussion'
     };
 
-    sb.from('posts').insert(insertData).select('*, author:profiles(nickname, avatar_url, level)').single()
+    sb.from('posts').insert(insertData)
       .then(function(result) {
         if (result.error) {
           showToast('发帖失败: ' + result.error.message);
@@ -686,7 +686,7 @@
       insertData.parent_reply_id = replyingTo.id;
     }
 
-    sb.from('replies').insert(insertData).select('*, author:profiles(nickname, avatar_url, level)').single()
+    sb.from('replies').insert(insertData)
       .then(function(result) {
         if (result.error) {
           showToast('回复失败: ' + result.error.message);
