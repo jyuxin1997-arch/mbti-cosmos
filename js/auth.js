@@ -47,9 +47,10 @@
       currentUser = updateResult.data;
     } else {
       // 新用户：创建 profile，id 与 auth_uid 都设为匿名 uid
+      var avatarUrl = (window.Avatars && window.Avatars.random) ? window.Avatars.random() : '⚽';
       var insertResult = await sb
         .from('profiles')
-        .insert({ id: uid, auth_uid: uid, phone: phone, nickname: nickname, masked_phone: maskPhone(phone) })
+        .insert({ id: uid, auth_uid: uid, phone: phone, nickname: nickname, masked_phone: maskPhone(phone), avatar_url: avatarUrl })
         .select()
         .single();
       if (insertResult.error) throw insertResult.error;

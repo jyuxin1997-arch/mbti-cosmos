@@ -87,10 +87,50 @@ nav a.active{color:var(--green)}
 .sources{padding:20px 0;text-align:center;font-size:12px;color:var(--muted);border-top:1px solid var(--line)}
 .sources a{color:var(--muted);text-decoration:underline}
 
+/* === 用户头像 === */
+.user-avatar{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;background:var(--green-2);flex-shrink:0}
+.user-avatar.sm{width:24px;height:24px;font-size:13px}
+.user-avatar.md{width:36px;height:36px;font-size:18px}
+.user-avatar.lg{width:48px;height:48px;font-size:24px}
+
+/* === 等级标签 === */
+.level-badge{display:inline-flex;align-items:center;padding:1px 6px;border:1px solid;border-radius:10px;font-size:10px;font-weight:600;line-height:1.4}
+.user-name{font-size:12px;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* === 通知铃铛 === */
+.notification-bell{position:relative;display:inline-flex;align-items:center;cursor:pointer;font-size:18px;padding:4px 8px;margin-right:4px;transition:transform .2s}
+.notification-bell:hover{transform:scale(1.15)}
+.notification-badge{position:absolute;top:0;right:2px;background:var(--red);color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;line-height:1;padding:0 3px}
+
+/* === 通知面板 === */
+.notification-panel{position:fixed;top:56px;right:8px;width:320px;max-width:calc(100vw - 16px);max-height:400px;overflow-y:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;z-index:210;box-shadow:var(--shadow)}
+.notification-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px}
+.notification-mark-all{font-size:12px;color:var(--blue);cursor:pointer;background:none;border:none;padding:4px 8px}
+.notification-mark-all:hover{text-decoration:underline}
+.notification-empty{padding:32px 16px;text-align:center;color:var(--muted);font-size:13px}
+.notification-item{display:flex;align-items:flex-start;gap:8px;padding:10px 16px;cursor:pointer;transition:background .15s}
+.notification-item:hover{background:var(--panel-2)}
+.notification-item.unread{background:rgba(49,196,122,.06)}
+.notification-text{flex:1;font-size:13px;line-height:1.4}
+.notification-text strong{color:var(--text)}
+.notification-text p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.notification-time{font-size:11px;color:var(--muted);white-space:nowrap;margin-top:2px}
+
+/* === 点赞弹跳动效 === */
+@keyframes like-bounce{0%{transform:scale(1)}30%{transform:scale(1.4)}60%{transform:scale(.9)}100%{transform:scale(1)}}
+.like-btn.bouncing{animation:like-bounce .35s ease}
+
+/* === 骨架屏 === */
+.skeleton-card{background:var(--panel);border-radius:12px;padding:20px;margin-bottom:16px}
+.skeleton-line{height:14px;border-radius:4px;background:linear-gradient(90deg,var(--panel-2) 25%,var(--line) 50%,var(--panel-2) 75%);background-size:200% 100%;animation:skeleton-pulse 1.5s infinite;margin-bottom:8px}
+.skeleton-line.w60{width:60%}.skeleton-line.w80{width:80%}.skeleton-line.w40{width:40%}
+@keyframes skeleton-pulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
 /* === 响应式断点 === */
 @media(max-width:768px){
   nav{display:none}
   .hamburger{display:flex}
   .tab-bar{display:flex}
   body{padding-bottom:calc(56px + env(safe-area-inset-bottom, 0px))}
+  .notification-panel{right:0;width:100%;max-width:100%;border-radius:12px 12px 0 0;bottom:0;top:auto;max-height:60vh}
 }

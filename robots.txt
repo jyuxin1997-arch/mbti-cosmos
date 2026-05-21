@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jyuxin1997-arch.github.io/mbti-cosmos/sitemap.xml

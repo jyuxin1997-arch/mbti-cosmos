@@ -38,3 +38,29 @@
 .like-btn{display:inline-flex;align-items:center;gap:4px;font-size:13px;color:var(--muted);cursor:pointer;padding:4px 8px;border-radius:6px;transition:all .2s}
 .like-btn:hover{color:var(--red);background:rgba(239,79,69,.1)}
 .like-btn.liked{color:var(--red)}
+
+/* 排序切换栏 */
+.sort-bar{display:flex;gap:8px;margin-bottom:16px}
+.sort-bar button{padding:5px 12px;border-radius:16px;font-size:12px;border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .2s}
+.sort-bar button.active{background:var(--panel-2);color:var(--text);border-color:var(--line)}
+
+/* 帖子操作按钮 */
+.post-owner-actions{display:flex;gap:8px;margin-top:8px}
+.btn-edit,.btn-delete{padding:4px 10px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid var(--line);color:var(--muted);transition:all .2s}
+.btn-edit:hover{border-color:var(--blue);color:var(--blue)}
+.btn-delete:hover{border-color:var(--red);color:var(--red)}
+
+/* 回复目标指示 */
+.reply-target{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:var(--panel-2);border-radius:4px;font-size:12px;color:var(--blue);margin-right:8px}
+.reply-target .cancel-reply{cursor:pointer;color:var(--muted);margin-left:4px}
+.reply-target .cancel-reply:hover{color:var(--red)}
+
+/* 嵌套回复 */
+.reply-item .reply-header{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.reply-item.reply-nested{margin-left:36px;padding-left:12px;border-left:2px solid var(--green-2)}
+.reply-item .reply-actions{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+.reply-item .reply-actions .btn-reply-to{font-size:12px;color:var(--blue);cursor:pointer;padding:2px 6px;border-radius:4px}
+.reply-item .reply-actions .btn-reply-to:hover{background:rgba(86,163,255,.1)}
+
+/* 精华标记 */
+.pinned-badge{display:inline-block;background:var(--gold);color:var(--ink);font-size:11px;font-weight:600;padding:2px 8px;border-radius:4px;margin-bottom:8px}

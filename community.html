@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="2026 FIFA 世界杯球迷社区 — 讨论、预测、资讯，自由交流">
+<meta property="og:title" content="球迷社区 - 世界杯胜率预测台">
+<meta property="og:description" content="2026 FIFA 世界杯球迷社区 — 讨论、预测、资讯，自由交流">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://jyuxin1997-arch.github.io/mbti-cosmos/community.html">
+<meta property="og:image" content="https://jyuxin1997-arch.github.io/mbti-cosmos/img/og-cover.png">
+<meta property="og:site_name" content="世界杯胜率预测台">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="球迷社区 - 世界杯胜率预测台">
+<meta name="twitter:description" content="2026 FIFA 世界杯球迷社区 — 讨论、预测、资讯，自由交流">
+<meta name="twitter:image" content="https://jyuxin1997-arch.github.io/mbti-cosmos/img/og-cover.png">
 <title>球迷社区 - 世界杯胜率预测台</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <link rel="stylesheet" href="css/base.css">
@@ -46,6 +56,11 @@
     <button data-filter="discussion">💬 讨论</button>
     <button data-filter="prediction">🎯 预测</button>
     <button data-filter="news">📰 资讯</button>
+  </div>
+  <div class="sort-bar" id="sortBar">
+    <button class="active" data-sort="latest">最新</button>
+    <button data-sort="hot">最热</button>
+    <button data-sort="pinned">置顶</button>
   </div>
   <div id="postList">
     <div style="text-align:center;padding:40px;color:var(--muted)">加载中...</div>
@@ -95,6 +110,7 @@
     </div>
     <div id="replyList"></div>
     <div class="reply-input-area" id="replyInputArea">
+      <span class="reply-target" id="replyTarget" style="display:none"></span>
       <input type="text" id="replyInput" placeholder="写下你的回复..." maxlength="500">
       <button id="submitReply">回复</button>
     </div>
@@ -103,11 +119,14 @@
 
 <!-- 登录弹窗由 nav.js 动态注入 -->
 
-<script src="js/config.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/supabase-client.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/nav.js"></script>
-<script src="js/community.js"></script>
+<script defer src="js/config.js"></script>
+<script defer src="js/utils.js"></script>
+<script defer src="js/supabase-client.js"></script>
+<script defer src="js/avatars.js"></script>
+<script defer src="js/content-filter.js"></script>
+<script defer src="js/notifications.js"></script>
+<script defer src="js/auth.js"></script>
+<script defer src="js/nav.js"></script>
+<script defer src="js/community.js"></script>
 </body>
 </html>

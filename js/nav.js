@@ -68,13 +68,66 @@
   }
 
   /**
+   * 等级计算与颜色
+   */
+  function _calcLevel(user) {
+    var score = (user.posts_count || 0) * 5 + (user.replies_count || 0) * 2 + (user.likes_received || 0) * 1;
+    if (score >= 100) return 5;
+    if (score >= 60) return 4;
+    if (score >= 30) return 3;
+    if (score >= 10) return 2;
+    return 1;
+  }
+
+  function _levelColor(lv) {
+    var colors = ['', '#9db2ab', '#31c47a', '#56a3ff', '#f0c04d', '#ef4f45'];
+    return colors[lv] || '#9db2ab';
+  }
+
+  /**
+   * 刷新用户 profile 计数
+   */
+  function _refreshProfileCounts() {
+    var sb = window.SupabaseClient ? window.SupabaseClient.getInstance() : null;
+    var user = window.AuthService ? window.AuthService.getCurrentUser() : null;
+    if (!sb || !user) return;
+    sb.from('profiles').select('posts_count,replies_count,likes_received,avatar_url,level')
+      .eq('id', user.id).single()
+      .then(function(result) {
+        if (result.data) {
+          var updated = Object.assign({}, user, result.data);
+          try {
+            var cached = localStorage.getItem(window.AppConfig.CACHE_KEY_USER);
+            if (cached) {
+              var parsed = JSON.parse(cached);
+              var merged = Object.assign(parsed, result.data);
+              localStorage.setItem(window.AppConfig.CACHE_KEY_USER, JSON.stringify(merged));
+            }
+          } catch(e) {}
+          renderAuthUI(updated);
+        }
+      }).catch(function() { /* ignore */ });
+  }
+
+  /**
    * 渲染认证 UI（登录按钮或用户信息+退出）
    * @param {Object|null} user - 当前用户对象，null 表示未登录
    */
   function renderAuthUI(user) {
-    var html = user
-      ? '<div class="auth-user"><div class="avatar">' + (user.nickname || '?')[0] + '</div><span>' + escapeHtml(user.nickname) + '</span><span class="logout" id="logoutBtn">退出</span></div>'
-      : '<button class="auth-login-btn" id="navLoginBtn">登录</button>';
+    var html;
+    if (user) {
+      var avatarEmoji = user.avatar_url || '⚽';
+      var lv = user.level || _calcLevel(user);
+      var lvColor = _levelColor(lv);
+      html = '<div class="auth-user">'
+        + '<span class="user-avatar sm">' + avatarEmoji + '</span>'
+        + '<span class="user-name">' + escapeHtml(user.nickname) + '</span>'
+        + '<span class="level-badge" style="color:' + lvColor + ';border-color:' + lvColor + '">Lv' + lv + '</span>'
+        + '<span class="logout" id="logoutBtn">退出</span>'
+        + '</div>';
+    } else {
+      html = '<button class="auth-login-btn" id="navLoginBtn">登录</button>';
+    }
 
     var authArea = document.getElementById('authArea');
     var authAreaMobile = document.getElementById('authAreaMobile');
@@ -193,10 +246,16 @@
     var user = window.AuthService ? window.AuthService.getCurrentUser() : null;
     renderAuthUI(user);
 
+    // 初始化通知铃铛
+    if (window.NotificationService) {
+      NotificationService.initBell();
+    }
+
     if (window.AuthService) {
       window.AuthService.restoreSession().then(function(restoredUser) {
         if (restoredUser) {
           console.log('[NavService] 用户已恢复:', restoredUser.nickname);
+          _refreshProfileCounts();
         }
       });
       window.AuthService.onAuthChange(function(changedUser) {
