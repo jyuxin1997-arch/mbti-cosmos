@@ -228,7 +228,7 @@
 
     var query = sb
       .from('posts')
-      .select('*, author:profiles(nickname, avatar_url, level)')
+      .select('*')
       .range(postOffset, postOffset + config.POSTS_PER_PAGE - 1);
 
     // 排序
@@ -257,23 +257,62 @@
         return;
       }
       var newPosts = result.data || [];
-      if (append) {
-        posts = posts.concat(newPosts);
-      } else {
-        posts = newPosts;
-      }
-      hasMorePosts = newPosts.length >= config.POSTS_PER_PAGE;
-      renderPostList(posts);
-      if (hasMorePosts) {
-        $('loadMorePosts').style.display = 'block';
-      } else {
-        $('loadMorePosts').style.display = 'none';
-      }
-      postOffset = posts.length;
+      // 批量查作者信息
+      _enrichAuthors(newPosts).then(function(enriched) {
+        if (append) {
+          posts = posts.concat(enriched);
+        } else {
+          posts = enriched;
+        }
+        hasMorePosts = newPosts.length >= config.POSTS_PER_PAGE;
+        renderPostList(posts);
+        if (hasMorePosts) {
+          $('loadMorePosts').style.display = 'block';
+        } else {
+          $('loadMorePosts').style.display = 'none';
+        }
+        postOffset = posts.length;
+      });
     }).catch(function(err) {
       console.error('[Community] 加载帖子异常:', err);
       $('postList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted)">' + escapeHtml(err.message || '网络异常') + '<button onclick="window.CommunityService.retryLoad()" style="margin-left:8px;padding:4px 12px;border-radius:4px;background:var(--panel-2);color:var(--accent);cursor:pointer">重试</button></div>';
     });
+  }
+
+  // ========== 批量查作者信息（避免FK嵌入歧义） ==========
+  function _enrichAuthors(items) {
+    if (!items || !items.length) return Promise.resolve(items);
+    var sb = window.SupabaseClient.getInstance();
+    if (!sb) return Promise.resolve(items);
+
+    var authorIds = [];
+    var idSet = {};
+    for (var i = 0; i < items.length; i++) {
+      var aid = items[i].author_id;
+      if (aid && !idSet[aid]) {
+        idSet[aid] = true;
+        authorIds.push(aid);
+      }
+    }
+    if (!authorIds.length) return Promise.resolve(items);
+
+    return sb.from('profiles')
+      .select('id, nickname, avatar_url, level')
+      .in('id', authorIds)
+      .then(function(result) {
+        var profileMap = {};
+        if (result.data) {
+          for (var j = 0; j < result.data.length; j++) {
+            profileMap[result.data[j].id] = result.data[j];
+          }
+        }
+        for (var k = 0; k < items.length; k++) {
+          items[k].author = profileMap[items[k].author_id] || null;
+        }
+        return items;
+      }).catch(function() {
+        return items;
+      });
   }
 
   // ========== 渲染帖子列表 ==========
@@ -388,17 +427,20 @@
     clearReplyTarget();
 
     // 加载帖子详情
-    sb.from('posts').select('*, author:profiles(nickname, avatar_url, level)').eq('id', postId).single()
+    sb.from('posts').select('*').eq('id', postId).limit(1)
       .then(function(postResult) {
-        if (postResult.error || !postResult.data) {
+        if (postResult.error || !postResult.data || !postResult.data.length) {
           showToast('帖子不存在');
           return;
         }
-        var post = postResult.data;
+        var post = postResult.data[0];
         // 加载回复
         getReplies(postId).then(function(replies) {
-          renderPostDetail(post, replies);
-          $('postDetailModal').classList.add('active');
+          // 查作者信息
+          _enrichAuthors([post]).then(function() {
+            renderPostDetail(post, replies);
+            $('postDetailModal').classList.add('active');
+          });
         });
       })
       .catch(function(err) {
@@ -412,7 +454,7 @@
     if (!sb) return Promise.resolve([]);
 
     return sb.from('replies')
-      .select('*, author:profiles(nickname, avatar_url, level)')
+      .select('*')
       .eq('post_id', postId)
       .order('created_at', { ascending: true })
       .then(function(result) {
@@ -420,7 +462,8 @@
           console.error('[Community] 加载回复失败:', result.error);
           return [];
         }
-        return result.data || [];
+        var replies = result.data || [];
+        return _enrichAuthors(replies).then(function() { return replies; });
       })
       .catch(function(err) {
         console.error('[Community] 加载回复异常:', err);
@@ -792,13 +835,13 @@
     if (!sb) return;
 
     // 先获取当前回复内容
-    sb.from('replies').select('content').eq('id', replyId).single()
+    sb.from('replies').select('content').eq('id', replyId).limit(1)
       .then(function(result) {
-        if (result.error || !result.data) {
+        if (result.error || !result.data || !result.data.length) {
           showToast('回复不存在');
           return;
         }
-        var newContent = window.prompt('编辑回复', result.data.content);
+        var newContent = window.prompt('编辑回复', result.data[0].content);
         if (newContent === null) return;
         newContent = newContent.trim();
         if (!newContent) {
@@ -872,9 +915,9 @@
       .select('user_id')
       .eq('user_id', userId)
       .eq('post_id', postId)
-      .maybeSingle()
+      .limit(1)
       .then(function(result) {
-        return !!(result.data);
+        return !!(result.data && result.data.length > 0);
       })
       .catch(function() { return false; });
   }
@@ -887,9 +930,9 @@
       .select('user_id')
       .eq('user_id', userId)
       .eq('reply_id', replyId)
-      .maybeSingle()
+      .limit(1)
       .then(function(result) {
-        return !!(result.data);
+        return !!(result.data && result.data.length > 0);
       })
       .catch(function() { return false; });
   }
