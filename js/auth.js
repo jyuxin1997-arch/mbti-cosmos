@@ -108,7 +108,7 @@
           .eq('id', session.user.id)
           .limit(1);
         if (profileResult.data && profileResult.data.length > 0) {
-          currentUser = profileResult.data;
+          currentUser = profileResult.data[0];
           localStorage.setItem(config.CACHE_KEY_USER, JSON.stringify(currentUser));
           _fireAuthChange(currentUser);
           return currentUser;
