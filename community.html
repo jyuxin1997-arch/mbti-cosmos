@@ -128,5 +128,44 @@
 <script defer src="js/auth.js"></script>
 <script defer src="js/nav.js"></script>
 <script defer src="js/community.js"></script>
+
+<!-- ================= 海报分享功能 ================= -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script defer src="js/share.js"></script>
+
+<!-- 隐藏海报模板 -->
+<div id="share-poster-tpl" style="position:absolute;left:-9999px;top:-9999px;width:375px;background:linear-gradient(160deg,#0d2818 0%,#1a472a 60%,#0d2818 100%);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;padding:36px 24px 28px;box-sizing:border-box;">
+  <div style="text-align:center;margin-bottom:22px;">
+    <div style="font-size:28px;margin-bottom:6px;">⚽</div>
+    <div style="font-size:20px;font-weight:700;color:#ffd700;letter-spacing:2px;">世界杯胜率预测台</div>
+    <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:3px;margin-top:4px;">2026 FIFA WORLD CUP</div>
+  </div>
+  <div id="share-poster-content" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,215,0,0.3);border-radius:12px;padding:18px 16px;margin-bottom:22px;min-height:80px;">
+    <div style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:8px;">来自球迷社区</div>
+    <div id="share-poster-title" style="font-size:16px;font-weight:600;line-height:1.5;color:#fff;"></div>
+    <div id="share-poster-body" style="font-size:13px;color:rgba(255,255,255,0.75);margin-top:8px;line-height:1.6;"></div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.15);padding-top:18px;">
+    <div>
+      <div style="font-size:13px;font-weight:600;color:#ffd700;margin-bottom:4px;">扫码参与预测</div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.5);">和球迷一起对线 ⚽</div>
+    </div>
+    <div style="background:#fff;padding:5px;border-radius:8px;">
+      <img id="share-poster-qr" src="" width="72" height="72" alt="QR" style="display:block;">
+    </div>
+  </div>
+</div>
+
+<!-- 分享预览弹窗 -->
+<div id="share-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;justify-content:center;align-items:center;flex-direction:column;">
+  <p style="color:#fff;margin-bottom:14px;font-size:14px;text-align:center;">✨ 海报已生成！长按图片保存到相册</p>
+  <div id="share-img-wrap" style="max-width:88vw;text-align:center;"></div>
+  <div style="margin-top:18px;display:flex;gap:12px;">
+    <button onclick="window.ShareModule&&window.ShareModule.download()" style="padding:10px 24px;background:#ffd700;color:#0d2818;border:none;border-radius:20px;font-weight:700;font-size:14px;cursor:pointer;">⬇ 保存图片</button>
+    <button onclick="window.ShareModule&&window.ShareModule.close()" style="padding:10px 24px;background:rgba(255,255,255,0.15);color:#fff;border:none;border-radius:20px;font-size:14px;cursor:pointer;">关闭</button>
+  </div>
+  <p style="color:rgba(255,255,255,0.4);font-size:11px;margin-top:12px;">iOS：长按图片 → 存储到"照片"</p>
+</div>
+<!-- ================= 海报分享功能结束 ================= -->
 </body>
 </html>

@@ -342,6 +342,7 @@
         + '<span>💬 ' + (post.replies_count || 0) + '</span>'
         + '<span>❤️ ' + (post.likes_count || 0) + '</span>'
         + (matchLabel ? '<span>' + matchLabel + '</span>' : '')
+        + '<button class="btn-share-post" data-id="' + post.id + '" data-title="' + escapeHtml(post.title) + '" data-content="' + escapeHtml((post.content || '').slice(0, 100)) + '" title="分享此帖" style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:15px;padding:2px 4px;color:var(--muted);flex-shrink:0;">📤</button>'
         + '</div>'
         + '<div class="post-excerpt">' + escapeHtml(post.content) + '</div>'
         + '</div>';
@@ -357,6 +358,19 @@
           openPostDetail(id);
         });
       })(cards[j]);
+    }
+
+    // 绑定帖子分享按钮（阻止冒泡，避免触发打开详情）
+    var shareBtns = $('postList').querySelectorAll('.btn-share-post');
+    for (var k = 0; k < shareBtns.length; k++) {
+      (function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (window.ShareModule) {
+            ShareModule.sharePost(btn.dataset.id, btn.dataset.title, btn.dataset.content);
+          }
+        });
+      })(shareBtns[k]);
     }
   }
 
