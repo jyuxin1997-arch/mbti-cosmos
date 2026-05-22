@@ -77,8 +77,14 @@
 .h2h-table td{padding:6px 8px;border-bottom:1px solid rgba(38,56,51,.5)}
 
 /* 分享按钮 */
-.share-btn{display:block;width:100%;padding:10px;margin-top:12px;background:rgba(49,196,122,.1);border:1px solid var(--green-2);border-radius:8px;font-size:13px;font-weight:500;color:var(--green);cursor:pointer;text-align:center;transition:.2s}
-.share-btn:hover{background:rgba(49,196,122,.2)}
+.share-btn{display:block;width:100%;padding:10px;margin-top:12px;background:linear-gradient(135deg,rgba(255,51,102,.15),rgba(255,153,51,.15));border:1px solid rgba(255,51,102,.4);border-radius:8px;font-size:13px;font-weight:600;color:#ff6680;cursor:pointer;text-align:center;transition:.2s}
+.share-btn:hover{background:linear-gradient(135deg,rgba(255,51,102,.25),rgba(255,153,51,.25))}
+
+/* 用户ID输入行 */
+.user-id-row{margin-top:8px}
+.user-id-input{width:100%;padding:9px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#f5fbf7;font-size:13px;box-sizing:border-box;text-align:center;transition:.2s}
+.user-id-input::placeholder{color:rgba(255,255,255,.3)}
+.user-id-input:focus{outline:none;border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,.2)}
 
 /* 讨论区入口 */
 .discuss-section{margin-top:20px;border-top:1px solid var(--line);padding-top:20px}

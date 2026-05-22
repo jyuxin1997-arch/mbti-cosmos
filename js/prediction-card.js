@@ -2,7 +2,7 @@
 (function() {
   var DPR = Math.min(window.devicePixelRatio || 1, 2);
   var CARD_W = 680;
-  var CARD_H = 400;
+  var CARD_H = 460;  // 加高，容纳用户ID区
   var REAL_W = CARD_W * DPR;
   var REAL_H = CARD_H * DPR;
 
@@ -11,10 +11,11 @@
   function init() {
     // 关闭预测卡片弹窗
     $('closeCardPreview').addEventListener('click', function() {
-      $('cardPreviewModal').classList.remove('active');
+      closeModal();
     });
+    // 背景点击关闭
     $('cardPreviewModal').addEventListener('click', function(e) {
-      if (e.target === $('cardPreviewModal')) $('cardPreviewModal').classList.remove('active');
+      if (e.target === $('cardPreviewModal')) closeModal();
     });
 
     // 下载按钮
@@ -30,6 +31,20 @@
       if (!img || !img.src) return;
       shareCard(img.src);
     });
+
+    // 物理返回键拦截：弹窗打开时压入 #poster，关闭时弹出
+    window.addEventListener('hashchange', function() {
+      if (window.location.hash !== '#poster') {
+        $('cardPreviewModal').classList.remove('active');
+      }
+    });
+  }
+
+  function closeModal() {
+    $('cardPreviewModal').classList.remove('active');
+    if (window.location.hash === '#poster') {
+      window.history.back();
+    }
   }
 
   /**
@@ -37,9 +52,10 @@
    * @param {Object} teamA - A队信息 { flag, cn, rating }
    * @param {Object} teamB - B队信息 { flag, cn, rating }
    * @param {Object} prediction - 预测结果 { winA, drawP, winB, advanceA, advanceB, score, mode }
+   * @param {string} userId - 用户抖音号/昵称（可选）
    * @returns {string} data URL
    */
-  function generateCard(teamA, teamB, prediction) {
+  function generateCard(teamA, teamB, prediction, userId) {
     var canvas = document.createElement('canvas');
     canvas.width = REAL_W;
     canvas.height = REAL_H;
@@ -60,11 +76,19 @@
     ctx.lineWidth = 1;
     ctx.strokeRect(0.5, 0.5, CARD_W - 1, CARD_H - 1);
 
-    // === 顶部站名 ===
+    // === 顶部：站名 + 用户ID ===
     ctx.fillStyle = '#f5fbf7';
     ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('世界杯胜率预测台', CARD_W / 2, 36);
+
+    // 用户ID（右上角）
+    if (userId) {
+      ctx.font = '500 12px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillStyle = '#ffd700';
+      ctx.fillText('抖音/ID: ' + userId, CARD_W - 20, 22);
+    }
 
     // 顶部装饰线
     ctx.strokeStyle = '#31c47a';
@@ -145,26 +169,40 @@
     ctx.fillStyle = '#56a3ff';
     ctx.fillText((teamB ? teamB.cn : 'B') + ' 胜', barX + barW, barY - 6);
 
-    // === 预计比分 ===
+    // === 预计比分（大字突出显示）===
     ctx.textAlign = 'center';
     ctx.fillStyle = '#9db2ab';
     ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
-    ctx.fillText('预计比分', CARD_W / 2, 250);
-    ctx.fillStyle = '#f5fbf7';
-    ctx.font = '700 22px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
-    ctx.fillText(prediction.score || '0 - 0', CARD_W / 2, 280);
+    ctx.fillText('AI 预计比分', CARD_W / 2, 255);
+    // 大字比分
+    ctx.fillStyle = '#ffd700';
+    ctx.font = '900 38px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(prediction.score || '0 - 0', CARD_W / 2, 298);
+    // 神预言标签
+    ctx.fillStyle = '#ff3366';
+    ctx.font = '700 11px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
+    ctx.fillText('★ 神预言', CARD_W / 2, 316);
 
     // === 淘汰赛晋级概率 ===
     if (prediction.mode === 'knockout') {
       ctx.font = '400 13px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
       ctx.fillStyle = '#9db2ab';
-      ctx.fillText('晋级概率', CARD_W / 2, 308);
+      ctx.fillText('晋级概率', CARD_W / 2, 340);
       ctx.font = '600 14px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
       ctx.fillStyle = '#31c47a';
-      ctx.fillText((teamA ? teamA.cn : 'A') + ' ' + (prediction.advanceA || 0).toFixed(1) + '%', CARD_W / 2 - 80, 330);
+      ctx.fillText((teamA ? teamA.cn : 'A') + ' ' + (prediction.advanceA || 0).toFixed(1) + '%', CARD_W / 2 - 80, 360);
       ctx.fillStyle = '#56a3ff';
-      ctx.fillText((teamB ? teamB.cn : 'B') + ' ' + (prediction.advanceB || 0).toFixed(1) + '%', CARD_W / 2 + 80, 330);
+      ctx.fillText((teamB ? teamB.cn : 'B') + ' ' + (prediction.advanceB || 0).toFixed(1) + '%', CARD_W / 2 + 80, 360);
     }
+
+    // === 底部召唤语（用户提供的文案）===
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#f5fbf7';
+    ctx.font = '600 13px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText('长按保存，去对线！', 30, CARD_H - 38);
+    ctx.fillStyle = '#00e5a0';
+    ctx.font = '400 11px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
+    ctx.fillText('输了吃键盘，赢了叫爸爸 ⚽', 30, CARD_H - 20);
 
     // === 右下角二维码 ===
     var shareUrl = window.PredictorApp && window.PredictorApp.buildShareUrl ? window.PredictorApp.buildShareUrl() : window.location.href;
@@ -176,8 +214,13 @@
       new QRCode(qrDiv, { text: shareUrl, width: 120, height: 120, colorDark: '#f5fbf7', colorLight: '#111a18' });
       var qrCanvas = qrDiv.querySelector('canvas');
       if (qrCanvas) {
-        ctx.drawImage(qrCanvas, CARD_W - 120, CARD_H - 120, 100, 100);
+        ctx.drawImage(qrCanvas, CARD_W - 120, CARD_H - 120, 90, 90);
       }
+      // 扫码提示文字
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffd700';
+      ctx.font = '400 10px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
+      ctx.fillText('扫码参与预测', CARD_W - 75, CARD_H - 10);
       // 清理临时元素
       document.body.removeChild(qrDiv);
     } catch(e) {
@@ -187,9 +230,9 @@
 
     // === 底部水印 ===
     ctx.textAlign = 'center';
-    ctx.fillStyle = '#9db2ab';
-    ctx.font = '400 11px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
-    ctx.fillText('世界杯胜率预测台 · 仅供娱乐参考', CARD_W / 2, CARD_H - 12);
+    ctx.fillStyle = 'rgba(157,178,171,0.4)';
+    ctx.font = '400 10px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';
+    ctx.fillText('世界杯胜率预测台 · 仅供娱乐参考', CARD_W / 2, CARD_H - 6);
 
     return canvas.toDataURL('image/png');
   }
@@ -263,6 +306,10 @@
   function showCardModal(dataUrl) {
     $('cardPreviewImg').src = dataUrl;
     $('cardPreviewModal').classList.add('active');
+    // 物理返回键黑科技：压入虚拟历史状态
+    window.location.hash = 'poster';
+    // 弹窗滚回顶部（防止长图遮挡按钮）
+    $('cardPreviewModal').scrollTop = 0;
   }
 
   window.PredictionCardService = {

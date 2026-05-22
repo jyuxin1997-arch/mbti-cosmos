@@ -154,7 +154,10 @@
 <div class="insights" id="insights"></div>
 <div class="verdict" id="verdict"></div>
 <div id="h2hArea"></div>
-<button class="share-btn" id="shareBtn">📤 分享预测结果</button>
+<button class="share-btn" id="shareBtn">📤 生成比分预测神单</button>
+<div class="user-id-row">
+  <input type="text" id="user-id-input" class="user-id-input" placeholder="输入抖音号 / 球迷昵称，生成专属海报" maxlength="30">
+</div>
 <div class="discuss-section">
 <h4>💬 球迷讨论</h4>
 <div class="discuss-list" id="discussList"><p style="color:var(--muted);font-size:12px">选择两支球队后即可查看讨论</p></div>
@@ -183,16 +186,17 @@
 <a href="teams.html"><span class="tab-icon">📖</span><span class="tab-label">百科</span></a>
 </nav>
 
-<!-- 预测卡片弹窗 -->
+<!-- 预测卡片弹窗（终极版：背景关闭 + 返回键拦截 + 可滚动） -->
 <div class="modal-overlay" id="cardPreviewModal">
-<div class="modal-card" style="position:relative;text-align:center">
+<div class="modal-card" style="position:relative;text-align:center;overflow-y:auto;max-height:90vh;">
 <span class="btn-close" id="closeCardPreview">&times;</span>
-<h3>预测卡片</h3>
-<div class="card-preview"><img id="cardPreviewImg" src="" alt="预测卡片"></div>
+<p style="color:rgba(255,255,255,0.6);font-size:13px;margin:0 0 12px 0;">🔥 专属比分神单已生成！长按图片保存</p>
+<div class="card-preview"><img id="cardPreviewImg" src="" alt="预测卡片" style="width:100%;border-radius:8px;"></div>
 <div class="card-actions">
-<button class="btn-download" id="btnDownloadCard">保存图片</button>
-<button class="btn-share" id="btnShareCard">分享</button>
+<button class="btn-download" id="btnDownloadCard">⬇ 保存图片</button>
+<button class="btn-share" id="btnShareCard">📤 分享</button>
 </div>
+<p style="color:rgba(255,255,255,0.35);font-size:11px;margin:8px 0 0 0;">iOS：长按图片 → 存储到「照片」</p>
 </div>
 </div>
 

@@ -259,6 +259,18 @@
         showToast('请先选择两支球队');
         return;
       }
+
+      // 读取用户输入的抖音号/昵称
+      var userIdEl = $('user-id-input');
+      var userId = userIdEl ? userIdEl.value.trim() : '';
+      if (!userId) {
+        userId = window.prompt('输入你的抖音号或球迷昵称，生成专属神单：');
+        if (!userId || !userId.trim()) userId = '匿名老球迷';
+        userId = userId.trim();
+        // 回填到输入框
+        if (userIdEl) userIdEl.value = userId;
+      }
+
       var prediction = {
         winA: result.winA,
         drawP: result.drawP,
@@ -268,7 +280,7 @@
         score: result.score,
         mode: state.mode
       };
-      var dataUrl = window.PredictionCardService.generateCard(tA, tB, prediction);
+      var dataUrl = window.PredictionCardService.generateCard(tA, tB, prediction, userId);
       window.PredictionCardService.showCardModal(dataUrl);
     });
   }
