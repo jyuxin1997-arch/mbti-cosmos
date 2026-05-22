@@ -186,19 +186,24 @@
 <a href="teams.html"><span class="tab-icon">📖</span><span class="tab-label">百科</span></a>
 </nav>
 
-<!-- 预测卡片弹窗（终极版：背景关闭 + 返回键拦截 + 可滚动） -->
+<!-- 预测卡片弹窗（终极版：loading + 背景关闭 + 返回键拦截 + 可滚动 + 点图片关闭） -->
 <div class="modal-overlay" id="cardPreviewModal">
 <div class="modal-card" style="position:relative;text-align:center;overflow-y:auto;max-height:90vh;">
 <span class="btn-close" id="closeCardPreview">&times;</span>
-<p style="color:rgba(255,255,255,0.6);font-size:13px;margin:0 0 12px 0;">🔥 专属比分神单已生成！长按图片保存</p>
+<p id="cardModalTips" style="color:rgba(255,255,255,0.6);font-size:13px;margin:0 0 12px 0;">🔥 专属比分神单已生成！长按图片保存</p>
+<!-- Loading Spinner -->
+<div id="cardLoading" style="display:none;justify-content:center;align-items:center;padding:40px;">
+  <div style="width:40px;height:40px;border:4px solid rgba(255,255,255,0.1);border-top-color:#ff3366;border-radius:50%;animation:spin 1s linear infinite;"></div>
+</div>
 <div class="card-preview"><img id="cardPreviewImg" src="" alt="预测卡片" style="width:100%;border-radius:8px;"></div>
-<div class="card-actions">
+<div class="card-actions" id="cardActions">
 <button class="btn-download" id="btnDownloadCard">⬇ 保存图片</button>
 <button class="btn-share" id="btnShareCard">📤 分享</button>
 </div>
 <p style="color:rgba(255,255,255,0.35);font-size:11px;margin:8px 0 0 0;">iOS：长按图片 → 存储到「照片」</p>
 </div>
 </div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <!-- 登录弹窗由 nav.js 动态注入 -->
 

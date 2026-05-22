@@ -251,6 +251,26 @@
 
   // ========== SHARE EVENTS ==========
   function setupShareEvents() {
+    // 自动从 AuthService 获取用户昵称预填输入框
+    if (window.AuthService && window.AuthService.getCurrentUser) {
+      var user = window.AuthService.getCurrentUser();
+      if (user && user.nickname) {
+        var userIdEl = $('user-id-input');
+        if (userIdEl && !userIdEl.value.trim()) {
+          userIdEl.value = user.nickname;
+        }
+      }
+      // 监听登录状态变化，自动更新
+      window.AuthService.onAuthChange(function(u) {
+        if (u && u.nickname) {
+          var el = $('user-id-input');
+          if (el && !el.value.trim()) {
+            el.value = u.nickname;
+          }
+        }
+      });
+    }
+
     $('shareBtn').addEventListener('click', function() {
       var tA = teams.find(function(t) { return t.cn === state.teamA; });
       var tB = teams.find(function(t) { return t.cn === state.teamB; });
@@ -260,9 +280,13 @@
         return;
       }
 
-      // 读取用户输入的抖音号/昵称
+      // 读取用户输入的抖音号/昵称（优先用输入框，其次用登录昵称）
       var userIdEl = $('user-id-input');
       var userId = userIdEl ? userIdEl.value.trim() : '';
+      if (!userId && window.AuthService && window.AuthService.getCurrentUser) {
+        var user = window.AuthService.getCurrentUser();
+        if (user && user.nickname) userId = user.nickname;
+      }
       if (!userId) {
         userId = window.prompt('输入你的抖音号或球迷昵称，生成专属神单：');
         if (!userId || !userId.trim()) userId = '匿名老球迷';

@@ -15,7 +15,7 @@
     });
     // 背景点击关闭
     $('cardPreviewModal').addEventListener('click', function(e) {
-      if (e.target === $('cardPreviewModal')) closeModal();
+      if (e.target === $('cardPreviewModal') || e.target === $('cardPreviewImg')) closeModal();
     });
 
     // 下载按钮
@@ -80,7 +80,7 @@
     ctx.fillStyle = '#f5fbf7';
     ctx.font = '600 18px -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('世界杯胜率预测台', CARD_W / 2, 36);
+    ctx.fillText('2026 美加墨世界杯预测', CARD_W / 2, 36);
 
     // 用户ID（右上角）
     if (userId) {
@@ -301,15 +301,32 @@
   }
 
   /**
-   * 显示预测卡片弹窗
+   * 显示预测卡片弹窗（带 loading spinner）
    */
   function showCardModal(dataUrl) {
-    $('cardPreviewImg').src = dataUrl;
+    // 先显示 loading 状态
+    var loadingEl = $('cardLoading');
+    var previewEl = $('cardPreviewImg');
+    var actionsEl = $('cardActions');
+    if (loadingEl) loadingEl.style.display = 'flex';
+    if (previewEl) previewEl.style.display = 'none';
+    if (actionsEl) actionsEl.style.display = 'none';
+
     $('cardPreviewModal').classList.add('active');
     // 物理返回键黑科技：压入虚拟历史状态
     window.location.hash = 'poster';
     // 弹窗滚回顶部（防止长图遮挡按钮）
     $('cardPreviewModal').scrollTop = 0;
+
+    // 延迟替换为实际图片（给 DOM 渲染时间）
+    setTimeout(function() {
+      if (previewEl) {
+        previewEl.src = dataUrl;
+        previewEl.style.display = 'block';
+      }
+      if (loadingEl) loadingEl.style.display = 'none';
+      if (actionsEl) actionsEl.style.display = 'flex';
+    }, 80);
   }
 
   window.PredictionCardService = {
